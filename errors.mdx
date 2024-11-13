@@ -1,0 +1,56 @@
+---
+title: Errors
+---
+
+Modem returns errors in a consistent JSON format to make it easy to handle issues in your application. Each error includes a simple message explaining the issue, with HTTP status codes indicating the type of error.
+
+#### Error Format
+
+All error responses follow this structure:
+
+```json
+{
+  "message": "Description of the error"
+}
+```
+
+#### Common Status Codes
+
+- **4xx Client Errors**: These indicate issues in the request sent to the server.
+
+  - **400 Bad Request**: The request was invalid or missing required fields.
+  - **401 Unauthorized**: Missing or invalid API key.
+  - **404 Not Found**: The requested resource doesn’t exist or was entered incorrectly.
+
+- **5xx Server Errors**: These signify an issue on Modem’s end.
+  - **500 Internal Server Error**: General server error; retry the request or contact support if it persists.
+
+#### Handling Errors
+
+Check the `message` field in the response to understand the cause of the error. If the status code is 400 or higher, review your request parameters and API key to ensure they meet Modem's requirements.
+
+## Error Retries
+
+Modem offers automatic retry handling for certain types of errors. By default, Modem retries up to three times if a request fails due to transient issues, such as network errors or temporary server overloads. This is configurable via the `maxRetries` option, which you can set during initialization:
+
+```javascript
+const modem = new Modem(process.env.MODEM_API_KEY, {
+  maxRetries: 3, // Sets the maximum number of retry attempts
+});
+```
+
+### When Retries Occur
+
+Retries are triggered for errors that are likely temporary, typically with **5xx server errors**. Each retry is delayed slightly to give the server time to recover, helping ensure more reliable payment handling.
+
+### Adjusting or Disabling Retries
+
+To reduce or increase the retry count, simply adjust the `maxRetries` value. Setting it to `0` disables retries entirely:
+
+```javascript
+const modem = new Modem(process.env.MODEM_API_KEY, {
+  maxRetries: 0, // Disables retries
+});
+```
+
+This configuration gives you flexibility in error handling and helps manage network issues effectively.

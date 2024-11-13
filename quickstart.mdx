@@ -1,86 +1,84 @@
 ---
-title: 'Quickstart'
-description: 'Start building awesome documentation in under 5 minutes'
+title: Quickstart
 ---
 
-## Setup your development
+To get started with Modem, follow these simple steps to set up and start collecting payments:
 
-Learn how to update your docs locally and deploy them to the public.
+### 1. **Create an Account**
 
-### Edit and preview
+- **Sign Up**: Register on [Modem's dashboard](https://modem.gomindz.gm) to access your account and manage payments.
+- **API Keys**: Once registered, get your API keys from the dashboard for integrating and authenticating requests.
 
-<AccordionGroup>
-  <Accordion icon="github" title="Clone your docs locally">
-    During the onboarding process, we created a repository on your Github with
-    your docs content. You can find this repository on our
-    [dashboard](https://dashboard.mintlify.com). To clone the repository
-    locally, follow these
-    [instructions](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository)
-    in your terminal.
-  </Accordion>
-  <Accordion icon="rectangle-terminal" title="Preview changes">
-    Previewing helps you make sure your changes look as intended. We built a
-    command line interface to render these changes locally. 1. Install the
-    [Mintlify CLI](https://www.npmjs.com/package/mintlify) to preview the
-    documentation changes locally with this command: ``` npm i -g mintlify ```
-    2. Run the following command at the root of your documentation (where
-    `mint.json` is): ``` mintlify dev ```
-  </Accordion>
-</AccordionGroup>
+### 2. **Configure Integrations**
 
-### Deploy your changes
+- **HTML Checkout**: Embed Modem’s HTML Checkout into your site for a quick, low-code payment solution.
 
-<AccordionGroup>
+Here's an example of how you'd implement HTML checkout:
 
-<Accordion icon="message-bot" title="Install our Github app">
-  Our Github app automatically deploys your changes to your docs site, so you
-  don't need to manage deployments yourself. You can find the link to install on
-  your [dashboard](https://dashboard.mintlify.com). Once the bot has been
-  successfully installed, there should be a check mark next to the commit hash
-  of the repo.
-</Accordion>
-<Accordion icon="rocket" title="Push your changes">
-  [Commit and push your changes to
-  Git](https://docs.github.com/en/get-started/using-git/pushing-commits-to-a-remote-repository#about-git-push)
-  for your changes to update in your docs site. If you push and don't see that
-  the Github app successfully deployed your changes, you can also manually
-  update your docs through our [dashboard](https://dashboard.mintlify.com).
-</Accordion>
+<iframe
+  height="400"
+  width="100%"
+  title="Modem Inline Payment"
+  src="https://codepen.io/mercury-sms/embed/WNVLZwe?default-tab=html%2Cresult"
+  frameborder="0"
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
+  referrerpolicy="strict-origin-when-cross-origin"
+  allowfullscreen
+></iframe>
 
-</AccordionGroup>
+**Walkthrough**
 
-## Update your docs
+1. **Setting Up the Form**
 
-Add content directly in your files with MDX syntax and React components. You can use any of our components, or even build your own.
+   When the user clicks **Pay Now**, the form submits the order details to Modem's endpoint (`/api/pay`), passing essential information like amount, customer details, and URLs for redirecting.
 
-<CardGroup>
+2. **Payload Format After Submission**
 
-<Card title="Style Your Docs" icon="paintbrush" href="/settings/global">
-  Add flair to your docs with personalized branding.
-</Card>
+   Once the form is submitted, the server receives the payment information in JSON format as shown below. Modem processes this payload to initialize the payment.
 
-<Card
-  title="Add API Endpoints"
-  icon="square-code"
-  href="/api-playground/configuration"
->
-  Implement your OpenAPI spec and enable API user interaction.
-</Card>
+   ```json
+   {
+     "public_key": "pk_test_971deb266f73e90c1083983e684a765dabe163c59b94c0d22dfdb8172f1915a0",
+     "amount": "450",
+     "customer_name": "Caleb Okpara",
+     "customer_email": "usr@example.com",
+     "customer_phone": "7000001",
+     "cancel_url": "https://modem.gomindz.gm",
+     "return_url": "https://academy.gomindz.gm",
+     "currency": "GMD",
+     "metadata": { "source": "modem-html-test" }
+   }
+   ```
 
-<Card
-  title="Integrate Analytics"
-  icon="chart-mixed"
-  href="/analytics/supported-integrations"
->
-  Draw insights from user interactions with your documentation.
-</Card>
+3. **After Payment – Redirect and Webhooks**
 
-<Card
-  title="Host on a Custom Domain"
-  icon="browser"
-  href="/settings/custom-domain/subdomain"
->
-  Keep your docs on your own website's subdomain.
-</Card>
+   - **Redirect URL**: Once the payment completes, the user is redirected to the `return_url` specified in the form, or if canceled, to the `cancel_url`.
+   - **Webhooks**: For real-time updates on the payment status, configure webhooks in Modem’s dashboard. This allows your server to receive notifications for events like `charge.succeeded` or `charge.cancelled` so you can handle them as needed, such as updating the order status on your end.
 
-</CardGroup>
+- **SDK Payment Intent**: For more control, use Modem’s SDK to create and confirm payment intents programmatically.
+
+<CodeGroup>
+
+```javascript nodejs
+import Modem from "modem";
+
+const modem = new Modem();
+
+const intent = await modem.paymentIntents.create({ amount: 450 });
+
+console.log(intent.link);
+```
+
+</CodeGroup>
+
+### 3. **Complete KYC**
+
+- **Identity Verification**: Before going live, complete Modem’s KYC requirements from the dashboard to enable secure, compliant transactions.
+
+### 4. **Start Collecting Live Payments**
+
+- **Go Live**: Once KYC is approved, switch from test to live mode on your dashboard to start processing real transactions and collecting payments from your customers.
+
+---
+
+This setup provides both a quick and customizable payment solution for your business, with HTML Checkout for a rapid start and SDK Payment Intent for detailed control.

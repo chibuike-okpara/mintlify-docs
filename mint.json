@@ -1,17 +1,17 @@
 {
   "$schema": "https://mintlify.com/schema.json",
-  "name": "Starter Kit",
+  "name": "Modem",
   "logo": {
     "dark": "/logo/dark.svg",
     "light": "/logo/light.svg"
   },
   "favicon": "/favicon.svg",
   "colors": {
-    "primary": "#0D9373",
-    "light": "#07C983",
-    "dark": "#0D9373",
+    "primary": "#08a591",
+    "light": "#08a591",
+    "dark": "#08a591",
     "anchors": {
-      "from": "#0D9373",
+      "from": "#08a591",
       "to": "#07C983"
     }
   },
@@ -23,14 +23,9 @@
   ],
   "topbarCtaButton": {
     "name": "Dashboard",
-    "url": "https://dashboard.mintlify.com"
+    "url": "https://modem.gomindz.gm"
   },
-  "tabs": [
-    {
-      "name": "API Reference",
-      "url": "api-reference"
-    }
-  ],
+  "tabs": [],
   "anchors": [
     {
       "name": "Documentation",
@@ -41,45 +36,32 @@
       "name": "Community",
       "icon": "slack",
       "url": "https://mintlify.com/community"
-    },
-    {
-      "name": "Blog",
-      "icon": "newspaper",
-      "url": "https://mintlify.com/blog"
     }
   ],
   "navigation": [
     {
       "group": "Get Started",
+      "pages": ["introduction", "quickstart", "authentication", "errors"]
+    },
+    {
+      "group": "Core Resources",
       "pages": [
-        "introduction",
-        "quickstart",
-        "development"
+        "core/customers",
+        "core/mandates",
+        "core/payment-links",
+        "core/transactions"
       ]
     },
     {
-      "group": "Essentials",
-      "pages": [
-        "essentials/markdown",
-        "essentials/code",
-        "essentials/images",
-        "essentials/settings",
-        "essentials/navigation",
-        "essentials/reusable-snippets"
-      ]
+      "group": "Sessions",
+      "pages": ["sessions/sessions", "sessions/manage-sessions"]
     },
     {
-      "group": "API Documentation",
+      "group": "Payment Intents",
       "pages": [
-        "api-reference/introduction"
-      ]
-    },
-    {
-      "group": "Endpoint Examples",
-      "pages": [
-        "api-reference/endpoint/get",
-        "api-reference/endpoint/create",
-        "api-reference/endpoint/delete"
+        "payment-intents/overview",
+        "payment-intents/create",
+        "payment-intents/management"
       ]
     }
   ],

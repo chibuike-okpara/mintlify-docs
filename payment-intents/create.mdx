@@ -1,0 +1,215 @@
+---
+title: Create a Payment Intent
+---
+
+The **Payment Intent** represents an intention to complete a payment. You can create a Payment Intent by specifying key details like the payment amount, the customer, and the payment method.
+
+#### General Workflow
+To create a payment intent, you generally follow these steps:
+1. Specify the amount the customer needs to pay.
+2. Optionally, provide additional information such as the customer details, payment methods, and redirect URLs.
+3. Receive a link to the payment page, where the customer can complete the payment.
+
+---
+
+### Scenarios for Creating a Payment Intent
+
+#### 1. **Creating a Payment Intent with Just Amount**
+
+In this simplest scenario, you only need to provide the amount that needs to be paid. This is the most basic setup for a payment.
+
+- **Scenario**: You want to create a payment intent for a customer to pay GMD 450, but you do not specify a customer or any other optional parameters.
+- **Request**:
+
+<CodeGroup>
+```javascript nodejs 
+const paymentIntent = await modem.paymentIntents.create({ amount: 450 });
+```
+</CodeGroup>
+
+- **Result**: A Payment Intent is created with a link to the payment page, where the customer can complete the payment.
+
+```json
+{
+  "id": "22ffe4c6-d30e-47d9-8173-1f1d9457d5cc",
+  "currency": "GMD",
+  "payment_methods": [
+    "wallet-gm"
+  ],
+  "metadata": {},
+  "custom_fields": [],
+  "custom_fields_values": {},
+  "is_session": false,
+  "amount": 450,
+  "intent_secret": "a2b7e8d934f3d93b0ad...2644f313e9965753e5792742cf",
+  "status": "requires_payment_method",
+  "customer": null,
+  "business_id": "a10a51ae-05c8-406e-968c-7b1d309a77e0",
+  "account_id": "7788dd90-3801-47a6-8597-b46eaa0a7d7d",
+  "payment_method_object": null,
+  "payment_method_options": [
+    {
+      "id": "4dbaaec5-7a16-4908-8fd9-c3d2bd24f739",
+      "tag": "qmoney",
+      "logo": "http://localhost:9090/images/qcell.png",
+      "name": "QMoney",
+      "group": "wallet-gm"
+    },
+    {
+      "id": "d8ec7405-0485-47aa-b58e-ab6d173ba4ed",
+      "tag": "afrimoney",
+      "logo": "http://localhost:9090/images/africell.jpg",
+      "name": "AfriMoney",
+      "group": "wallet-gm"
+    }
+  ],
+  "test_mode": true,
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9....jS_I0",
+  "updatedAt": "2024-11-11T17:03:17.574Z",
+  "createdAt": "2024-11-11T17:03:17.547Z",
+  "payment_method": null,
+  "title": null,
+  "description": null,
+  "return_url": null,
+  "cancel_url": null,
+  "link": "http://localhost:3001/22ffe4c6-d30e-47d9-8173-1f1d9457d5cc",
+  "payment_link_id": null,
+  "customer_name": null,
+  "customer_phone": null,
+  "customer_email": null
+}
+```
+
+
+#### 2. **Creating a Payment Intent with Amount and Customer**
+
+In this scenario, in addition to specifying the amount, you also specify the customer who will be making the payment. This helps associate the payment with a particular customer for better tracking.
+
+- **Scenario**: You want to create a payment intent for GMD 450 and associate it with a specific customer.
+- **Request**:
+
+<CodeGroup>
+```javascript nodejs 
+const paymentIntent = await modem.paymentIntents.create({
+    amount: 450,
+    customer: "d9bf8831-4db5-4a1c-8aa0-3de72492f330",
+});
+```
+</CodeGroup>
+
+- **Result**: The payment intent is created for the specified customer. A link is returned for the customer to complete the payment.
+
+
+```json
+{
+  ...
+  "amount": 450,
+  "customer": "d9bf8831-4db5-4a1c-8aa0-3de72492f330",
+  "customer_email": "mercurysms21@gmail.com",
+  "customer_name": "Caleb Okpara",
+  "customer_phone": "7024725",
+  "link": "http://localhost:3001/dc55335e-e6e0-4abb-940e-47dba21d09c7",
+}
+```
+
+#### 3. **Creating a Payment Intent with Amount, Customer, and Payment Methods**
+
+This scenario involves a more specific setup where you specify the amount, associate the intent with a customer, and predefine the payment methods the customer will use. This is useful when you want to guarantee specific methods of payment.
+
+- **Scenario**: You want to create a payment intent for GMD 450, associate it with a customer, and specify that the payment should be processed using a particular payment method.
+- **Request**:
+
+<CodeGroup>
+```javascript nodejs 
+const paymentIntent = await modem.paymentIntents.create({
+    amount: 450,
+    customer: "d9bf8831-4db5-4a1c-8aa0-3de72492f330",
+    payment_methods: ["card"],
+});
+```
+</CodeGroup>
+
+- **Result**: The payment intent is created, and the customer will be directed to a page that only allows them to pay with the specified methods. A payment link is generated for the customer to complete the payment.
+
+```json
+{
+  ...
+  "customer": "d9bf8831-4db5-4a1c-8aa0-3de72492f330",
+  "payment_methods": [
+    "card"
+  ],
+  "payment_method_options": [
+    {
+      "id": "1afe1e0f-927b-4579-ac7f-c87975dc3340",
+      "tag": "visa",
+      "logo": "https://logolook.net/wp-content/uploads/2023/09/Visa-Logo.png",
+      "name": "Visa Card",
+      "group": "card"
+    }
+  ],
+  "link": "http://localhost:3001/4310976f-69f2-4d8c-9b94-c5202b2dcb87",
+}
+```
+
+---
+
+#### 4. **Creating a Payment Intent with Amount, Customer, and Specific Payment Method ID**
+
+In this scenario, you create a Payment Intent specifying a particular customer's payment method ID. This is useful when you want to charge a customer using a specific saved payment method, such as a stored card or bank account.
+
+- **Scenario**: You want to create a payment intent for GMD 450, associate it with a specific customer, and use a specific saved payment method ID from the customer’s account. This setup allows you to charge a saved payment method directly, streamlining the payment process for returning customers.
+
+- **Request**:
+
+<CodeGroup>
+```javascript nodejs 
+const paymentIntent = await modem.paymentIntents.create({
+    amount: 450,
+    payment_method: "ad47ccb9-687c-475b-90dc-1dd3b4cba68e",
+    customer: "d9bf8831-4db5-4a1c-8aa0-3de72492f330",
+});
+```
+</CodeGroup>
+
+- **Result**: The payment intent is created using the specified customer's saved payment method. A link is generated for the customer to complete any necessary authorization steps, if required, for the payment method.
+
+```json
+{
+  ...
+  "amount": 450,
+  "payment_method": "ad47ccb9-687c-475b-90dc-1dd3b4cba68e",
+  "customer": "d9bf8831-4db5-4a1c-8aa0-3de72492f330",
+  "payment_method_object": {
+    "logo": "http://localhost:9090/images/qcell.png",
+    "type": "mobilepay",
+    "group": "wallet-gm",
+    "last4": "9944",
+    "gateway": "qmoney",
+    "fingerprint": "8d84c1b8ba568bce9b2590bfec618a65",
+    "gateway_name": "QMoney"
+  },
+  "test_mode": true,
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9....Hdet27VjQWFJtZUrekAs5w",
+  "link": "http://localhost:3001/0197f33a-25dc-4788-bd42-97b9814c553c",
+}
+```
+
+---
+
+### Common Optional Parameters for Creating a Payment Intent
+
+While the **amount** is the only required parameter for creating a payment intent, you can optionally include other parameters to enhance the payment flow:
+
+- **currency**: The currency for the payment (optional). If omitted, the default currency will be used.
+- **title**: A title for the payment (optional).
+- **description**: A description of the payment (optional).
+- **metadata**: Any additional custom data (optional).
+- **return_url**: A URL to which the customer will be redirected after completing the payment (optional).
+- **cancel_url**: A URL to which the customer will be redirected if they cancel the payment (optional).
+- **payment_methods**: A list of accepted payment methods (optional).
+
+---
+
+### Conclusion
+
+Creating a Payment Intent is a straightforward process. By specifying just the **amount**, or additionally associating the intent with a **customer** and **payment method**, you can tailor the payment flow to meet specific needs. Once created, you will receive a unique link that the customer can use to complete the payment. This flexible setup ensures a seamless payment experience.

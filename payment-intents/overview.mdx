@@ -1,0 +1,41 @@
+---
+title: Payment Intents
+---
+
+A **Payment Intent** in Modem represents a user's intention to pay a specified amount. It is used to initiate a payment process and generate a link for the customer to complete the transaction securely.
+
+### Payment Intent Object
+
+The **Payment Intent** object contains the following properties:
+
+- **amount**: The total amount to be paid.
+- **currency**: The currency of the payment (optional).
+- **payment_methods**: A list of accepted payment methods (optional).
+- **title**: A title for the payment (optional).
+- **description**: A description of the payment (optional).
+- **customer**: The ID of the customer making the payment (optional).
+- **metadata**: Any additional information about the payment (optional).
+- **return_url**: The URL to which the customer is redirected after a successful payment (optional).
+- **cancel_url**: The URL to which the customer is redirected if they cancel the payment (optional).
+- **payment_method**: The specific payment method to use (optional).
+
+#### Payment Intent Response Object
+These are the response properties after the Payment Intent is created:
+
+- **id**: A unique identifier for the Payment Intent.
+- **payment_method_options**: The available payment methods for this transaction.
+- **Customer**: The associated customer object (optional).
+- **intent_secret**: A secret key used to secure the payment intent.
+- **status**: The current status of the payment. It can be one of the following:
+  - `initialized`: The payment intent has been created, but payment has not started.
+  - `processing`: The payment is currently being processed.
+  - `requires_payment_method`: Payment method is required before proceeding.
+  - `successful`: The payment was successfully completed.
+  - `failed`: The payment failed to process.
+  - `cancelled`: The payment was canceled by the customer or the system.
+- **link**: A URL to the hosted payment page where the customer can complete the payment.
+- **custom_fields_values**: Any custom data associated with the payment (optional).
+- **is_session**: A boolean flag indicating whether the payment intent is part of a session.
+
+### Summary
+Payment Intents in Modem are used to initiate and manage the payment flow. By grouping parameters and responses in a structured way, they allow businesses to control how and when payments are processed while providing a seamless experience for their customers.

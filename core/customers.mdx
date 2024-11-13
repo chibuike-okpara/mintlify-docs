@@ -1,0 +1,221 @@
+---
+title: Customers
+---
+
+The Modem API’s customer management is built to help you store and manage customer details efficiently. Below are detailed steps and example requests for creating, retrieving, updating, deleting, and listing customers, as well as listing their payment methods. This allows you to manage customer profiles and payment preferences seamlessly.
+
+---
+
+#### **Create a Customer**
+
+To create a customer, use the `modem.customers.create()` method, which allows you to add key information like the customer's name, email, phone number, and an optional starting balance. The `distinct` option, when set to `true`, checks for existing customers with matching fields (e.g., email) to avoid duplicate entries. If `distinct` is omitted or set to `false`, a new customer entry will be created without duplicate checks.
+
+**Sample Request:**
+
+<CodeGroup>
+```typescript nodejs
+const customer = await modem.customers.create(
+    { name: "Caleb Okpara", email: "caleb@modem.com", phone: "7000001" },
+    { distinct: true }
+);
+```
+</CodeGroup>
+
+**Sample Response:**
+
+```json
+{
+  "id": "8a8c8a0e-c5d2-4692-a94b-25284d36adc7",
+  "balance": 0,
+  "name": "Caleb Okpara",
+  "email": "caleb@modem.com",
+  "phone": "7000001",
+  "business_id": "a10a51ae-05c8-406e-968c-7b1d309a77e0",
+  "account_id": "7788dd90-3801-47a6-8597-b46eaa0a7d7d",
+  "test_mode": true,
+  "updatedAt": "2024-11-11T13:54:10.104Z",
+  "createdAt": "2024-11-11T13:54:10.104Z"
+}
+```
+
+---
+
+#### **Retrieve a Customer**
+
+To fetch a customer’s details, use `modem.customers.retrieve(customerId)`. Replace `customerId` with the customer’s unique ID.
+
+**Sample Request:**
+
+<CodeGroup>
+```javascript nodejs 
+const customer = await modem.customers.retrieve("8a8c8a0e-c5d2-4692-a94b-25284d36adc7"); 
+```
+</CodeGroup>
+
+**Sample Response:**
+
+```json
+{
+  "id": "8a8c8a0e-c5d2-4692-a94b-25284d36adc7",
+  "name": "Caleb Okpara",
+  "email": "caleb@modem.com",
+  "phone": "7000001",
+  "balance": 0,
+  "business_id": "a10a51ae-05c8-406e-968c-7b1d309a77e0",
+  "account_id": "7788dd90-3801-47a6-8597-b46eaa0a7d7d",
+  "test_mode": true,
+  "createdAt": "2024-11-11T13:54:10.104Z",
+  "updatedAt": "2024-11-11T13:54:10.104Z"
+}
+```
+
+---
+
+#### **Update a Customer**
+
+Update a customer's information using `modem.customers.update(customerId, params)`. Specify the customer ID and the fields to update.
+
+**Sample Request:**
+
+<CodeGroup>
+```javascript nodejs 
+const customer = await modem.customers.update(
+    "8a8c8a0e-c5d2-4692-a94b-25284d36adc7",
+    { name: "Chibuike Okpara" }
+);
+```
+</CodeGroup>
+
+**Sample Response:**
+
+```json
+{
+  "id": "8a8c8a0e-c5d2-4692-a94b-25284d36adc7",
+  "name": "Chibuike Okpara",
+  "email": "caleb@modem.com",
+  "phone": "7000001",
+  "balance": 0,
+  "business_id": "a10a51ae-05c8-406e-968c-7b1d309a77e0",
+  "account_id": "7788dd90-3801-47a6-8597-b46eaa0a7d7d",
+  "test_mode": true,
+  "createdAt": "2024-11-11T13:54:10.104Z",
+  "updatedAt": "2024-11-11T14:56:53.949Z"
+}
+```
+
+---
+
+#### **Delete a Customer**
+
+Remove a customer from your records using `modem.customers.delete(customerId)`. This action is irreversible.
+
+**Sample Request:**
+
+<CodeGroup>
+```javascript nodejs 
+await modem.customers.delete("8a8c8a0e-c5d2-4692-a94b-25284d36adc7");
+```
+</CodeGroup>
+
+---
+
+#### **List All Customers**
+
+To view all customers, use `modem.customers.list()`. This returns a list of customers, with pagination options if there are many entries.
+
+**Sample Request:**
+
+<CodeGroup>
+```javascript nodejs 
+const customers = await modem.customers.list({ limit: 2 });
+
+// or list by matching terms
+const customers = await modem.customers.list({ limit:2, search: "caleb" })
+
+```
+</CodeGroup>
+
+**Sample Response:**
+
+```json
+{
+  "data": [
+    {
+      "id": "8a8c8a0e-c5d2-4692-a94b-25284d36adc7",
+      "name": "Chibuike Okpara",
+      "email": "caleb@modem.com",
+      "phone": "7000001",
+      "balance": 0,
+      "business_id": "a10a51ae-05c8-406e-968c-7b1d309a77e0",
+      "account_id": "7788dd90-3801-47a6-8597-b46eaa0a7d7d",
+      "test_mode": true,
+      "createdAt": "2024-11-11T13:54:10.104Z",
+      "updatedAt": "2024-11-11T14:56:53.949Z"
+    },
+    {
+      "id": "0f6e0912-2f2f-4d8b-bd68-ac8c97c44ae6",
+      "name": "Caleb Okpara",
+      "email": "calebchibuike@modem.com",
+      "phone": "7000002",
+      "balance": 0,
+      "business_id": "a10a51ae-05c8-406e-968c-7b1d309a77e0",
+      "account_id": "7788dd90-3801-47a6-8597-b46eaa0a7d7d",
+      "test_mode": true,
+      "createdAt": "2024-11-09T14:49:49.490Z",
+      "updatedAt": "2024-11-09T14:49:49.490Z"
+    }
+  ],
+  "meta": {
+    "total": 3
+  }
+}
+```
+
+---
+
+#### **List Payment Methods for a Customer**
+
+To retrieve the payment methods associated with a specific customer, use their customer ID. This is useful to manage or display available payment methods during checkout.
+
+**Sample Request:**
+
+<CodeGroup>
+```javascript nodejs 
+const paymentMethods = await modem.customers.listPaymentMethods(
+    "8a8c8a0e-c5d2-4692-a94b-25284d36adc7"
+);
+```
+</CodeGroup>
+
+**Sample Response:**
+
+```json
+{
+  "data": [
+    {
+      "mobilepay": {
+        "logo": "http://localhost:9090/images/qcell.png",
+        "type": "mobilepay",
+        "group": "wallet-gm",
+        "last4": "9944",
+        "gateway": "qmoney",
+        "fingerprint": "8d84c1b8ba568bce9b2590bfec618a65",
+        "gateway_name": "QMoney"
+      },
+      "id": "ad47ccb9-687c-475b-90dc-1dd3b4cba68e",
+      "type": "mobilepay",
+      "customer": "8a8c8a0e-c5d2-4692-a94b-25284d36adc7",
+      "business_id": "a10a51ae-05c8-406e-968c-7b1d309a77e0",
+      "account_id": "7788dd90-3801-47a6-8597-b46eaa0a7d7d",
+      "test_mode": true,
+      "has_been_detached": false,
+      "createdAt": "2024-11-09T11:22:31.169Z",
+      "updatedAt": "2024-11-09T11:22:31.169Z"
+    }
+  ],
+  "meta": {
+    "total": 1
+  }
+}
+```
+

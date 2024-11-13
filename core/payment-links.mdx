@@ -1,0 +1,171 @@
+---
+title: Payment Link
+---
+
+**Payment Links** in Modem are designed to help businesses collect payments effortlessly through a hosted checkout page. With a unique link, customers can be directed to pay for items or services without requiring code-intensive solutions or complicated integrations. 
+
+**Primary Use Cases**:
+- **Single-Charge Payments**: One-time payments, perfect for items or services.
+- **Recurring Payments (Subscriptions)**: Set up links for ongoing payments.
+- **Donations**: Enable variable amounts for donation collections.
+
+A Payment Link is highly customizable, allowing the merchant to specify payment details like amount, currency, title, description, and additional form fields. These fields enable you to gather custom data from customers, such as details about the product or service, or special instructions.
+
+---
+
+### Payment Link Properties
+
+Each Payment Link object includes the following fields:
+
+- **id** *(string)*: Unique identifier.
+- **payment_link** *(string)*: URL to share with customers for payment.
+- **unique_code** *(string)*: Code used for tracking and managing the link.
+- **status** *(string)*: `"active"` or `"inactive"`, indicating availability.
+- **type** *(string)*: Payment link type, such as `"single-charge"`, `"subscriptions"`, or `"donations"`.
+- **title** *(string)*: Title displayed on the checkout page.
+- **description** *(string)*: Brief description of the item or service.
+- **amount** *(number)*: Amount to be charged; leave blank to let customers enter their preferred amount.
+- **currency** *(string)*: Payment currency.
+- **redirect_url** *(string)*: URL for successful payments.
+- **cancel_url** *(string)*: URL if the customer cancels the payment.
+- **custom_fields** *(string[])*: Fields to collect additional customer data.
+
+--- 
+
+### Example Use Case: Paying for an Online Course
+
+Imagine you're a platform offering an online course, and you need a simple way for students to pay for enrollment. Modem Payment Links can help by creating a link with custom fields to gather information like course name, course level, and any other relevant data. 
+
+---
+
+## Payment Link Operations
+
+Modem’s Payment Link API provides tools to create, retrieve, update, list, and delete links. Here’s how each operation works:
+
+
+### 1. Create a Payment Link
+
+To create a Payment Link for course enrollment:
+
+**Parameters**:
+- **title** *(optional)*: Title that appears on the checkout page.
+- **description** *(optional)*: Details of what’s being paid for (e.g., course title).
+- **amount** *(optional)*: Set payment amount, or leave blank to let customers enter their preferred amount.
+- **currency**: Set the currency (e.g., `"GMD"`).
+- **redirect_url**: URL for successful payment redirection.
+- **cancel_url**: URL for canceled payments.
+- **custom_fields** *(optional)*: Extra fields to collect additional data, such as the specific course name and student ID.
+
+<CodeGroup>
+```javascript nodejs
+const courseLink = await modem.paymentLinks.create({
+    title: "Course Payment",
+    description: "Payment for Full-Stack Development Course",
+    amount: 15000,
+    currency: "GMD",
+    redirect_url: "https://your-platform.com/payment-success",
+    cancel_url: "https://your-platform.com/payment-cancelled",
+    custom_fields: ["Course Name", "Student ID"],
+});
+```
+</CodeGroup>
+
+**Response:**
+
+```json
+{
+  "id": "e9dd2d50-1dbf-49f4-bd4a-e129aae1aa4b",
+  "metadata": {},
+  "type": "single-charge",
+  "status": "active",
+  "title": "Course Payment",
+  "description": "Payment for Full-Stack Development Course",
+  "amount": 15000,
+  "currency": "GMD",
+  "redirect_url": "https://your-platform.com/payment-success",
+  "cancel_url": "https://your-platform.com/payment-cancelled",
+  "custom_fields": [
+    "Course Name",
+    "Student ID"
+  ],
+  "unique_code": "344ae20834aab7ec2785b11c247269ac72801342b0d45204d34332a34308e217",
+  "payment_link": "http://localhost:3001/pay/344ae20834aab7ec2785b11c247269ac72801342b0d45204d34332a34308e217",
+  "test_mode": true
+}
+```
+
+---
+
+### 2. Retrieve a Payment Link
+
+Retrieve details for a specific Payment Link by using its unique `id`:
+
+<CodeGroup>
+```javascript nodejs
+const courseLink = await modem.paymentLinks.retrieve(
+    "e9dd2d50-1dbf-49f4-bd4a-e129aae1aa4b"
+);
+```
+</CodeGroup>
+
+---
+
+### 3. Update a Payment Link
+
+To modify an existing Payment Link, such as updating the amount, title, or status:
+
+<CodeGroup>
+```javascript nodejs
+const courseLink = await modem.paymentLinks.update(
+    "e9dd2d50-1dbf-49f4-bd4a-e129aae1aa4b",
+    {
+      status: "inactive",
+      title: "Updated Course Payment",
+    }
+);
+```
+</CodeGroup>
+
+**Updatable Fields**:
+- **status**: `"active"` or `"inactive"`.
+- **title**: Update the title shown on the checkout page.
+- **description**: Modify the course details or description.
+- **amount**: Adjust the payment amount.
+- **currency**: Change the currency.
+- **redirect_url**: Change the redirect URL.
+- **cancel_url**: Change the cancel URL.
+- **custom_fields**: Edit or add data fields.
+
+---
+
+### 4. List Payment Links
+
+Get a list of all Payment Links for easy management:
+
+<CodeGroup>
+```javascript nodejs
+const links = await modem.paymentLinks.list();
+```
+</CodeGroup>
+
+---
+
+### 5. Delete a Payment Link
+
+Remove an outdated or invalid Payment Link:
+
+<CodeGroup>
+```javascript nodejs
+await modem.paymentLinks.delete("e9dd2d50-1dbf-49f4-bd4a-e129aae1aa4b");
+```
+</CodeGroup>
+
+--- 
+
+### Key Benefits of Using Payment Links
+
+- **Flexible**: Customize details like amount, title, and form fields to fit each payment need.
+- **Reusable**: Payment Links can be set to active or inactive and reused as necessary.
+- **Easy Sharing**: Share the link through emails, SMS, or embed it on a website.
+
+With Modem’s Payment Links, collecting payments becomes straightforward, whether you’re setting up one-time fees, subscriptions, or open-ended donations.
