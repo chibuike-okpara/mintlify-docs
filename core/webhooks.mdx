@@ -1,0 +1,99 @@
+---
+title: Webhooks
+---
+
+Modem’s webhooks notify your server about key events, such as customer creation, payment intent updates, and successful charges. To receive and securely process these notifications, follow the steps outlined here for setting up, validating, and handling webhooks.
+
+*Note: You can generate your unique Modem webhook secret in the Modem dashboard under **Developers > Webhooks**.*
+
+
+### Setting Up Webhooks
+
+1. **Define Your Webhook Endpoint**:  
+   Create a dedicated `POST` endpoint on your server to receive webhook events from Modem. Ensure this endpoint is accessible over HTTPS to maintain security.
+
+2. **Listening for Events**:  
+   Your endpoint will receive a variety of event notifications (e.g., `customer.created`, `payment_intent.created`, `charge.succeeded`). The event type is provided in the `event` field, while the main data is within the `payload`.
+
+
+### Webhook Security and Signature Validation
+
+To confirm the integrity of incoming events, Modem includes a unique `x-modem-signature` header in each webhook request. This header allows you to verify that the event originated from Modem.
+
+1. **Retrieve the Signature**:  
+   In your webhook endpoint, extract the `x-modem-signature` header from the incoming request.
+
+2. **Use `modem.webhooks.composeEventDetails` for Validation**:  
+   Pass the payload, signature, and your unique Modem secret to the `modem.webhooks.composeEventDetails` function. This function performs the necessary checks, verifying the signature and parsing the payload.
+
+<CodeGroup>
+```javascript nodejs
+// Example usage
+const event = modem.webhooks.composeEventDetails(
+    payload,
+    xSignatureHeader,
+    modemSecret
+);
+```
+</CodeGroup>
+
+3. **Handle Validation Failures**: 
+      
+    If validation fails, reject the event with an appropriate response (e.g., HTTP 400). Validation ensures that your system processes only authorized notifications.
+
+
+### Event Structure
+
+Upon successful validation, `modem.webhooks.composeEventDetails` returns an `Event` object containing the event type and payload data. The event types you may receive include:
+
+- **Customer Events**: `"customer.created"`, `"customer.updated"`, `"customer.deleted"`
+- **Payment Intent Events**: `"payment_intent.created"`, `"payment_intent.cancelled"`
+- **Charge Events**: `"charge.succeeded"`, `"charge.cancelled"`
+
+### Example Usage
+
+Here’s an example of using `modem.webhooks.composeEventDetails` to handle incoming webhooks in a Node.js application:
+
+```javascript
+const express = require("express");
+const bodyParser = require("body-parser");
+const Modem = require("modem");
+
+const modem = new Modem();
+const app = express();
+app.use(bodyParser.json());
+
+app.post("/webhook", (req, res) => {
+  const payload = req.body;
+  const signature = req.headers["x-modem-signature"];
+  const secret = process.env.MODEM_WEBHOOK_SECRET;
+
+  try {
+    const event = modem.webhooks.composeEventDetails(payload, signature, secret);
+    // Process the event
+    switch (event.event) {
+      case "customer.created":
+        // Handle new customer logic
+        break;
+      case "charge.succeeded":
+        // Process successful payment
+        break;
+      // Add other cases as needed
+    }
+
+    res.status(200).send("Webhook processed");
+  } catch (error) {
+    res.status(400).send("Invalid signature");
+  }
+});
+
+app.listen(3000, () => console.log("Listening for webhooks on port 3000"));
+```
+
+### Recommended Response
+
+For each webhook event, respond to Modem with an HTTP `200 OK` status as confirmation. This ensures Modem won’t re-send the event unless there's an error response.
+
+### Summary
+
+By following these steps, you can securely receive and process webhook events from Modem, automating actions based on customer interactions and payment flows. Make sure to store and securely handle the event data, as each event may carry critical transaction or customer information relevant to your application.

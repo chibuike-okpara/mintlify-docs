@@ -49,7 +49,8 @@
         "core/customers",
         "core/mandates",
         "core/payment-links",
-        "core/transactions"
+        "core/transactions",
+        "core/webhooks"
       ]
     },
     {
