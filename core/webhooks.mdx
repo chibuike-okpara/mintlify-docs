@@ -81,9 +81,9 @@ app.post("/webhook", (req, res) => {
       // Add other cases as needed
     }
 
-    res.status(200).send("Webhook processed");
+    res.status(200).send("Webhook processed!");
   } catch (error) {
-    res.status(400).send("Invalid signature");
+    res.status(400).send("Invalid signature!");
   }
 });
 
