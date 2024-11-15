@@ -54,7 +54,8 @@ Upon successful validation, `modem.webhooks.composeEventDetails` returns an `Eve
 
 Here’s an example of using `modem.webhooks.composeEventDetails` to handle incoming webhooks in a Node.js application:
 
-```javascript
+<CodeGroup>
+```javascript nodejs
 const express = require("express");
 const bodyParser = require("body-parser");
 const Modem = require("modem");
@@ -89,6 +90,7 @@ app.post("/webhook", (req, res) => {
 
 app.listen(3000, () => console.log("Listening for webhooks on port 3000"));
 ```
+</CodeGroup>
 
 ### Recommended Response
 
