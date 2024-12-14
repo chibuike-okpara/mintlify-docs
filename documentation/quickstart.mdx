@@ -2,23 +2,23 @@
 title: Quickstart
 ---
 
-To get started with Modem, follow these simple steps to set up and start collecting payments:
+To get started with Modem Pay, follow these simple steps to set up and start collecting payments:
 
 ### 1. **Create an Account**
 
-- **Sign Up**: Register on [Modem's dashboard](https://modem.gomindz.gm) to access your account and manage payments.
+- **Sign Up**: Register on [Modem Pay's dashboard](https://modem.gomindz.gm) to access your account and manage payments.
 - **API Keys**: Once registered, get your API keys from the dashboard for integrating and authenticating requests.
 
 ### 2. **Configure Integrations**
 
-- **HTML Checkout**: Embed Modem’s HTML Checkout into your site for a quick, low-code payment solution.
+- **HTML Checkout**: Embed Modem Pay’s HTML Checkout into your site for a quick, low-code payment solution.
 
 Here's an example of how you'd implement HTML checkout:
 
 <iframe
   height="400"
   width="100%"
-  title="Modem Inline Payment"
+  title="Modem Pay Inline Payment"
   src="https://codepen.io/mercury-sms/embed/WNVLZwe?default-tab=html%2Cresult"
   frameborder="0"
   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
@@ -30,11 +30,11 @@ Here's an example of how you'd implement HTML checkout:
 
 1. **Setting Up the Form**
 
-   When the user clicks **Pay Now**, the form submits the order details to Modem's endpoint (`/api/pay`), passing essential information like amount, customer details, and URLs for redirecting.
+   When the user clicks **Pay Now**, the form submits the order details to Modem Pay's endpoint (`/api/pay`), passing essential information like amount, customer details, and URLs for redirecting.
 
 2. **Payload Format After Submission**
 
-   Once the form is submitted, the server receives the payment information in JSON format as shown below. Modem processes this payload to initialize the payment.
+   Once the form is submitted, the server receives the payment information in JSON format as shown below. Modem Pay processes this payload to initialize the payment.
 
    ```json
    {
@@ -53,16 +53,16 @@ Here's an example of how you'd implement HTML checkout:
 3. **After Payment – Redirect and Webhooks**
 
    - **Redirect URL**: Once the payment completes, the user is redirected to the `return_url` specified in the form, or if canceled, to the `cancel_url`.
-   - **Webhooks**: For real-time updates on the payment status, configure webhooks in Modem’s dashboard. This allows your server to receive notifications for events like `charge.succeeded` or `charge.cancelled` so you can handle them as needed, such as updating the order status on your end.
+   - **Webhooks**: For real-time updates on the payment status, configure webhooks in Modem Pay’s dashboard. This allows your server to receive notifications for events like `charge.succeeded` or `charge.cancelled` so you can handle them as needed, such as updating the order status on your end.
 
-- **SDK Payment Intent**: For more control, use Modem’s SDK to create and confirm payment intents programmatically.
+- **SDK Payment Intent**: For more control, use Modem Pay’s SDK to create and confirm payment intents programmatically.
 
 <CodeGroup>
 
 ```javascript nodejs
-import Modem from "modem";
+import Modem Pay from "modem";
 
-const modem = new Modem();
+const modem = new Modem Pay();
 
 const intent = await modem.paymentIntents.create({ amount: 450 });
 
@@ -73,7 +73,7 @@ console.log(intent.link);
 
 ### 3. **Complete KYC**
 
-- **Identity Verification**: Before going live, complete Modem’s KYC requirements from the dashboard to enable secure, compliant transactions.
+- **Identity Verification**: Before going live, complete Modem Pay’s KYC requirements from the dashboard to enable secure, compliant transactions.
 
 ### 4. **Start Collecting Live Payments**
 

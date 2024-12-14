@@ -4,13 +4,13 @@ title: Webhooks
 
 Modem’s webhooks notify your server about key events, such as customer creation, payment intent updates, and successful charges. To receive and securely process these notifications, follow the steps outlined here for setting up, validating, and handling webhooks.
 
-*Note: You can generate your unique Modem webhook secret in the Modem dashboard under **Developers > Webhooks**.*
+*Note: You can generate your unique Modem Pay webhook secret in the Modem Pay dashboard under **Developers > Webhooks**.*
 
 
 ### Setting Up Webhooks
 
 1. **Define Your Webhook Endpoint**:  
-   Create a dedicated `POST` endpoint on your server to receive webhook events from Modem. Ensure this endpoint is accessible over HTTPS to maintain security.
+   Create a dedicated `POST` endpoint on your server to receive webhook events from Modem Pay. Ensure this endpoint is accessible over HTTPS to maintain security.
 
 2. **Listening for Events**:  
    Your endpoint will receive a variety of event notifications (e.g., `customer.created`, `payment_intent.created`, `charge.succeeded`). The event type is provided in the `event` field, while the main data is within the `payload`.
@@ -18,13 +18,13 @@ Modem’s webhooks notify your server about key events, such as customer creatio
 
 ### Webhook Security and Signature Validation
 
-To confirm the integrity of incoming events, Modem includes a unique `x-modem-signature` header in each webhook request. This header allows you to verify that the event originated from Modem.
+To confirm the integrity of incoming events, Modem Pay includes a unique `x-modem-signature` header in each webhook request. This header allows you to verify that the event originated from Modem Pay.
 
 1. **Retrieve the Signature**:  
    In your webhook endpoint, extract the `x-modem-signature` header from the incoming request.
 
 2. **Use `modem.webhooks.composeEventDetails` for Validation**:  
-   Pass the payload, signature, and your unique Modem secret to the `modem.webhooks.composeEventDetails` function. This function performs the necessary checks, verifying the signature and parsing the payload.
+   Pass the payload, signature, and your unique Modem Pay secret to the `modem.webhooks.composeEventDetails` function. This function performs the necessary checks, verifying the signature and parsing the payload.
 
 <CodeGroup>
 ```javascript nodejs
@@ -58,9 +58,9 @@ Here’s an example of using `modem.webhooks.composeEventDetails` to handle inco
 ```javascript nodejs
 const express = require("express");
 const bodyParser = require("body-parser");
-const Modem = require("modem");
+const Modem Pay = require("modem");
 
-const modem = new Modem();
+const modem = new Modem Pay();
 const app = express();
 app.use(bodyParser.json());
 
@@ -94,8 +94,8 @@ app.listen(3000, () => console.log("Listening for webhooks on port 3000"));
 
 ### Recommended Response
 
-For each webhook event, respond to Modem with an HTTP `200 OK` status as confirmation. This ensures Modem won’t re-send the event unless there's an error response.
+For each webhook event, respond to Modem Pay with an HTTP `200 OK` status as confirmation. This ensures Modem Pay won’t re-send the event unless there's an error response.
 
 ### Summary
 
-By following these steps, you can securely receive and process webhook events from Modem, automating actions based on customer interactions and payment flows. Make sure to store and securely handle the event data, as each event may carry critical transaction or customer information relevant to your application.
+By following these steps, you can securely receive and process webhook events from Modem Pay, automating actions based on customer interactions and payment flows. Make sure to store and securely handle the event data, as each event may carry critical transaction or customer information relevant to your application.

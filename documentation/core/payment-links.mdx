@@ -2,7 +2,7 @@
 title: Payment Link
 ---
 
-**Payment Links** in Modem are designed to help businesses collect payments effortlessly through a hosted checkout page. With a unique link, customers can be directed to pay for items or services without requiring code-intensive solutions or complicated integrations. 
+**Payment Links** in Modem Pay are designed to help businesses collect payments effortlessly through a hosted checkout page. With a unique link, customers can be directed to pay for items or services without requiring code-intensive solutions or complicated integrations. 
 
 **Primary Use Cases**:
 - **Single-Charge Payments**: One-time payments, perfect for items or services.
@@ -11,6 +11,19 @@ title: Payment Link
 
 A Payment Link is highly customizable, allowing the merchant to specify payment details like amount, currency, title, description, and additional form fields. These fields enable you to gather custom data from customers, such as details about the product or service, or special instructions.
 
+### How it Works in Real Life
+
+<Tip>
+Fatou runs a boutique on Kairaba Avenue, selling elegant African prints and handcrafted accessories. Her shop, *Elegant Threads*, is popular among locals and tourists alike. But one challenge keeps coming up: customers often request to pay remotely for reserved items, especially during the busy festive seasons.  
+
+One afternoon, a loyal customer, Mariama, calls from Banjul. She has her eye on a stunning wax print dress but won’t be able to visit the shop until next week. “Can I pay now to secure it?” Mariama asks.  
+
+Fatou logs into the Modem Pay dashboard and quickly generates a payment link. She customizes it with the item’s name and price, D3,500 for the dress. Within seconds, she shares the link via WhatsApp.  
+
+Mariama clicks the link, completes the payment, and sends a confirmation screenshot. The dress is now secured, waiting for her pickup.  
+
+With Modem Pay’s payment link feature, Fatou keeps her customers happy and never misses a sale, even from miles away. On Kairaba Avenue, where businesses thrive on trust and connections, this simple tool has become a game-changer.
+</Tip>
 ---
 
 ### Payment Link Properties
@@ -32,15 +45,9 @@ Each Payment Link object includes the following fields:
 
 --- 
 
-### Example Use Case: Paying for an Online Course
-
-Imagine you're a platform offering an online course, and you need a simple way for students to pay for enrollment. Modem Payment Links can help by creating a link with custom fields to gather information like course name, course level, and any other relevant data. 
-
----
-
 ## Payment Link Operations
 
-Modem’s Payment Link API provides tools to create, retrieve, update, list, and delete links. Here’s how each operation works:
+Modem Pay’s Payment Link API provides tools to create, retrieve, update, list, and delete links. Here’s how each operation works:
 
 
 ### 1. Create a Payment Link
@@ -168,4 +175,4 @@ await modem.paymentLinks.delete("e9dd2d50-1dbf-49f4-bd4a-e129aae1aa4b");
 - **Reusable**: Payment Links can be set to active or inactive and reused as necessary.
 - **Easy Sharing**: Share the link through emails, SMS, or embed it on a website.
 
-With Modem’s Payment Links, collecting payments becomes straightforward, whether you’re setting up one-time fees, subscriptions, or open-ended donations.
+With Modem Pay’s Payment Links, collecting payments becomes straightforward, whether you’re setting up one-time fees, subscriptions, or open-ended donations.

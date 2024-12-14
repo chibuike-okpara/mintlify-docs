@@ -2,10 +2,10 @@
 title: Authentication
 ---
 
-Modem uses API keys to authenticate requests, ensuring that only authorized applications can access payment functions. API keys are generated in the Modem dashboard and can be used in either live or test modes.
+Modem Pay uses API keys to authenticate requests, ensuring that only authorized applications can access payment functions. API keys are generated in the Modem Pay dashboard and can be used in either live or test modes.
 
 1. **API Keys**  
-   Modem provides two types of API keys:
+   Modem Pay provides two types of API keys:
 
    - **Public Key**: Used on the client side for initial requests (e.g., HTML form submissions).
    - **Secret Key**: Used on the server side for secure API calls and operations that need high trust (e.g., managing payment intents, accessing sensitive customer data).
@@ -18,7 +18,7 @@ Modem uses API keys to authenticate requests, ensuring that only authorized appl
    ```javascript nodejs
    import modem from "modem";
 
-   const modem = new Modem("sk_test_b9596....4865");
+   const modem = new Modem Pay("sk_test_b9596....4865");
    ```
 
    ```http http
@@ -31,4 +31,4 @@ Modem uses API keys to authenticate requests, ensuring that only authorized appl
 
 3. **Test and Live Modes**
 
-   Modem separates test and live keys, enabling you to test transactions without impacting real accounts. Test keys operate in a sandbox environment, allowing you to simulate payment flows before going live.
+   Modem Pay separates test and live keys, enabling you to test transactions without impacting real accounts. Test keys operate in a sandbox environment, allowing you to simulate payment flows before going live.

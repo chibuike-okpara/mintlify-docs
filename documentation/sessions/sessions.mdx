@@ -2,7 +2,7 @@
 title: Sessions
 ---
 
-**Sessions** in Modem are designed for flexible payment experiences that can adapt to a variety of scenarios. Unlike static [**Payment Links**](/core/payment-links), Sessions are dynamic and provide the flexibility to attach a customer directly, automatically populating saved payment methods if available. Sessions also come with an expiration setting, making them ideal for time-sensitive transactions like limited-time offers, reservations, or real-time booking payments.
+**Sessions** in Modem Pay are designed for flexible payment experiences that can adapt to a variety of scenarios. Unlike static [**Payment Links**](/core/payment-links), Sessions are dynamic and provide the flexibility to attach a customer directly, automatically populating saved payment methods if available. Sessions also come with an expiration setting, making them ideal for time-sensitive transactions like limited-time offers, reservations, or real-time booking payments.
 
 ### When to Use Sessions
 
@@ -65,7 +65,7 @@ const session = await modem.sessions.create({
 
 #### 2. Session with Attached Customer and Saved Payment Methods
 
-For recurring users, attaching a customer to the session lets Modem retrieve saved payment methods. The session expiration is set to 10 minutes.
+For recurring users, attaching a customer to the session lets Modem Pay retrieve saved payment methods. The session expiration is set to 10 minutes.
 
 <CodeGroup>
 ```javascript nodejs
