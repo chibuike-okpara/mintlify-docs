@@ -9,7 +9,7 @@ By using this integration, you can implement a "Pay Now" button that triggers a 
 
 ## Example: Setting Up Inline Payment
 
-```html
+```html html
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -50,17 +50,8 @@ By using this integration, you can implement a "Pay Now" button that triggers a 
 </html>
 ```
 
-### Key Highlights of the Code:
-
-- **`callback`:** Called after the payment is successfully completed. Receives the payment details as an argument, which can be used to verify the transaction or update your records.
-- **`onClose`:** Triggered when the customer closes the payment modal. Receives a boolean (`cancelled`) indicating whether the payment was explicitly canceled. You can use this to handle cancellations gracefully.
-- **Precedence Rules:**
-  - If `return_url` is provided, it will override the `callback` function after payment completion.
-  - Similarly, if `cancel_url` is provided, it takes precedence over `onClose`.
-
-
-
-## Full List of Fields for Inline Integration
+## Calling the ModemPayCheckout() Function
+Let's examine the parameters provided when invoking `ModemPayCheckout()` in detail:
 
 | **Field**            | **Description**                                                                                             | **Example**                          |
 |----------------------|-----------------------------------------------------------------------------------------------------------|--------------------------------------|
@@ -80,42 +71,65 @@ By using this integration, you can implement a "Pay Now" button that triggers a 
 | `onClose`            | Function to handle when the modal is closed or payment is canceled.                                       | `(cancelled) => { ... }`            |
 
 
+<Warning> 
+**Public Key**
+
+Keep in mind that this is client-side code, so it utilizes your public key rather than your secret key.
+</Warning>
+
 ## How Callbacks and onClose Work
+
+
+Here's an example that demonstrates how to use both the `callback` and `onClose` functions. The `callback` function sends a verification request to the backend in the background. Meanwhile, the `onClose` function handles the modal closure by displaying a "verifying" message if the background request is still in progress, or a thank-you message if the verification succeeds. If the verification fails, the user is prompted to retry or contact support.
+
+> **View**: [https://codepen.io/mercury-sms/embed/EaYNGOv](https://codepen.io/mercury-sms/embed/EaYNGOv?default-tab=html%2Cresult)
 
 ### **`callback`: Handling Successful Payments**
 
 The `callback` function allows you to perform actions after a successful payment. For instance, you can verify the transaction, send a confirmation email, or update your database. The `transaction` parameter contains essential information about the payment.
 
-#### Example:
+<Warning>
+The `redirect_url` takes priority over the `callback`. If both are provided, the `redirect_url` will be used.
+</Warning>
 
-```javascript
-callback: (transaction) => {
-  console.log("Transaction ID:", transaction.id);
-  console.log("Amount Paid:", transaction.amount);
-  // Add logic to verify the transaction with your backend
-  fetch("/verify-payment", {
-    method: "POST",
-    body: JSON.stringify({ transactionId: transaction.id }),
-  }).then((response) => response.json())
-    .then((data) => console.log("Verification Result:", data));
+
+
+```javascript javascript
+function makePayment() {
+  const modal = ModemPayCheckout({
+    public_key:
+      "pk_test_971deb266f73e90c1083983e684a765dabe163c59b94c0d22dfdb8172f1915a0",
+    // ...
+    callback: function (transaction) {
+      // Handle the transaction success and verify on backend
+      verifyTransactionOnBackend(transaction.id, modal);
+    },
+  });
 }
 ```
-
+<Warning>
+Always verify the payment on your server after the transaction, even if a callback was used.
+</Warning>
+<Note>
+Keep in mind that the `callback` function is triggered after the payment is completed, even while the modal remains open. For an enhanced user experience, you can combine the `callback` with the `onClose` handler.
+</Note>
 
 ### **`onClose`: Handling Payment Cancellations**
 
 The `onClose` function is invoked when the customer cancels the payment by closing the modal. This is particularly useful for logging or notifying users of incomplete transactions.
 
-#### Example:
-
-```javascript
-onClose: (cancelled) => {
-  if (cancelled) {
-    console.log("The payment was cancelled by the user.");
-    alert("You cancelled the payment. Please try again.");
-  } else {
-    console.log("Payment modal closed without action.");
-  }
+```javascript javascript
+function makePayment() {
+  const modal = ModemPayCheckout({
+    public_key:
+      "pk_test_971deb266f73e90c1083983e684a765dabe163c59b94c0d22dfdb8172f1915a0",
+    // ...
+    onClose: function (cancelled) {
+      if (cancelled) {
+        // handle cancellation
+      }
+    },
+  });
 }
 ```
 
@@ -126,6 +140,49 @@ onClose: (cancelled) => {
   
 - **`cancel_url` vs `onClose`:**  
   If a `cancel_url` is provided, it overrides the `onClose` function, and the user will be redirected to the specified URL upon cancellation.
+
+## Webhooks
+
+If you have configured [webhook notifications](/documentation/core/webhooks) for your account, we will send a webhook when the payment is completed, as well as for any failed payment attempts. Here's an example of the webhook payload:
+
+```json
+{
+  "event": "charge.succeeded",
+  "payload": {
+    "id": "23419194-7324-4c2b-a74b-d8fba736e692",
+    "type": "payment",
+    "amount": 2500,
+    "currency": "GMD",
+    "payment_method": "qmoney",
+    "customer": "0f6e0912-2f2f-4d8b-bd68-ac8c97c44ae6",
+    "metadata": {},
+    "status": "completed",
+    "payment_link_id": null,
+    "custom_fields_values": {},
+    "business_id": "a10a51ae-05c8-406e-968c-7b1d309a77e0",
+    "account_id": "7788dd90-3801-47a6-8597-b46eaa0a7d7d",
+    "test_mode": true,
+    "customer_name": "Caleb Okpara",
+    "customer_phone": "7024725",
+    "customer_email": "calebchibuike110@gmail.com",
+    "createdAt": "2024-12-15T09:34:17.036Z",
+    "updatedAt": "2024-12-15T09:34:43.306Z",
+    "payment_account": ".... 9944",
+    "payment_metadata": {
+      "os": "MacOS",
+      "browser": "Firefox",
+      "ipAddress": "196.223.149.183",
+      "timestamp": "2024-12-15T09:34:43.266Z",
+      "deviceType": "Desktop",
+      "urlIPAddress": "https://db-ip.com/196.223.149.183",
+      "screenResolution": "1600x900"
+    },
+    "payment_intent_id": "273ac751-369d-4198-8340-da480208bded",
+    "transaction_reference": "VOAO1CFEN7",
+    "payment_method_id": "4dbaaec5-7a16-4908-8fd9-c3d2bd24f739"
+  }
+}
+```
 
 ## Why Use Inline Payments?
 

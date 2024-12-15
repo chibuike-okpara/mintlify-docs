@@ -1,0 +1,248 @@
+---
+title: Modem Standard 
+---
+
+## 1. **Using Payment Sessions**
+
+Payment sessions simplify the payment process by redirecting the customer to a secure payment page hosted by Modem. You create a payment session on your backend, specifying details like the amount and currency. The customer completes the payment, and you verify the transaction via webhook or API. This method is ideal for a simple, secure checkout experience.
+
+**Steps**:
+1. Create a payment session on your backend.
+2. Redirect the customer to Modem's secure payment page.
+3. Confirm the payment status via webhook or API.
+
+<CodeGroup>
+```javascript server.js
+import express from "express";
+import path from "path";
+import Modem from "../index";
+
+const modem = new Modem(
+  "sk_test_b9596116930a926d33bd51ced40766e61d0c53c521f0cd28c70253e158ee4865"
+);
+
+const app = express();
+app.use(express.json());
+app.use(express.static(path.join(__dirname, "public")));
+
+const YOUR_DOMAIN = "http://localhost:7024";
+
+app.post("/create-checkout-session", async (req, res) => {
+  const session = await modem.sessions.create({
+    amount: 2000,
+    title: "Stubborn Attachments",
+    redirect_url: `${YOUR_DOMAIN}/success.html`,
+    cancel_url: `${YOUR_DOMAIN}/cancel.html`,
+  });
+
+  res.redirect(303, session.payment_link);
+});
+
+
+app.post('/verify', async (req, res) => {
+  const payload = req.body;
+  const signature = req.headers["x-modem-signature"];
+  const secret = process.env.MODEM_WEBHOOK_SECRET;
+
+  try {
+    const event = modem.webhooks.composeEventDetails(payload, signature, secret);
+    // Process the event
+    
+    res.status(200).send("Webhook processed!");
+  } catch (error) {
+    res.status(400).send("Invalid signature!");
+  }
+})
+
+app.listen(7024, () => console.log("Running on port 7024"));
+
+```
+```html checkout.html
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Buy cool new product</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <section>
+      <div class="product">
+        <img
+          src="https://i.imgur.com/EHyR2nP.png"
+          alt="The cover of Stubborn Attachments"
+        />
+        <div class="description">
+          <h3>Stubborn Attachments</h3>
+          <h5>GMD 2,000.00</h5>
+        </div>
+      </div>
+      <form action="/create-checkout-session" method="POST">
+        <button type="submit" id="checkout-button">Checkout</button>
+      </form>
+    </section>
+  </body>
+</html>
+```
+
+```html success.html
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Thanks for your order!</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <section>
+    <p>
+      We appreciate your business! If you have any questions, please email
+      <a href="mailto:orders@example.com">orders@example.com</a>.
+    </p>
+  </section>
+</body>
+</html>
+```
+
+```html cancel.html
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Checkout canceled</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <section>
+    <p>Forgot to add something to your cart? Shop around then come back to pay!</p>
+  </section>
+</body>
+</html>
+```
+
+</CodeGroup>
+
+---
+
+## 2. **Using Direct Payment Intent**
+
+A payment intent gives you more control over the payment process. You create the payment intent on your backend, collect payment details directly from the customer, and confirm the payment. Afterward, you verify the transaction status via webhooks or API.
+
+**Steps**:
+1. Create a payment intent on your backend.
+2. Collect customer payment details.
+3. Confirm the payment and verify the status via webhook or API.
+
+
+<CodeGroup>
+```javascript server.js
+import express from "express";
+import path from "path";
+import bodyParser from "body-parser";
+import Modem from "../index";
+
+const modem = new Modem(
+  "sk_test_b9596116930a926d33bd51ced40766e61d0c53c521f0cd28c70253e158ee4865"
+);
+
+const app = express();
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, "public")));
+
+const YOUR_DOMAIN = "http://localhost:7024";
+
+app.post("/create-checkout-session", async (req, res) => {
+  const intent = await modem.paymentIntents.create({
+    ...req.body,
+    return_url: `${YOUR_DOMAIN}/success.html`,
+    cancel_url: `${YOUR_DOMAIN}/cancel.html`,
+  });
+
+  res.redirect(303, intent.link);
+});
+
+
+app.post('/verify', async (req, res) => {
+  const payload = req.body;
+  const signature = req.headers["x-modem-signature"];
+  const secret = process.env.MODEM_WEBHOOK_SECRET;
+
+  try {
+    const event = modem.webhooks.composeEventDetails(payload, signature, secret);
+    // Process the event
+    
+    res.status(200).send("Webhook processed!");
+  } catch (error) {
+    res.status(400).send("Invalid signature!");
+  }
+})
+
+app.listen(7024, () => console.log("Running on port 7024"));
+
+```
+```html checkout.html
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Buy cool new product</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <section>
+      <div class="product">
+        <img
+          src="https://i.imgur.com/EHyR2nP.png"
+          alt="The cover of Stubborn Attachments"
+        />
+        <div class="description">
+          <h3>Stubborn Attachments</h3>
+          <h5>GMD 2,000.00</h5>
+        </div>
+      </div>
+      <form action="/create-checkout-session" method="POST">
+        <input type="hidden" name="title" value="Stubborn Attachments" />
+        <input type="hidden" name="amount" value="2000" />
+        <input
+          type="hidden"
+          name="customer"
+          value="0f6e0912-2f2f-4d8b-bd68-ac8c97c44ae6"
+        />
+        <button type="submit" id="checkout-button">Checkout</button>
+      </form>
+    </section>
+  </body>
+</html>
+
+```
+
+```html success.html
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Thanks for your order!</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <section>
+    <p>
+      We appreciate your business! If you have any questions, please email
+      <a href="mailto:orders@example.com">orders@example.com</a>.
+    </p>
+  </section>
+</body>
+</html>
+```
+
+```html cancel.html
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Checkout canceled</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <section>
+    <p>Forgot to add something to your cart? Shop around then come back to pay!</p>
+  </section>
+</body>
+</html>
+```
+
+</CodeGroup>

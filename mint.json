@@ -83,7 +83,8 @@
       "pages": [
         "payments/overview",
         "payments/modem-inline",
-        "payments/html-checkout"
+        "payments/html-checkout",
+        "payments/custom"
       ]
     }
   ],
