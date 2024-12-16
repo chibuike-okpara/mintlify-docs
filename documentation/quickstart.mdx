@@ -62,7 +62,7 @@ Here's an example of how you'd implement HTML checkout:
 ```javascript nodejs
 import Modem Pay from "modem";
 
-const modem = new Modem Pay();
+const modem = new Modem();
 
 const intent = await modem.paymentIntents.create({ amount: 450 });
 
