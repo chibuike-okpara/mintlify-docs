@@ -54,7 +54,7 @@
       ]
     },
     {
-      "group": "Core Resources",
+      "group": "Core API Resources",
       "pages": [
         "documentation/core/customers",
         "documentation/core/mandates",
@@ -79,7 +79,7 @@
       ]
     },
     {
-      "group": "Payment UI and Embeds",
+      "group": "Payment UI and Integration",
       "pages": [
         "payments/overview",
         "payments/modem-inline",
