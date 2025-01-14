@@ -20,22 +20,23 @@ The **Payment Intent** object contains the following properties:
 - **payment_method**: The specific payment method to use (optional).
 
 #### Payment Intent Response Object
+
 These are the response properties after the Payment Intent is created:
 
-- **id**: A unique identifier for the Payment Intent.
-- **payment_method_options**: The available payment methods for this transaction.
-- **Customer**: The associated customer object (optional).
-- **intent_secret**: A secret key used to secure the payment intent.
-- **status**: The current status of the payment. It can be one of the following:
-  - `initialized`: The payment intent has been created, but payment has not started.
-  - `processing`: The payment is currently being processed.
-  - `requires_payment_method`: Payment method is required before proceeding.
-  - `successful`: The payment was successfully completed.
-  - `failed`: The payment failed to process.
-  - `cancelled`: The payment was canceled by the customer or the system.
-- **link**: A URL to the hosted payment page where the customer can complete the payment.
-- **custom_fields_values**: Any custom data associated with the payment (optional).
-- **is_session**: A boolean flag indicating whether the payment intent is part of a session.
+- **status**: A boolean value indicating whether the payment intent creation was successful. Returns `true` if successful, `false` otherwise.
+- **message**: A descriptive message about the result of the Payment Intent creation (e.g., "Payment intent created successfully. Please proceed to complete the payment.").
+- **data**: An object containing the details of the payment intent. The properties inside this object are:
+  - **intent_secret**: A secret key used to secure the payment intent, required for completing the payment.
+  - **payment_link**: A URL to the hosted payment page where the customer can complete the payment.
+  - **amount**: The total amount to be paid, expressed in the currency specified in **currency**.
+  - **currency**: The currency code (e.g., `GMD` for Gambian Dalasi) in which the payment is to be made.
+  - **expires_at**: A timestamp (ISO 8601 format) indicating when the payment intent will expire. After this time, the payment intent will no longer be valid.
+  - **status**: The current status of the payment intent. It can be one of the following:
+    - `requires_payment_method`: Payment method is required before proceeding.
+    - `processing`: The payment is currently being processed.
+    - `successful`: The payment was successfully completed.
+    - `failed`: The payment failed to process.
+    - `cancelled`: The payment was canceled by the customer or the system.
 
 ### Summary
 Payment Intents in Modem Pay are used to initiate and manage the payment flow. By grouping parameters and responses in a structured way, they allow businesses to control how and when payments are processed while providing a seamless experience for their customers.

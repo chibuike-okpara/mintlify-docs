@@ -27,13 +27,139 @@ To confirm the integrity of incoming events, Modem Pay includes a unique `x-mode
    Pass the payload, signature, and your unique Modem Pay secret to the `modem.webhooks.composeEventDetails` function. This function performs the necessary checks, verifying the signature and parsing the payload.
 
 <CodeGroup>
-```javascript nodejs
+```javascript sdk
 // Example usage
 const event = modem.webhooks.composeEventDetails(
     payload,
     xSignatureHeader,
     modemSecret
 );
+```
+```javascript javascript
+app.post("/modem-webhook", (req, res) => {
+  const payload = JSON.stringify(req.body);
+  const signature = req.headers["x-modem-signature"];
+
+  // Ensure the signature is provided
+  if (!signature) {
+    return res.status(400).send("Signature missing");
+  }
+
+  const secretHash = process.env.MODEM_PAY_SECRET_HASH;
+
+  // Generate the HMAC-SHA256 hash for signature comparison
+  const computedSignature = crypto
+    .createHmac("sha256", secretHash)
+    .update(payload)
+    .digest("hex");
+
+  // Ensure the signature length matches to avoid timing attacks
+  if (computedSignature.length !== signature.length) {
+    return res.status(400).send("Invalid signature length");
+  }
+
+  // Use timing-safe comparison to protect against timing attacks
+  if (
+    !crypto.timingSafeEqual(
+      Buffer.from(computedSignature),
+      Buffer.from(signature)
+    )
+  ) {
+    return res.status(400).send("Invalid signature!");
+  }
+
+  // Parse the payload to handle the event
+  try {
+    const eventPayload = JSON.parse(payload);
+    // You can add logic here to process the eventPayload
+    res.sendStatus(200); // Acknowledge successful receipt
+  } catch (error) {
+    res.status(400).send("Invalid event data");
+  }
+});
+```
+```python python
+app = Flask(__name__)
+
+@app.route("/modem-webhook", methods=["POST"])
+def modem_webhook():
+    payload = json.dumps(request.json)
+    signature = request.headers.get("x-modem-signature")
+
+    # Ensure the signature is provided
+    if not signature:
+        return jsonify({"error": "Signature missing"}), 400
+
+    secret_hash = os.environ.get("MODEM_PAY_SECRET_HASH")
+
+    # Generate the HMAC-SHA256 hash for signature comparison
+    computed_signature = hmac.new(
+        secret_hash.encode(), payload.encode(), hashlib.sha256
+    ).hexdigest()
+
+    # Ensure the signature length matches to avoid timing attacks
+    if len(computed_signature) != len(signature):
+        return jsonify({"error": "Invalid signature length"}), 400
+
+    # Use timing-safe comparison to protect against timing attacks
+    if not hmac.compare_digest(computed_signature, signature):
+        return jsonify({"error": "Invalid signature!"}), 400
+
+    # Parse the payload to handle the event
+    try:
+        event_payload = json.loads(payload)
+        # Logic to process the eventPayload can go here
+        return "", 200  # Acknowledge successful receipt
+    except json.JSONDecodeError:
+        return jsonify({"error": "Invalid event data"}), 400
+
+if __name__ == "__main__":
+    app.run(debug=True)
+```
+```php php
+$secretHash = getenv("MODEM_PAY_SECRET_HASH");
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $payload = json_encode(file_get_contents("php://input"));
+    $signature = $_SERVER["HTTP_X_MODEM_SIGNATURE"];
+
+    // Ensure the signature is provided
+    if (!$signature) {
+        http_response_code(400);
+        echo json_encode(["error" => "Signature missing"]);
+        exit();
+    }
+
+    // Generate the HMAC-SHA256 hash for signature comparison
+    $computedSignature = hash_hmac('sha256', $payload, $secretHash);
+
+    // Ensure the signature length matches to avoid timing attacks
+    if (strlen($computedSignature) !== strlen($signature)) {
+        http_response_code(400);
+        echo json_encode(["error" => "Invalid signature length"]);
+        exit();
+    }
+
+    // Use timing-safe comparison to protect against timing attacks
+    if (!hash_equals($computedSignature, $signature)) {
+        http_response_code(400);
+        echo json_encode(["error" => "Invalid signature!"]);
+        exit();
+    }
+
+    // Parse the payload to handle the event
+    $eventPayload = json_decode($payload, true);
+
+    if (json_last_error() !== JSON_ERROR_NONE) {
+        http_response_code(400);
+        echo json_encode(["error" => "Invalid event data"]);
+        exit();
+    }
+
+    // Logic to process the eventPayload can go here
+    http_response_code(200);  // Acknowledge successful receipt
+    echo "";
+}
 ```
 </CodeGroup>
 
@@ -58,7 +184,7 @@ Here’s an example of using `modem.webhooks.composeEventDetails` to handle inco
 ```javascript nodejs
 const express = require("express");
 const bodyParser = require("body-parser");
-const Modem = require("modem");
+const Modem = require("modem-pay");
 
 const modem = new Modem();
 const app = express();
