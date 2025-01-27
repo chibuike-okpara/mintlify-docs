@@ -2,29 +2,31 @@
 title: Webhooks
 ---
 
-Modem’s webhooks notify your server about key events, such as customer creation, payment intent updates, and successful charges. To receive and securely process these notifications, follow the steps outlined here for setting up, validating, and handling webhooks.
+Modem Pay's webhooks notify your server about key events, such as customer creation, payment intent updates, and successful charges. To receive and securely process these notifications, follow the steps outlined here for setting up, validating, and handling webhooks.
 
-*Note: You can generate your unique Modem Pay webhook secret in the Modem Pay dashboard under **Developers > Webhooks**.*
+<Note>
+You can generate your unique Modem Pay webhook secret in the Modem Pay dashboard under **_Developers > Webhooks_**.
+</Note>
 
-
-### Setting Up Webhooks
+## Setting Up Webhooks  
 
 1. **Define Your Webhook Endpoint**:  
    Create a dedicated `POST` endpoint on your server to receive webhook events from Modem Pay. Ensure this endpoint is accessible over HTTPS to maintain security.
 
 2. **Listening for Events**:  
-   Your endpoint will receive a variety of event notifications (e.g., `customer.created`, `payment_intent.created`, `charge.succeeded`). The event type is provided in the `event` field, while the main data is within the `payload`.
+   Your endpoint will receive a variety of event notifications (e.g., `customer.created`, `payment_intent.created`, `charge.succeeded`). The event type is provided in the `event` field, while the main data is within the `payload`.  
 
 
-### Webhook Security and Signature Validation
+## Webhook Security and Signature Validation  
 
-To confirm the integrity of incoming events, Modem Pay includes a unique `x-modem-signature` header in each webhook request. This header allows you to verify that the event originated from Modem Pay.
+To confirm the integrity of incoming events, Modem Pay includes a unique `x-modem-signature` header in each webhook request. This header allows you to verify that the event originated from Modem Pay.  
 
 1. **Retrieve the Signature**:  
-   In your webhook endpoint, extract the `x-modem-signature` header from the incoming request.
+   In your webhook endpoint, extract the `x-modem-signature` header from the incoming request.  
 
 2. **Use `modem.webhooks.composeEventDetails` for Validation**:  
-   Pass the payload, signature, and your unique Modem Pay secret to the `modem.webhooks.composeEventDetails` function. This function performs the necessary checks, verifying the signature and parsing the payload.
+   Pass the payload, signature, and your unique Modem Pay secret to the `modem.webhooks.composeEventDetails` function. This function performs the necessary checks, verifying the signature and parsing the payload.  
+
 
 <CodeGroup>
 ```javascript sdk
@@ -163,10 +165,92 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ```
 </CodeGroup>
 
-3. **Handle Validation Failures**: 
-      
-    If validation fails, reject the event with an appropriate response (e.g., HTTP 400). Validation ensures that your system processes only authorized notifications.
+## Modem Pay CLI  
 
+The Modem Pay CLI is a tool designed to simplify integration testing by offering features like authentication, webhook management, and event simulation **only in a test environment**.  
+
+
+### Installation  
+<Note>
+Ensure that both Node.js and npm are installed on your machine before proceeding.
+</Note>
+To install the Modem Pay CLI, run:  
+```bash bash 
+npm install -g modem-pay-cli  
+```  
+
+### Commands  
+
+#### **1. Login**  
+Authenticates a user and generates an access token, business ID, and account ID. Authentication is required to access other CLI features.  
+
+**Usage**:  
+```bash bash 
+$ modempay login 
+
+✔ Enter your Modem Pay email: › mercury@modempay.com
+✔ Enter your password: › *******
+✅ Login successful! Credentials saved.
+```  
+
+#### **2. Listen**  
+The `listen` command creates a secure public tunnel using **Localtunnel** to forward webhooks to a local endpoint. This is particularly useful for testing webhooks during development.  
+
+**Disclaimer**:  
+- The CLI leverages **Localtunnel** to generate the public URL. In some cases, a public URL might not be provisioned successfully due to network issues.  
+- This feature should **only** be used in **test environments**.  
+
+**Usage**:  
+```bash bash 
+$ modempay listen --forward-url <local-endpoint>  
+```  
+
+**Options**:  
+- `--forward-url`: Specifies your local endpoint to receive webhook events.  
+
+**Example**:  
+```bash bash 
+$ modempay listen --forward-url=http://localhost:3000/webhook  
+
+Ready! Your webhook signing secret is '{{WEBHOOK_SIGNING_SECRET}}' (^C to quit)
+```  
+This will create a public tunnel pointing to `http://localhost:3000/webhook`.  
+
+
+
+#### **3. Trigger**  
+Simulates events for testing purposes.  
+
+**Usage**:  
+```bash bash 
+$ modempay trigger <event-type>  
+```  
+
+**Supported Event Types**:  
+- **Customer Events**: `"customer.created"`, `"customer.updated"`, `"customer.deleted"`
+- **Payment Intent Events**: `"payment_intent.created"`, `"payment_intent.cancelled"`
+- **Charge Events**: `"charge.succeeded"`, `"charge.cancelled"`
+
+
+<Note>
+The `listen` command captures both manually triggered events and automatically triggered events from the Modem Pay system. For testing purposes, always use the webhook secret generated by the listen command. This secret is displayed in the terminal and can also be found in the Modem Pay dashboard, but only in test mode. 
+
+**Important**: Production secrets and endpoints remain unaffected and are not impacted by the test mode configuration.
+</Note>
+
+**Example**:  
+```bash bash 
+$ modempay trigger charge.succeeded 
+
+🔧 Executing event: "charge.succeeded"
+✅ Event "charge.succeeded" triggered successfully.
+```  
+This sends a `charge.succeeded` event payload to the configured webhook endpoint for testing.  
+
+
+<Tip>
+Always respond to webhook events with an HTTP `200 OK` status to confirm receipt. This ensures Modem Pay doesn’t retry the webhook unnecessarily.  
+</Tip>
 
 ### Event Structure
 
@@ -218,9 +302,14 @@ app.listen(3000, () => console.log("Listening for webhooks on port 3000"));
 ```
 </CodeGroup>
 
+
 ### Recommended Response
 
 For each webhook event, respond to Modem Pay with an HTTP `200 OK` status as confirmation. This ensures Modem Pay won’t re-send the event unless there's an error response.
+
+<Warning>
+Ensure your webhook endpoint quickly responds with an HTTP `200 OK` status before performing any tasks that might cause delays or timeouts, such as updating records or sending invoices. This prevents webhook retries and ensures smooth processing.
+</Warning>
 
 ### Summary
 
