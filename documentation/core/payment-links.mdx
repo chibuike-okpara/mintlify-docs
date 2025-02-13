@@ -65,7 +65,7 @@ To create a Payment Link for course enrollment:
 
 <CodeGroup>
 ```javascript nodejs
-const courseLink = await modem.paymentLinks.create({
+const courseLink = await modempay.paymentLinks.create({
     title: "Course Payment",
     description: "Payment for Full-Stack Development Course",
     amount: 15000,
@@ -81,9 +81,12 @@ const courseLink = await modem.paymentLinks.create({
 
 ```json
 {
-  "id": "e9dd2d50-1dbf-49f4-bd4a-e129aae1aa4b",
+  "id": "ed46f172-0c9e-4d53-862d-0afbb85d6f88",
+  "min_amount": 0,
+  "min_amount_type": "fixed",
   "metadata": {},
   "type": "single-charge",
+  "notification_channels": [],
   "status": "active",
   "title": "Course Payment",
   "description": "Payment for Full-Stack Development Course",
@@ -95,9 +98,13 @@ const courseLink = await modem.paymentLinks.create({
     "Course Name",
     "Student ID"
   ],
-  "unique_code": "344ae20834aab7ec2785b11c247269ac72801342b0d45204d34332a34308e217",
-  "payment_link": "http://localhost:3001/pay/344ae20834aab7ec2785b11c247269ac72801342b0d45204d34332a34308e217",
-  "test_mode": true
+  "unique_code": "aa57aa1a28655934962f1bee1bec517fd2c1f4de8abdcaf75b75d6313d8a055b",
+  "payment_link": "https://test.checkout.modempay.com/pay/aa57aa1a28655934962f1bee1bec517fd2c1f4de8abdcaf75b75d6313d8a055b",
+  "business_id": "a10a51ae-05c8-406e-968c-7b1d309a77e0",
+  "account_id": "7788dd90-3801-47a6-8597-b46eaa0a7d7d",
+  "test_mode": true,
+  "updatedAt": "2025-02-13T12:11:17.695Z",
+  "createdAt": "2025-02-13T12:11:17.695Z"
 }
 ```
 
@@ -109,7 +116,7 @@ Retrieve details for a specific Payment Link by using its unique `id`:
 
 <CodeGroup>
 ```javascript nodejs
-const courseLink = await modem.paymentLinks.retrieve(
+const courseLink = await modempay.paymentLinks.retrieve(
     "e9dd2d50-1dbf-49f4-bd4a-e129aae1aa4b"
 );
 ```
@@ -123,7 +130,7 @@ To modify an existing Payment Link, such as updating the amount, title, or statu
 
 <CodeGroup>
 ```javascript nodejs
-const courseLink = await modem.paymentLinks.update(
+const courseLink = await modempay.paymentLinks.update(
     "e9dd2d50-1dbf-49f4-bd4a-e129aae1aa4b",
     {
       status: "inactive",
@@ -151,7 +158,7 @@ Get a list of all Payment Links for easy management:
 
 <CodeGroup>
 ```javascript nodejs
-const links = await modem.paymentLinks.list();
+const links = await modempay.paymentLinks.list();
 ```
 </CodeGroup>
 
@@ -163,7 +170,7 @@ Remove an outdated or invalid Payment Link:
 
 <CodeGroup>
 ```javascript nodejs
-await modem.paymentLinks.delete("e9dd2d50-1dbf-49f4-bd4a-e129aae1aa4b");
+await modempay.paymentLinks.delete("e9dd2d50-1dbf-49f4-bd4a-e129aae1aa4b");
 ```
 </CodeGroup>
 

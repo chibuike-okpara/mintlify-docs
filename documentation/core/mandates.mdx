@@ -21,7 +21,7 @@ Mandates are tied directly to specific payment methods and can only be retrieved
 
 <CodeGroup>
 ```javascript nodejs
-const mandate = await modem.mandates.retrieve(
+const mandate = await modempay.mandates.retrieve(
     "ad47ccb9-687c-475b-90dc-1dd3b4cba68e"
 );
 ```
@@ -38,7 +38,7 @@ const mandate = await modem.mandates.retrieve(
   },
   "payment_method": "ad47ccb9-687c-475b-90dc-1dd3b4cba68e",
   "payment_method_details": {
-    "logo": "http://localhost:9090/images/qcell.png",
+    "logo": "https://api.modempay.com/images/qcell.png",
     "type": "mobilepay",
     "group": "wallet-gm",
     "last4": "9944",

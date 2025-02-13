@@ -42,7 +42,7 @@ Use `retrieve` to get the complete details of a specific transaction by its ID. 
 
 <CodeGroup>
 ```javascript nodejs
-const transaction = await modem.transactions.retrieve(
+const transaction = await modempay.transactions.retrieve(
     "5a24d5d0-1117-4f18-9a44-78112eac8aa1"
 );
 ```
@@ -54,7 +54,7 @@ The `list` function returns all transactions, helping you monitor overall paymen
 
 <CodeGroup>
 ```javascript nodejs
-const transactions = await modem.transactions.list();
+const transactions = await modempay.transactions.list();
 ```
 </CodeGroup>
 
@@ -80,7 +80,7 @@ The `TransactionListOption` allows the following filtering and pagination option
 
 <CodeGroup>
 ```javascript node
-const transactions = await modem.transactions.list({
+const transactions = await modempay.transactions.list({
   limit: 20,
   search: "GMD",
   timeframe: 1440 // last 24 hours

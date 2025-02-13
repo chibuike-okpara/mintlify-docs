@@ -12,7 +12,7 @@ Use the retrieve method to access detailed information about a single session by
 
 <CodeGroup>
 ```javascript nodejs
-const session = await modem.sessions.retrieve(
+const session = await modempay.sessions.retrieve(
   "2f4145b6-5a8b-4ec7-b62a-246b4424d351"
 );
 ```
@@ -32,7 +32,7 @@ The list method provides a summary of all sessions, allowing you to monitor and 
 
 <CodeGroup>
 ```javascript nodejs
-const sessions = await modem.sessions.list();
+const sessions = await modempay.sessions.list();
 ```
 </CodeGroup>
 
@@ -46,7 +46,7 @@ If a session needs to be invalidated manually, perhaps due to a canceled order o
 
 <CodeGroup>
 ```javascript nodejs
-const expiredSession = await modem.sessions.expire(
+const expiredSession = await modempay.sessions.expire(
     "2f4145b6-5a8b-4ec7-b62a-246b4424d351"
 );
 ```

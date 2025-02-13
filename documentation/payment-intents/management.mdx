@@ -17,7 +17,7 @@ If a payment session is no longer needed, you can cancel a Payment Intent. Once 
 
 <CodeGroup>
 ```javascript nodejs
-const paymentIntent = await modem.paymentIntents.cancel(
+const paymentIntent = await modempay.paymentIntents.cancel(
     "49ac6595-beba-480f-bc3d-33e5d4162c4c"
 );
 ```
@@ -46,7 +46,7 @@ To check the current status or details of an existing Payment Intent, you can re
 
 <CodeGroup>
 ```javascript nodejs
-const paymentIntent = await modem.paymentIntents.retrieve(
+const paymentIntent = await modempay.paymentIntents.retrieve(
     "bfa7eb3ea516ee15f80915a922c00242a77629eb5b1efe34048b83a61925bbf5"
 );
 ```
@@ -71,7 +71,7 @@ To view a collection of recent Payment Intents, use the `list` method. This is i
 
 <CodeGroup>
 ```javascript nodejs
-const paymentIntents = await modem.paymentIntents.list({ limit: 10 });
+const paymentIntents = await modempay.paymentIntents.list({ limit: 10 });
 ```
 </CodeGroup>
 

@@ -21,12 +21,12 @@
   "topbarLinks": [
     {
       "name": "Support",
-      "url": "mailto:hi@mintlify.com"
+      "url": "mailto:support@modempay.com"
     }
   ],
   "topbarCtaButton": {
     "name": "Dashboard",
-    "url": "https://modempay.com"
+    "url": "https://merchant.modempay.com"
   },
   "layout": "solidSidenav",
   "tabs": [

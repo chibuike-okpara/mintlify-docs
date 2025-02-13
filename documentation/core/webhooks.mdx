@@ -24,14 +24,14 @@ To confirm the integrity of incoming events, Modem Pay includes a unique `x-mode
 1. **Retrieve the Signature**:  
    In your webhook endpoint, extract the `x-modem-signature` header from the incoming request.  
 
-2. **Use `modem.webhooks.composeEventDetails` for Validation**:  
-   Pass the payload, signature, and your unique Modem Pay secret to the `modem.webhooks.composeEventDetails` function. This function performs the necessary checks, verifying the signature and parsing the payload.  
+2. **Use `modempay.webhooks.composeEventDetails` for Validation**:  
+   Pass the payload, signature, and your unique Modem Pay secret to the `modempay.webhooks.composeEventDetails` function. This function performs the necessary checks, verifying the signature and parsing the payload.  
 
 
 <CodeGroup>
 ```javascript sdk
 // Example usage
-const event = modem.webhooks.composeEventDetails(
+const event = modempay.webhooks.composeEventDetails(
     payload,
     xSignatureHeader,
     modemSecret
@@ -44,7 +44,7 @@ app.post("/modem-webhook", (req, res) => {
 
   // Ensure the signature is provided
   if (!signature) {
-    return res.status(400).send("Signature missing");
+    return res.status(400).json({ message: "Signature missing" });
   }
 
   const secretHash = process.env.MODEM_PAY_SECRET_HASH;
@@ -57,7 +57,7 @@ app.post("/modem-webhook", (req, res) => {
 
   // Ensure the signature length matches to avoid timing attacks
   if (computedSignature.length !== signature.length) {
-    return res.status(400).send("Invalid signature length");
+    return res.status(400).json({ message: "Invalid signature length" });
   }
 
   // Use timing-safe comparison to protect against timing attacks
@@ -67,7 +67,7 @@ app.post("/modem-webhook", (req, res) => {
       Buffer.from(signature)
     )
   ) {
-    return res.status(400).send("Invalid signature!");
+    return res.status(400).json({ message: "Invalid signature!" });
   }
 
   // Parse the payload to handle the event
@@ -76,7 +76,7 @@ app.post("/modem-webhook", (req, res) => {
     // You can add logic here to process the eventPayload
     res.sendStatus(200); // Acknowledge successful receipt
   } catch (error) {
-    res.status(400).send("Invalid event data");
+    res.status(400).json({ message: "Invalid event data" });
   }
 });
 ```
@@ -90,7 +90,7 @@ def modem_webhook():
 
     # Ensure the signature is provided
     if not signature:
-        return jsonify({"error": "Signature missing"}), 400
+        return jsonify({"message": "Signature missing"}), 400
 
     secret_hash = os.environ.get("MODEM_PAY_SECRET_HASH")
 
@@ -101,11 +101,11 @@ def modem_webhook():
 
     # Ensure the signature length matches to avoid timing attacks
     if len(computed_signature) != len(signature):
-        return jsonify({"error": "Invalid signature length"}), 400
+        return jsonify({"message": "Invalid signature length"}), 400
 
     # Use timing-safe comparison to protect against timing attacks
     if not hmac.compare_digest(computed_signature, signature):
-        return jsonify({"error": "Invalid signature!"}), 400
+        return jsonify({"message": "Invalid signature!"}), 400
 
     # Parse the payload to handle the event
     try:
@@ -113,7 +113,7 @@ def modem_webhook():
         # Logic to process the eventPayload can go here
         return "", 200  # Acknowledge successful receipt
     except json.JSONDecodeError:
-        return jsonify({"error": "Invalid event data"}), 400
+        return jsonify({"message": "Invalid event data"}), 400
 
 if __name__ == "__main__":
     app.run(debug=True)
@@ -128,7 +128,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Ensure the signature is provided
     if (!$signature) {
         http_response_code(400);
-        echo json_encode(["error" => "Signature missing"]);
+        echo json_encode(["message" => "Signature missing"]);
         exit();
     }
 
@@ -138,14 +138,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Ensure the signature length matches to avoid timing attacks
     if (strlen($computedSignature) !== strlen($signature)) {
         http_response_code(400);
-        echo json_encode(["error" => "Invalid signature length"]);
+        echo json_encode(["message" => "Invalid signature length"]);
         exit();
     }
 
     // Use timing-safe comparison to protect against timing attacks
     if (!hash_equals($computedSignature, $signature)) {
         http_response_code(400);
-        echo json_encode(["error" => "Invalid signature!"]);
+        echo json_encode(["message" => "Invalid signature!"]);
         exit();
     }
 
@@ -154,7 +154,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (json_last_error() !== JSON_ERROR_NONE) {
         http_response_code(400);
-        echo json_encode(["error" => "Invalid event data"]);
+        echo json_encode(["message" => "Invalid event data"]);
         exit();
     }
 
@@ -229,7 +229,7 @@ $ modempay trigger <event-type>
 **Supported Event Types**:  
 - **Customer Events**: `"customer.created"`, `"customer.updated"`, `"customer.deleted"`
 - **Payment Intent Events**: `"payment_intent.created"`, `"payment_intent.cancelled"`
-- **Charge Events**: `"charge.succeeded"`, `"charge.cancelled"`
+- **Charge Events**: `"charge.succeeded"`, `"charge.cancelled"`, `"charge.created"`, `"charge.updated"`
 
 
 <Note>
@@ -254,23 +254,23 @@ Always respond to webhook events with an HTTP `200 OK` status to confirm receipt
 
 ### Event Structure
 
-Upon successful validation, `modem.webhooks.composeEventDetails` returns an `Event` object containing the event type and payload data. The event types you may receive include:
+Upon successful validation, `modempay.webhooks.composeEventDetails` returns an `Event` object containing the event type and payload data. The event types you may receive include:
 
 - **Customer Events**: `"customer.created"`, `"customer.updated"`, `"customer.deleted"`
 - **Payment Intent Events**: `"payment_intent.created"`, `"payment_intent.cancelled"`
-- **Charge Events**: `"charge.succeeded"`, `"charge.cancelled"`
+- **Charge Events**: `"charge.succeeded"`, `"charge.cancelled"`, `"charge.created"`, `"charge.updated"`
 
 ### Example Usage
 
-Here’s an example of using `modem.webhooks.composeEventDetails` to handle incoming webhooks in a Node.js application:
+Here’s an example of using `modempay.webhooks.composeEventDetails` to handle incoming webhooks in a Node.js application:
 
 <CodeGroup>
 ```javascript nodejs
 const express = require("express");
 const bodyParser = require("body-parser");
-const Modem = require("modem-pay");
+const ModemPay = require("modem-pay");
 
-const modem = new Modem();
+const modempay = new ModemPay();
 const app = express();
 app.use(bodyParser.json());
 
@@ -280,7 +280,7 @@ app.post("/webhook", (req, res) => {
   const secret = process.env.MODEM_WEBHOOK_SECRET;
 
   try {
-    const event = modem.webhooks.composeEventDetails(payload, signature, secret);
+    const event = modempay.webhooks.composeEventDetails(payload, signature, secret);
     // Process the event
     switch (event.event) {
       case "customer.created":

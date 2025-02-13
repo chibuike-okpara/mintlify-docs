@@ -17,7 +17,7 @@ By using this integration, you can implement a "Pay Now" button that triggers a 
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Modem Pay</title>
     <link rel="stylesheet" href="https://murnitur.github.io/murnix-kube/styles.css" />
-    <script src="https://murnitur.github.io/murnix-kube/modem.js"></script>
+    <script src="https://api.modempay.com/js/v1.js"></script>
   </head>
   <body>
     <h1>Inline Payment Example</h1>
@@ -60,7 +60,7 @@ Let's examine the parameters provided when invoking `ModemPayCheckout()` in deta
 | `payment_methods`    | Available payment methods (`card`, `wallet`, `bank`).                                                     | `"card,wallet,bank"`                 |
 | `title`              | A short title describing the transaction.                                                                 | `"Course Payment"`                  |
 | `description`        | Detailed description of the transaction.                                                                  | `"Access to Premium Content"`       |
-| `customer`           | A unique identifier for the customer.                                                                     | `"12345"`                            |
+| `customer`           | A unique identifier for the customer.                                                                     | `"7e1908bb-bd62-4d20-9af7-3463a150fd98"`                            |
 | `customer_email`     | Customer's email address.                                                                                 | `"customer@example.com"`            |
 | `customer_name`      | Full name of the customer.                                                                                | `"John Doe"`                         |
 | `customer_phone`     | Customer's phone number.                                                                                  | `"7000000"`                     |

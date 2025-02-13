@@ -35,7 +35,7 @@ Check the `message` field in the response to understand the cause of the error. 
 Modem Pay offers automatic retry handling for certain types of errors. By default, Modem Pay retries up to three times if a request fails due to transient issues, such as network errors or temporary server overloads. This is configurable via the `maxRetries` option, which you can set during initialization:
 
 ```javascript
-const modem = new Modem(process.env.MODEM_API_KEY, {
+const modempay = new ModemPay(process.env.MODEM_API_KEY, {
   maxRetries: 3, // Sets the maximum number of retry attempts
 });
 ```
@@ -49,7 +49,7 @@ Retries are triggered for errors that are likely temporary, typically with **5xx
 To reduce or increase the retry count, simply adjust the `maxRetries` value. Setting it to `0` disables retries entirely:
 
 ```javascript
-const modem = new Modem(process.env.MODEM_API_KEY, {
+const modempay = new ModemPay(process.env.MODEM_API_KEY, {
   maxRetries: 0, // Disables retries
 });
 ```

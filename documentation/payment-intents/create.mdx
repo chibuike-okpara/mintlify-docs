@@ -23,7 +23,7 @@ In this simplest scenario, you only need to provide the amount that needs to be 
 
 <CodeGroup>
 ```javascript nodejs 
-const paymentIntent = await modem.paymentIntents.create({ amount: 450 });
+const paymentIntent = await modempay.paymentIntents.create({ amount: 450 });
 ```
 </CodeGroup>
 
@@ -34,11 +34,11 @@ const paymentIntent = await modem.paymentIntents.create({ amount: 450 });
   "status": true,
   "message": "Payment intent created successfully. Please proceed to complete the payment.",
   "data": {
-    "intent_secret": "b6d892d9fc58a93b04182f44d46e2549aa0b209c15949275a7dca9a55a59b125",
-    "payment_link": "http://localhost:3001/284997c2-9651-4855-8e0a-fd2403458f89",
+    "intent_secret": "8816a8e679d9df252fa80d09ebe21efaa3a8980cb053cb64afeed44c5df696f4",
+    "payment_link": "https://test.checkout.modempay.com/6b63ccef-0232-4be1-b53d-be6823767874",
     "amount": 450,
     "currency": "GMD",
-    "expires_at": "2025-01-14T11:11:10.356Z",
+    "expires_at": "2025-02-13T12:31:15.601Z",
     "status": "requires_payment_method"
   }
 }
@@ -54,7 +54,7 @@ In this scenario, in addition to specifying the amount, you also specify the cus
 
 <CodeGroup>
 ```javascript nodejs 
-const paymentIntent = await modem.paymentIntents.create({
+const paymentIntent = await modempay.paymentIntents.create({
     amount: 450,
     customer: "d9bf8831-4db5-4a1c-8aa0-3de72492f330",
 });
@@ -70,7 +70,7 @@ This scenario involves a more specific setup where you specify the amount, assoc
 
 <CodeGroup>
 ```javascript nodejs 
-const paymentIntent = await modem.paymentIntents.create({
+const paymentIntent = await modempay.paymentIntents.create({
     amount: 450,
     customer: "d9bf8831-4db5-4a1c-8aa0-3de72492f330",
     payment_methods: ["card"],
@@ -88,7 +88,7 @@ In this scenario, you create a Payment Intent specifying a particular customer's
 
 <CodeGroup>
 ```javascript nodejs 
-const paymentIntent = await modem.paymentIntents.create({
+const paymentIntent = await modempay.paymentIntents.create({
     amount: 450,
     payment_method: "ad47ccb9-687c-475b-90dc-1dd3b4cba68e",
     customer: "d9bf8831-4db5-4a1c-8aa0-3de72492f330",

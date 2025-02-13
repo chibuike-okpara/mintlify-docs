@@ -48,7 +48,7 @@ A simple checkout session for a one-time payment for a service. This session doe
 
 <CodeGroup>
 ```javascript nodejs
-const session = await modem.sessions.create({
+const session = await modempay.sessions.create({
     title: "Exclusive Webinar Access",
     description: "One-time payment for access to the live webinar event.",
     amount: 5000,
@@ -69,7 +69,7 @@ For recurring users, attaching a customer to the session lets Modem Pay retrieve
 
 <CodeGroup>
 ```javascript nodejs
-const sessionWithCustomer = await modem.sessions.create({
+const sessionWithCustomer = await modempay.sessions.create({
     title: "Payment for Premium Content",
     description: "Payment for premium content access.",
     amount: 1500,
@@ -92,7 +92,7 @@ If a new customer hasn't registered or saved a payment method, the session can s
 
 <CodeGroup>
 ```javascript nodejs
-const guestSession = await modem.sessions.create({
+const guestSession = await modempay.sessions.create({
     title: "Special Course Payment",
     description: "One-time payment for a specialized course module.",
     amount: 8000,

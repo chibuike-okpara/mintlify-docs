@@ -6,7 +6,7 @@ To get started with Modem Pay, follow these simple steps to set up and start col
 
 ### 1. **Create an Account**
 
-- **Sign Up**: Register on [Modem Pay's dashboard](https://modem.gomindz.gm) to access your account and manage payments.
+- **Sign Up**: Register on [Modem Pay's dashboard](https://merchant.modempay.com) to access your account and manage payments.
 - **API Keys**: Once registered, get your API keys from the dashboard for integrating and authenticating requests.
 
 ### 2. **Configure Integrations**
@@ -43,7 +43,7 @@ Here's an example of how you'd implement HTML checkout:
      "customer_name": "Caleb Okpara",
      "customer_email": "usr@example.com",
      "customer_phone": "7000001",
-     "cancel_url": "https://modem.gomindz.gm",
+     "cancel_url": "https://modempay.gomindz.gm",
      "return_url": "https://academy.gomindz.gm",
      "currency": "GMD",
      "metadata": { "source": "modem-html-test" }
@@ -60,13 +60,13 @@ Here's an example of how you'd implement HTML checkout:
 <CodeGroup>
 
 ```javascript nodejs
-import Modem from "modem-pay";
+import ModemPay from "modem-pay";
 
-const modem = new Modem();
+const modempay = new ModemPay('YOUR_MODEM_PAY_API_KEY');
 
-const intent = await modem.paymentIntents.create({ amount: 450 });
+const intent = await modempay.paymentIntents.create({ amount: 450 });
 
-console.log(intent.link);
+console.log(intent.data.payment_link);
 ```
 
 </CodeGroup>

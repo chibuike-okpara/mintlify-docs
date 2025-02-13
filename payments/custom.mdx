@@ -28,7 +28,7 @@ app.use(express.static(path.join(__dirname, "public")));
 const YOUR_DOMAIN = "http://localhost:7024";
 
 app.post("/create-checkout-session", async (req, res) => {
-  const session = await modem.sessions.create({
+  const session = await modempay.sessions.create({
     amount: 2000,
     title: "Stubborn Attachments",
     redirect_url: `${YOUR_DOMAIN}/success.html`,
@@ -45,7 +45,7 @@ app.post('/verify', async (req, res) => {
   const secret = process.env.MODEM_WEBHOOK_SECRET;
 
   try {
-    const event = modem.webhooks.composeEventDetails(payload, signature, secret);
+    const event = modempay.webhooks.composeEventDetails(payload, signature, secret);
     // Process the event
     
     res.status(200).send("Webhook processed!");
@@ -149,7 +149,7 @@ app.use(express.static(path.join(__dirname, "public")));
 const YOUR_DOMAIN = "http://localhost:7024";
 
 app.post("/create-checkout-session", async (req, res) => {
-  const intent = await modem.paymentIntents.create({
+  const intent = await modempay.paymentIntents.create({
     ...req.body,
     return_url: `${YOUR_DOMAIN}/success.html`,
     cancel_url: `${YOUR_DOMAIN}/cancel.html`,
@@ -165,7 +165,7 @@ app.post('/verify', async (req, res) => {
   const secret = process.env.MODEM_WEBHOOK_SECRET;
 
   try {
-    const event = modem.webhooks.composeEventDetails(payload, signature, secret);
+    const event = modempay.webhooks.composeEventDetails(payload, signature, secret);
     // Process the event
     
     res.status(200).send("Webhook processed!");

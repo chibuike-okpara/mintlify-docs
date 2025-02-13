@@ -8,13 +8,13 @@ The Modem Pay API’s customer management is built to help you store and manage 
 
 #### **Create a Customer**
 
-To create a customer, use the `modem.customers.create()` method, which allows you to add key information like the customer's name, email, phone number, and an optional starting balance. The `distinct` option, when set to `true`, checks for existing customers with matching fields (e.g., email) to avoid duplicate entries. If `distinct` is omitted or set to `false`, a new customer entry will be created without duplicate checks.
+To create a customer, use the `modempay.customers.create()` method, which allows you to add key information like the customer's name, email, phone number, and an optional starting balance. The `distinct` option, when set to `true`, checks for existing customers with matching fields (e.g., email) to avoid duplicate entries. If `distinct` is omitted or set to `false`, a new customer entry will be created without duplicate checks.
 
 **Sample Request:**
 
 <CodeGroup>
 ```typescript nodejs
-const customer = await modem.customers.create(
+const customer = await modempay.customers.create(
     { name: "Caleb Okpara", email: "caleb@modempay.com", phone: "7000001" },
     { distinct: true }
 );
@@ -42,13 +42,13 @@ const customer = await modem.customers.create(
 
 #### **Retrieve a Customer**
 
-To fetch a customer’s details, use `modem.customers.retrieve(customerId)`. Replace `customerId` with the customer’s unique ID.
+To fetch a customer’s details, use `modempay.customers.retrieve(customerId)`. Replace `customerId` with the customer’s unique ID.
 
 **Sample Request:**
 
 <CodeGroup>
 ```javascript nodejs 
-const customer = await modem.customers.retrieve(
+const customer = await modempay.customers.retrieve(
   "8a8c8a0e-c5d2-4692-a94b-25284d36adc7"
 );
 ```
@@ -75,13 +75,13 @@ const customer = await modem.customers.retrieve(
 
 #### **Update a Customer**
 
-Update a customer's information using `modem.customers.update(customerId, params)`. Specify the customer ID and the fields to update.
+Update a customer's information using `modempay.customers.update(customerId, params)`. Specify the customer ID and the fields to update.
 
 **Sample Request:**
 
 <CodeGroup>
 ```javascript nodejs 
-const customer = await modem.customers.update(
+const customer = await modempay.customers.update(
     "8a8c8a0e-c5d2-4692-a94b-25284d36adc7",
     { name: "Chibuike Okpara" }
 );
@@ -109,13 +109,13 @@ const customer = await modem.customers.update(
 
 #### **Delete a Customer**
 
-Remove a customer from your records using `modem.customers.delete(customerId)`. This action is irreversible.
+Remove a customer from your records using `modempay.customers.delete(customerId)`. This action is irreversible.
 
 **Sample Request:**
 
 <CodeGroup>
 ```javascript nodejs 
-await modem.customers.delete("8a8c8a0e-c5d2-4692-a94b-25284d36adc7");
+await modempay.customers.delete("8a8c8a0e-c5d2-4692-a94b-25284d36adc7");
 ```
 </CodeGroup>
 
@@ -123,16 +123,16 @@ await modem.customers.delete("8a8c8a0e-c5d2-4692-a94b-25284d36adc7");
 
 #### **List All Customers**
 
-To view all customers, use `modem.customers.list()`. This returns a list of customers, with pagination options if there are many entries.
+To view all customers, use `modempay.customers.list()`. This returns a list of customers, with pagination options if there are many entries.
 
 **Sample Request:**
 
 <CodeGroup>
 ```javascript nodejs 
-const customers = await modem.customers.list({ limit: 2 });
+const customers = await modempay.customers.list({ limit: 2 });
 
 // or list by matching terms
-const customers = await modem.customers.list({ limit:2, search: "caleb" })
+const customers = await modempay.customers.list({ limit:2, search: "caleb" })
 
 ```
 </CodeGroup>
@@ -183,7 +183,7 @@ To retrieve the payment methods associated with a specific customer, use their c
 
 <CodeGroup>
 ```javascript nodejs 
-const paymentMethods = await modem.customers.listPaymentMethods(
+const paymentMethods = await modempay.customers.listPaymentMethods(
     "8a8c8a0e-c5d2-4692-a94b-25284d36adc7"
 );
 ```
@@ -196,7 +196,7 @@ const paymentMethods = await modem.customers.listPaymentMethods(
   "data": [
     {
       "mobilepay": {
-        "logo": "http://localhost:9090/images/qcell.png",
+        "logo": "https://api.modempay.com/images/qcell.png",
         "type": "mobilepay",
         "group": "wallet-gm",
         "last4": "9944",
