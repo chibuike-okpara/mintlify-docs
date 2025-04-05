@@ -49,9 +49,9 @@ app.post("/modem-webhook", (req, res) => {
 
   const secretHash = process.env.MODEM_PAY_SECRET_HASH;
 
-  // Generate the HMAC-SHA256 hash for signature comparison
+  // Generate the HMAC-SHA512 hash for signature comparison
   const computedSignature = crypto
-    .createHmac("sha256", secretHash)
+    .createHmac("sha512", secretHash)
     .update(payload)
     .digest("hex");
 
@@ -94,9 +94,9 @@ def modem_webhook():
 
     secret_hash = os.environ.get("MODEM_PAY_SECRET_HASH")
 
-    # Generate the HMAC-SHA256 hash for signature comparison
+    # Generate the HMAC-SHA512 hash for signature comparison
     computed_signature = hmac.new(
-        secret_hash.encode(), payload.encode(), hashlib.sha256
+        secret_hash.encode(), payload.encode(), hashlib.sha512
     ).hexdigest()
 
     # Ensure the signature length matches to avoid timing attacks
@@ -132,8 +132,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit();
     }
 
-    // Generate the HMAC-SHA256 hash for signature comparison
-    $computedSignature = hash_hmac('sha256', $payload, $secretHash);
+    // Generate the HMAC-SHA512 hash for signature comparison
+    $computedSignature = hash_hmac('sha512', $payload, $secretHash);
 
     // Ensure the signature length matches to avoid timing attacks
     if (strlen($computedSignature) !== strlen($signature)) {

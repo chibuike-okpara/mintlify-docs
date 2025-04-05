@@ -31,7 +31,7 @@ Here's an example of how you'd implement HTML checkout:
 
 1. **Setting Up the Form**
 
-   When the user clicks **Pay Now**, the form submits the order details to Modem Pay's endpoint (`/api/pay`), passing essential information like amount, customer details, and URLs for redirecting.
+   When the user clicks **Pay Now**, the form submits the order details to Modem Pay's endpoint (`https://test.checkout.modempay.com/api/pay`), passing essential information like amount, customer details, and URLs for redirecting.
 
 2. **Payload Format After Submission**
 
@@ -39,13 +39,13 @@ Here's an example of how you'd implement HTML checkout:
 
    ```json
    {
-     "public_key": "pk_test_971deb266f73e90c1083983e684a765dabe163c59b94c0d22dfdb8172f1915a0",
+     "public_key": "pk_test_e073bbf9db47b09cebfdf2f7ec147d02116b69ea55135e1747a0bc8d47612f69",
      "amount": "450",
      "customer_name": "Caleb Okpara",
      "customer_email": "usr@example.com",
      "customer_phone": "7000001",
-     "cancel_url": "https://modempay.gomindz.gm",
-     "return_url": "https://academy.gomindz.gm",
+     "cancel_url": "https://modempay.com",
+     "return_url": "https://modempay.com",
      "currency": "GMD",
      "metadata": { "source": "modem-html-test" }
    }

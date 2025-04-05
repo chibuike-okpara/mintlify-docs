@@ -30,7 +30,7 @@ By using this integration, you can implement a "Pay Now" button that triggers a 
         const modal = ModemPayCheckout({
           amount: 450,
           public_key:
-            "pk_test_971deb266f73e90c1083983e684a765dabe163c59b94c0d22dfdb8172f1915a0",
+            "pk_test_e073bbf9db47b09cebfdf2f7ec147d02116b69ea55135e1747a0bc8d47612f69",
           payment_methods: "wallet,card,bank",
           callback: (transaction) => {
             console.log("Payment completed:", transaction);
@@ -98,7 +98,7 @@ The `redirect_url` takes priority over the `callback`. If both are provided, the
 function makePayment() {
   const modal = ModemPayCheckout({
     public_key:
-      "pk_test_971deb266f73e90c1083983e684a765dabe163c59b94c0d22dfdb8172f1915a0",
+      "pk_test_e073bbf9db47b09cebfdf2f7ec147d02116b69ea55135e1747a0bc8d47612f69",
     // ...
     callback: function (transaction) {
       // Handle the transaction success and verify on backend
@@ -122,7 +122,7 @@ The `onClose` function is invoked when the customer cancels the payment by closi
 function makePayment() {
   const modal = ModemPayCheckout({
     public_key:
-      "pk_test_971deb266f73e90c1083983e684a765dabe163c59b94c0d22dfdb8172f1915a0",
+      "pk_test_e073bbf9db47b09cebfdf2f7ec147d02116b69ea55135e1747a0bc8d47612f69",
     // ...
     onClose: function (cancelled) {
       if (cancelled) {

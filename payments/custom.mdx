@@ -15,10 +15,10 @@ Payment sessions simplify the payment process by redirecting the customer to a s
 ```javascript server.js
 import express from "express";
 import path from "path";
-import Modem from "../index";
+import ModemPay from "modem-pay";
 
-const modem = new Modem(
-  "sk_test_b9596116930a926d33bd51ced40766e61d0c53c521f0cd28c70253e158ee4865"
+const modem = new ModemPay(
+  "sk_test_516aa853e1574295ed778eadc82b0a7128b18b628e4059f82e77041adf8692cb"
 );
 
 const app = express();
@@ -136,10 +136,10 @@ A payment intent gives you more control over the payment process. You create the
 import express from "express";
 import path from "path";
 import bodyParser from "body-parser";
-import Modem from "../index";
+import ModemPay from "modem-pay";
 
-const modem = new Modem(
-  "sk_test_b9596116930a926d33bd51ced40766e61d0c53c521f0cd28c70253e158ee4865"
+const modem = new ModemPay(
+  "sk_test_516aa853e1574295ed778eadc82b0a7128b18b628e4059f82e77041adf8692cb"
 );
 
 const app = express();
