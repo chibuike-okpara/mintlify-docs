@@ -1,0 +1,64 @@
+---
+title: Installation
+---
+
+## Prerequisites
+
+Before installing, make sure you have the following:
+
+- [Node.js](https://nodejs.org/) (v16 or higher)
+- [npm](https://www.npmjs.com/)
+
+---
+
+## Install the Modem Pay SDK
+Modem Pay currently offers official support for JavaScript and TypeScript, with plans to introduce SDKs in additional languages over time.
+
+To get started, install the SDK in your Node.js or TypeScript project using npm:
+
+```bash bash
+npm install modem-pay
+```
+---
+
+## Initialize the SDK
+
+To authenticate requests, instantiate the SDK with your **Modem Pay secret API key**:
+
+```ts
+import ModemPay from "modem-pay";
+
+const modempay = new ModemPay("YOUR_MODEM_PAY_API_KEY");
+
+const intent = await modempay.paymentIntents.create({ amount: 450 });
+
+console.log(intent.data.payment_link);
+```
+<Warning>
+🔐 Never expose your secret API key on the frontend or in public repositories.
+</Warning>
+
+---
+
+## Get Your API Key
+
+1. Log in to [modempay.com](https://merchant.modempay.com).
+2. Go to **Developers** → **API Keys**.
+3. Generate or copy your secret key.
+4. Use this key when initializing the SDK.
+
+---
+
+## (Optional) Install the Modem Pay CLI
+
+For local webhook testing and simulation in a test environment, you can install the CLI globally:
+
+```bash bash
+npm install -g modem-pay-cli
+```
+
+Use `modempay listen` to test webhooks locally and `modempay trigger` to simulate events.
+
+<Tip>
+For full CLI usage, visit the [CLI docs](/documentation/core/webhooks).
+</Tip>
