@@ -54,4 +54,8 @@ const modempay = new ModemPay(process.env.MODEM_API_KEY, {
 });
 ```
 
+<Tip>
+To disable error retry logs, add `RETRY_LOGGING=false` to your `.env` file. This will suppress the retry attempt logs while still performing the retries.
+</Tip>
+
 This configuration gives you flexibility in error handling and helps manage network issues effectively.

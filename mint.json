@@ -60,7 +60,8 @@
         "documentation/core/mandates",
         "documentation/core/payment-links",
         "documentation/core/transactions",
-        "documentation/core/webhooks"
+        "documentation/core/webhooks",
+        "documentation/core/coupons"
       ]
     },
     {

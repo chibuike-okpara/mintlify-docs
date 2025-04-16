@@ -1,0 +1,194 @@
+---
+title: Coupons
+---
+
+ModemPay’s coupons let you offer discounts to customers with ease. Create coupons with `modempay.coupons.create()` to provide percentage or fixed-amount discounts (in GMD), set duration, redemption limits, and restrictions like minimum purchase amounts. Manage them with methods like `retrieve`, `list`, `update`, or `delete`. Apply coupons to a `PaymentIntent` to instantly reduce the transaction amount, perfect for promotions or loyalty rewards. Simple, flexible, and developer-friendly!
+
+### Creating a Coupon
+
+Use `modempay.coupons.create()` to create a coupon. Coupons can offer a fixed amount or percentage discount and support options like duration, redemption limits, and restrictions.
+
+**Example: Creating a 15% Off Coupon for a Market Promotion**
+
+<CodeGroup>
+```typescript nodejs
+async function createCoupon() {
+  try {
+    const coupon = await modempay.coupons.create({
+      name: 'Market Fest 15% Off',
+      percent_off: 15,
+      duration: 'once',
+      redeem_by: new Date('2025-06-30'),
+      currency: 'GMD',
+      restrictions: {
+        first_time_transaction: false,
+        minimum_amount: 100,
+        minimum_amount_currency: 'GMD'
+      }
+    });
+    console.log('Coupon created:', coupon);
+  } catch (error) {
+    console.error('Error creating coupon:', error);
+  }
+}
+```
+</CodeGroup>
+
+This creates a coupon offering 15% off for purchases of at least 100 GMD, valid until June 30, 2025, and redeemable once.
+
+**Example: Creating a 50 GMD Off Coupon for Mobile Data**
+
+<CodeGroup>
+```typescript nodejs
+async function createDataCoupon() {
+  try {
+    const coupon = await modempay.coupons.create({
+      name: 'Mobile Data Discount',
+      amount_off: 50, 
+      duration: 'forever',
+      currency: 'GMD',
+      restrictions: {
+        first_time_transaction: true,
+        minimum_amount: 200, 
+        minimum_amount_currency: 'GMD'
+      },
+    });
+    console.log('Coupon created:', coupon);
+  } catch (error) {
+    console.error('Error creating coupon:', error);
+  }
+}
+```
+</CodeGroup>
+
+This coupon gives 50 GMD off for first-time data bundle purchases of 200 GMD or more, with no expiry or redemption limit.
+
+**Key Parameters**
+
+- `name` : Descriptive name (e.g., "Market Fest").
+- `percent_off` : Percentage discount (e.g., 15 for 15%). Use amount_off for fixed amounts.
+- `currency` : Set to "GMD" for all amounts.
+- `duration` : "once", "repeating", or "forever".
+- `duration_in_months` : Required if duration is "repeating".
+- `max_redemptions` : Maximum uses of the coupon.
+- `redeem_by` : Expiry date.
+- `restrictions` : Conditions like minimum_amount or first_time_transaction.
+
+### Retrieving a Coupon
+
+Fetch a specific coupon’s details using `modempay.coupons.retrieve()`.
+
+<CodeGroup>
+```typescript nodejs
+async function getCoupon(couponId) {
+  try {
+    const coupon = await modempay.coupons.retrieve(couponId);
+    console.log('Coupon details:', coupon);
+  } catch (error) {
+    console.error('Error retrieving coupon:', error);
+  }
+}
+```
+</CodeGroup>
+
+### Listing Coupons
+
+View all coupons with `modempay.coupons.list()`, with options to paginate or filter.
+
+<CodeGroup>
+```typescript nodejs
+async function listCoupons() {
+  try {
+    const coupons = await modempay.coupons.list({ limit: 5, search: 'Fest' });
+    console.log('Coupons:', coupons);
+  } catch (error) {
+    console.error('Error listing coupons:', error);
+  }
+}
+```
+</CodeGroup>
+
+This retrieves up to 5 coupons with "Fest" in their name.
+
+### Updating a Coupon
+
+Modify a coupon’s properties (e.g., name, redemption limits) using `modempay.coupons.update()`.
+
+<CodeGroup>
+```typescript nodejs
+async function updateCoupon(couponId) {
+  try {
+    const updatedCoupon = await modempay.coupons.update(couponId, {
+      name: 'Extended Market Fest',
+      max_redemptions: 75,
+      redeem_by: new Date('2025-07-31')
+    });
+    console.log('Updated coupon:', updatedCoupon);
+  } catch (error) {
+    console.error('Error updating coupon:', error);
+  }
+}
+```
+</CodeGroup>
+
+This extends the coupon’s validity to July 31, 2025, and increases the redemption limit to 75.
+
+### Deleting a Coupon
+
+Permanently remove a coupon with `modempay.coupons.delete()`.
+
+<CodeGroup>
+```typescript nodejs
+async function deleteCoupon(couponId) {
+  try {
+    await modempay.coupons.delete(couponId);
+    console.log('Coupon deleted successfully');
+  } catch (error) {
+    console.error('Error deleting coupon:', error);
+  }
+}
+```
+</CodeGroup>
+
+### Applying a Coupon to a Payment Intent
+
+Apply a coupon to a [PaymentIntent](/documentation/payment-intents/overview) to discount the transaction. Include the coupon ID in the `coupon` field when creating a [PaymentIntent](/documentation/payment-intents/overview).
+
+<CodeGroup>
+```typescript nodejs
+async function createPaymentIntentWithCoupon(couponId) {
+  try {
+    const paymentIntent = await modempay.paymentIntents.create({
+      amount: 150,
+      currency: 'GMD',
+      customer: '8a8c8a0e-c5d2-4692-a94b-25284d36adc7',
+      coupon: couponId
+    });
+    console.log('Payment Intent with coupon:', paymentIntent);
+  } catch (error) {
+    console.error('Error creating Payment Intent:', error);
+  }
+}
+```
+</CodeGroup>
+
+If the coupon offers 15% off and the original amount is 150 GMD, the discounted amount will be 127.50 GMD (assuming the coupon is valid and meets restrictions).
+
+**How It Works**
+
+- Modem Pay validates the coupon’s restrictions (e.g., `minimum_amount`, `first_time_transaction`).
+- If valid, the discount (`percent_off` or `amount_off`) is applied to the `PaymentIntent`’s amount.
+- The coupon’s `times_redeemed` increments upon successful application.
+
+### Best Practices
+
+- **Validate Restrictions**: Ensure the coupon’s `minimum_amount` aligns with your pricing.
+- **Test Thoroughly**: Use test API keys to simulate coupon scenarios.
+- **Monitor Usage**: Track active coupons and redemptions with `modempay.coupons.list()`.
+
+### Troubleshooting
+
+- **Invalid Coupon**: Verify the coupon ID and ensure `valid: true`.
+- **Restrictions Not Met**: Check if the `PaymentIntent` meets `minimum_amount` or `first_time_transaction` requirements.
+- **API Errors**: Confirm API key setup and network connectivity.
+
