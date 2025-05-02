@@ -10,14 +10,18 @@ The **Payment Intent** object contains the following properties:
 
 - **amount**: The total amount to be paid.
 - **currency**: The currency of the payment (optional).
-- **payment_methods**: A list of accepted payment methods (optional).
+- **payment_methods**: A list of accepted payment methods (optional) (e.g., "card", "bank", "wallet").
 - **title**: A title for the payment (optional).
 - **description**: A description of the payment (optional).
 - **customer**: The ID of the customer making the payment (optional).
+- **customer_name**: The name of the customer making the payment (optional).
+- **customer_email**: The email address of the customer making the payment (optional).
+- **customer_phone**: The phone number of the customer making the payment (optional).
 - **metadata**: Any additional information about the payment (optional).
 - **return_url**: The URL to which the customer is redirected after a successful payment (optional).
 - **cancel_url**: The URL to which the customer is redirected if they cancel the payment (optional).
 - **payment_method**: The specific payment method to use (optional).
+- **coupon**: The ID of a coupon to apply to the payment (optional). If provided, the coupon's discount will be applied to the payment amount.
 
 #### Payment Intent Response Object
 
