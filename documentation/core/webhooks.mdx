@@ -80,6 +80,74 @@ app.post("/modem-webhook", (req, res) => {
   }
 });
 ```
+```go go
+package main
+
+import (
+	"crypto/hmac"
+	"crypto/sha512"
+	"crypto/subtle"
+	"encoding/hex"
+	"encoding/json"
+	"io"
+	"net/http"
+	"os"
+)
+
+func modemWebhookHandler(w http.ResponseWriter, r *http.Request) {
+	// Read request body
+	body, err := io.ReadAll(r.Body)
+	if err != nil {
+		http.Error(w, `{"message": "Failed to read request body"}`, http.StatusBadRequest)
+		return
+	}
+
+	// Get signature from header
+	signature := r.Header.Get("x-modem-signature")
+	if signature == "" {
+		http.Error(w, `{"message": "Signature missing"}`, http.StatusBadRequest)
+		return
+	}
+
+	// Get secret hash from environment
+	secretHash := os.Getenv("MODEM_PAY_SECRET_HASH")
+
+	// Generate HMAC-SHA512 hash
+	mac := hmac.New(sha512.New, []byte(secretHash))
+	mac.Write(body)
+	computedSignature := hex.EncodeToString(mac.Sum(nil))
+
+	// Check signature length
+	if len(computedSignature) != len(signature) {
+		http.Error(w, `{"message": "Invalid signature length"}`, http.StatusBadRequest)
+		return
+	}
+
+	// Timing-safe comparison
+	if subtle.ConstantTimeCompare([]byte(computedSignature), []byte(signature)) != 1 {
+		http.Error(w, `{"message": "Invalid signature!"}`, http.StatusBadRequest)
+		return
+	}
+
+	// Parse payload
+	var eventPayload interface{}
+	if err := json.Unmarshal(body, &eventPayload); err != nil {
+		http.Error(w, `{"message": "Invalid event data"}`, http.StatusBadRequest)
+		return
+	}
+
+	// Process eventPayload here if needed
+	// ...
+
+	// Send success response
+	w.WriteHeader(http.StatusOK)
+}
+
+func main() {
+	http.HandleFunc("/modem-webhook", modemWebhookHandler)
+	http.ListenAndServe(":8080", nil)
+}
+```
 ```python python
 app = Flask(__name__)
 

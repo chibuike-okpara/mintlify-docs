@@ -25,6 +25,17 @@ In this simplest scenario, you only need to provide the amount that needs to be 
 ```javascript nodejs 
 const paymentIntent = await modempay.paymentIntents.create({ amount: 450 });
 ```
+```bash curl 
+curl -X POST "https://api.modempay.com/v1/payments" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <your_api_key>" \
+  -d '{
+    "data": {
+      "amount": 450,
+      "from_sdk": false
+    }
+  }'
+```
 </CodeGroup>
 
 - **Result**: A Payment Intent is created with a link to the payment page, where the customer can complete the payment.
@@ -59,6 +70,18 @@ const paymentIntent = await modempay.paymentIntents.create({
     customer: "d9bf8831-4db5-4a1c-8aa0-3de72492f330",
 });
 ```
+```bash curl 
+curl -X POST "https://api.modempay.com/v1/payments" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <your_api_key>" \
+  -d '{
+    "data": {
+      "amount": 450,
+      "customer": "d9bf8831-4db5-4a1c-8aa0-3de72492f330",
+      "from_sdk": false
+    }
+  }'
+```
 </CodeGroup>
 
 #### 3. **Creating a Payment Intent with Amount, Customer, and Payment Methods**
@@ -75,6 +98,19 @@ const paymentIntent = await modempay.paymentIntents.create({
     customer: "d9bf8831-4db5-4a1c-8aa0-3de72492f330",
     payment_methods: ["card"],
 });
+```
+```bash curl 
+curl -X POST "https://api.modempay.com/v1/payments" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <your_api_key>" \
+  -d '{
+    "data": {
+      "amount": 450,
+      "customer": "d9bf8831-4db5-4a1c-8aa0-3de72492f330",
+      "payment_methods": ["card"],
+      "from_sdk": false
+    }
+  }'
 ```
 </CodeGroup>
 
@@ -93,6 +129,19 @@ const paymentIntent = await modempay.paymentIntents.create({
     payment_method: "ad47ccb9-687c-475b-90dc-1dd3b4cba68e",
     customer: "d9bf8831-4db5-4a1c-8aa0-3de72492f330",
 });
+```
+```bash curl 
+curl -X POST "https://api.modempay.com/v1/payments" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <your_api_key>" \
+  -d '{
+    "data": {
+      "amount": 450,
+      "customer": "d9bf8831-4db5-4a1c-8aa0-3de72492f330",
+      "payment_method": "ad47ccb9-687c-475b-90dc-1dd3b4cba68e",
+      "from_sdk": false
+    }
+  }'
 ```
 </CodeGroup>
 

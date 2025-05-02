@@ -19,6 +19,17 @@ const customer = await modempay.customers.create(
     { distinct: true }
 );
 ```
+```bash curl
+curl -X POST "https://api.modempay.com/v1/customers" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <your_api_key>" \
+  -d '{
+    "name": "Caleb Okpara",
+    "email": "caleb@modempay.com",
+    "phone": "7000001",
+    "config": { "distinct": true }
+  }'
+```
 </CodeGroup>
 
 **Sample Response:**
@@ -51,6 +62,10 @@ To fetch a customer’s details, use `modempay.customers.retrieve(customerId)`. 
 const customer = await modempay.customers.retrieve(
   "8a8c8a0e-c5d2-4692-a94b-25284d36adc7"
 );
+```
+```bash curl 
+curl -X GET "https://api.modempay.com/v1/customers/8a8c8a0e-c5d2-4692-a94b-25284d36adc7" \
+  -H "Authorization: Bearer <your_api_key>"
 ```
 </CodeGroup>
 
@@ -86,6 +101,17 @@ const customer = await modempay.customers.update(
     { name: "Chibuike Okpara" }
 );
 ```
+```bash curl 
+curl -X PUT "https://api.modempay.com/v1/customers/<customer_id>" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <your_api_key>" \
+  -d '{
+    "data": {
+      "<parameter_1>": "<value_1>",
+      "<parameter_2>": "<value_2>"
+    }
+  }'
+```
 </CodeGroup>
 
 **Sample Response:**
@@ -116,6 +142,10 @@ Remove a customer from your records using `modempay.customers.delete(customerId)
 <CodeGroup>
 ```javascript nodejs 
 await modempay.customers.delete("8a8c8a0e-c5d2-4692-a94b-25284d36adc7");
+```
+```bash curl 
+curl -X DELETE "https://api.modempay.com/v1/customers/<customer_id>" \
+  -H "Authorization: Bearer <your_api_key>"
 ```
 </CodeGroup>
 
