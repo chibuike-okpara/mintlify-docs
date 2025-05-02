@@ -21,6 +21,10 @@ const paymentIntent = await modempay.paymentIntents.cancel(
     "49ac6595-beba-480f-bc3d-33e5d4162c4c"
 );
 ```
+```bash curl
+curl -X PATCH "https://api.modempay.com/v1/payments/<payment_intent_id>" \
+  -H "Authorization: Bearer <your_api_key>"
+```
 </CodeGroup>
 
 **Response:**
@@ -50,6 +54,10 @@ const paymentIntent = await modempay.paymentIntents.retrieve(
     "bfa7eb3ea516ee15f80915a922c00242a77629eb5b1efe34048b83a61925bbf5"
 );
 ```
+```bash curl
+curl -X GET "https://api.modempay.com/v1/payments/verify?intent_secret=<intent_secret>" \
+  -H "Authorization: Bearer <your_api_key>"
+```
 </CodeGroup>
 
 **Response:**
@@ -72,6 +80,10 @@ To view a collection of recent Payment Intents, use the `list` method. This is i
 <CodeGroup>
 ```javascript nodejs
 const paymentIntents = await modempay.paymentIntents.list({ limit: 10 });
+```
+```bash curl
+curl -X GET "https://api.modempay.com/v1/payments?offset=0&limit=10" \
+  -H "Authorization: Bearer <your_api_key>"
 ```
 </CodeGroup>
 
