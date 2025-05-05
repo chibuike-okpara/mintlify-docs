@@ -80,6 +80,14 @@
       ]
     },
     {
+      "group": "Transfers",
+      "pages": [
+        "documentation/transfers/overview",
+        "documentation/transfers/mobile-money",
+        "documentation/transfers/fees"
+      ]
+    },
+    {
       "group": "Payment UI and Integration",
       "pages": [
         "payments/overview",

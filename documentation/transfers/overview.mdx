@@ -1,0 +1,76 @@
+---
+title: Overview
+---
+
+The Modem Pay Transfers API allows you to send funds from your business account to users, vendors, or other accounts. Transfers can be made via mobile money, internal (Modem Pay) transfers, or bank transfers (coming soon).
+
+Use cases include:
+- User withdrawals
+- Vendor payouts
+- Payroll and salary disbursements
+
+### Transfer Parameters
+
+Here’s the general shape of a transfer request:
+
+```typescript typescript
+type TransferParams = {
+  amount: number;
+  currency: string;
+  narration?: string;
+  network: string;
+  beneficiary_name: string;
+  account_number: string;
+  metadata?: object;
+};
+```
+
+* `amount` – The amount to send.
+* `currency` – Currency code (e.g., `GMD`, `USD`).
+* `network` – Mobile money provider or transfer channel.
+* `account_number` – Destination account (phone or bank account).
+* `beneficiary_name` – Name of the recipient.
+* `metadata` – Optional key-value pairs for internal tracking.
+
+
+### Transfer Object
+
+Once initiated, a transfer is represented as:
+
+```typescript typescript
+type Transfer = {
+  id: string;
+  business_id: string;
+  account_id: string;
+  amount: number;
+  currency: string;
+  type: "self" | "modem-pay" | "mobile-money" | "bank";
+  status: "pending" | "completed" | "failed" | "cancelled";
+  fee: number;
+  balance_before: number;
+  balance_after: number;
+  transfer_reference: string;
+  metadata: object;
+  // Optional fields based on type
+  network?: string;
+  account_number?: string;
+  mobile_number?: string;
+  bank?: string;
+  amount_received?: number;
+  otp?: string;
+  test_mode: boolean;
+  events: object;
+  note?: string;
+};
+```
+
+This object is returned on creation and is also sent to your webhook endpoint when status updates occur.
+
+### Webhooks
+
+Transfers are asynchronous and may trigger the following webhook events:
+
+* `transfer.succeeded`
+* `transfer.failed`
+* `transfer.reversed`
+

@@ -1,0 +1,73 @@
+---
+title: Transfer Fees
+---
+
+With Modem Pay, you can check how much a transfer will cost before proceeding. This allows you to estimate the total amount, including any fees that will be applied based on the payment network and transfer amount.
+
+### Check Transfer Fees
+
+To check the fee for a transfer, use the `/v1/transfers/fees` endpoint. You can specify the transfer amount, currency, and network to get an estimate of the transfer fee.
+
+#### Request Parameters
+
+| Field        | Type   | Description                                                  |
+|--------------|--------|--------------------------------------------------------------|
+| `amount`     | `number` | The amount to be transferred.          |
+| `currency`   | `string` | The currency code (e.g., "GMD", "USD").                      |
+| `network`    | `string` | The payment network used (e.g., "afrimoney", "wave").         |
+
+#### Response
+
+The response will include the transfer fee, the currency of the fee, and the amount that will be sent.
+
+| Field        | Type   | Description                                                  |
+|--------------|--------|--------------------------------------------------------------|
+| `fee`        | `number` | The fee for the transfer.              |
+| `currency`   | `string` | The currency code of the fee (e.g., "GMD", "USD").            |
+| `network`    | `string` | The payment network used for the transfer (e.g., "afrimoney", "wave"). |
+| `amount`     | `number` | The total amount to be transferred.        |
+
+### Example
+
+<CodeGroup>
+```typescript nodejs
+import ModemPay from "modem-pay";
+
+const modemPay = new ModemPay("sk_test_...");
+
+const feeResponse = await modemPay.transfers.fee({
+  amount: 1000,
+  currency: "GMD",
+  network: "afrimoney"
+});
+
+console.log(`Transfer fee: ${feeResponse.fee} ${feeResponse.currency}`);
+console.log(`Total amount: ${feeResponse.amount} ${feeResponse.currency}`);
+```
+```bash cURL
+curl -X POST https://api.modempay.dev/v1/transfers/fees \
+  -H "Authorization: Bearer sk_test_..." \
+  -H "Content-Type: application/json" \
+  -d '{
+    "amount": 1000,
+    "currency": "GMD",
+    "network": "afrimoney"
+  }'
+```
+</CodeGroup>
+
+
+### Example Response
+
+The following is a sample response returned from the API after querying the transfer fee:
+
+```json
+{
+  "fee": 5,
+  "currency": "GMD",
+  "network": "afrimoney",
+  "amount": 1000
+}
+```
+
+In this example, the transfer fee is **5 GMD**, and the total amount to be debited (including fees) is **1,005 GMD**.

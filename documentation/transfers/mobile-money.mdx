@@ -1,0 +1,130 @@
+---
+title: Mobile Money Transfers
+---
+
+Mobile money is one of the most popular and accessible methods of transferring funds in The Gambia and across West Africa. Modem Pay supports seamless transfers to major mobile money providers.
+
+
+### Supported Networks
+
+Here are the currently supported mobile money networks on Modem Pay:
+
+| Network     | Key (`network`) | Notes                        |
+|-------------|------------------|------------------------------|
+| Africell    | `afrimoney`      | Instant transfers supported  |
+| Wave        | `wave`           | Instant transfers supported  |
+| Jarama Wallet       | `jarama`         | Instant transfers supported  |
+
+<Note>
+You must specify the correct `network` value in your transfer request.
+</Note>
+
+### Required Fields
+
+For mobile money transfers, you must provide the following in your request:
+
+| Field              | Required | Description                             |
+|--------------------|----------|-----------------------------------------|
+| `amount`           | ✅       | Amount to send |
+| `currency`         | ✅       | Currency code (e.g., `GMD`)             |
+| `network`          | ✅       | One of: `jarama`, `afrimoney`, `wave`   |
+| `account_number`   | ✅       | Recipient's mobile wallet number        |
+| `beneficiary_name` | ✅       | Name of the wallet holder               |
+| `narration`        | ⛔       | Optional transfer note                  |
+| `metadata`         | ⛔       | Optional structured data (JSON)         |
+
+
+### Initiate Transfer
+
+<CodeGroup>
+```typescript nodejs
+import ModemPay from "modem-pay";
+
+const modemPay = new ModemPay("sk_test_...");
+
+const response = await modemPay.transfers.initiate({
+  amount: 100,
+  currency: "GMD",
+  network: "afrimoney",
+  account_number: "7834567",
+  beneficiary_name: "John Doe",
+  narration: "Vendor payment for April supplies",
+  metadata: {
+    vendor_id: "vendor_001",
+    invoice_id: "inv_204"
+  }
+});
+```
+```bash cURL
+curl -X POST https://api.modempay.com/v1/transfers \
+  -H "Authorization: Bearer sk_test_..." \
+  -H "Content-Type: application/json" \
+  -d '{
+    "amount": 100,
+    "currency": "GMD",
+    "network": "afrimoney",
+    "account_number": "7834567",
+    "beneficiary_name": "John Doe",
+    "narration": "Vendor payment for April supplies",
+    "metadata": {
+      "vendor_id": "vendor_001",
+      "invoice_id": "inv_204"
+    }
+  }'
+
+```
+</CodeGroup>
+
+### Transfer Response
+
+```typescript json
+{
+  "id": "45eb796c-e66a-442f-bba2-d282053f8883",
+  "events": {},
+  "business_id": "120c298f-b736-49c1-8220-8a8c84a5d8f3",
+  "account_id": "199bf17b-0b5a-45c0-a5b0-1d29f5f173c9",
+  "amount": 100,
+  "currency": "GMD",
+  "type": "mobile-money",
+  "balance_before": 995,
+  "balance_after": 894,
+  "transfer_reference": "5Np7iVHrN",
+  "test_mode": true,
+  "status": "completed",
+  "account_name": "John Doe",
+  "network": "afrimoney",
+  "mobile_number": "7834567",
+  "account_number": "7834567",
+  "note": "Vendor payment for April supplies",
+  "fee": 1,
+  "metadata": {
+    "vendor_id": "vendor_001",
+    "invoice_id": "inv_204"
+  },
+  "updatedAt": "2025-05-05T21:12:52.839Z",
+  "createdAt": "2025-05-05T21:12:52.839Z",
+  "merchant_id": null,
+  "recipient_business_id": null,
+  "bank": null,
+  "amount_received": null,
+  "otp": null
+}
+```
+
+
+### Retrieve a Transfer
+
+You can fetch the details of a specific transfer using its unique `id`.
+
+<CodeGroup>
+```typescript nodejs
+const transfer = await modemPay.transfers.retrieve("45eb796c...");
+console.log(transfer.status); // e.g., 'completed'
+```
+```bash cURL
+curl -X GET https://api.modempay.com/v1/transfers/45eb796c... \
+  -H "Authorization: Bearer sk_test_..."
+```
+</CodeGroup>
+
+This returns the full transfer object with all metadata, status, and transaction history.

@@ -25,8 +25,8 @@ In this simplest scenario, you only need to provide the amount that needs to be 
 ```javascript nodejs 
 const paymentIntent = await modempay.paymentIntents.create({ amount: 450 });
 ```
-```bash curl 
-curl -X POST "https://api.modempay.com/v1/payments" \
+```bash cURL 
+cURL -X POST "https://api.modempay.com/v1/payments" \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer <your_api_key>" \
   -d '{
@@ -70,8 +70,8 @@ const paymentIntent = await modempay.paymentIntents.create({
     customer: "d9bf8831-4db5-4a1c-8aa0-3de72492f330",
 });
 ```
-```bash curl 
-curl -X POST "https://api.modempay.com/v1/payments" \
+```bash cURL 
+cURL -X POST "https://api.modempay.com/v1/payments" \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer <your_api_key>" \
   -d '{
@@ -99,8 +99,8 @@ const paymentIntent = await modempay.paymentIntents.create({
     payment_methods: ["card"],
 });
 ```
-```bash curl 
-curl -X POST "https://api.modempay.com/v1/payments" \
+```bash cURL 
+cURL -X POST "https://api.modempay.com/v1/payments" \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer <your_api_key>" \
   -d '{
@@ -130,8 +130,8 @@ const paymentIntent = await modempay.paymentIntents.create({
     customer: "d9bf8831-4db5-4a1c-8aa0-3de72492f330",
 });
 ```
-```bash curl 
-curl -X POST "https://api.modempay.com/v1/payments" \
+```bash cURL 
+cURL -X POST "https://api.modempay.com/v1/payments" \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer <your_api_key>" \
   -d '{
