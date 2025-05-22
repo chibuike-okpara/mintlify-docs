@@ -48,7 +48,7 @@ Retries are triggered for errors that are likely temporary, typically with **5xx
 
 To reduce or increase the retry count, simply adjust the `maxRetries` value. Setting it to `0` disables retries entirely:
 
-```javascript
+```javascript javascript
 const modempay = new ModemPay(process.env.MODEM_API_KEY, {
   maxRetries: 0, // Disables retries
 });
@@ -57,5 +57,17 @@ const modempay = new ModemPay(process.env.MODEM_API_KEY, {
 <Tip>
 To disable error retry logs, add `RETRY_LOGGING=false` to your `.env` file. This will suppress the retry attempt logs while still performing the retries.
 </Tip>
+
+### Request Timeouts
+
+Modem Pay lets you configure request timeouts to prevent your application from waiting indefinitely for a response. By default, requests will time out after 60 seconds (1 minute).
+
+You can easily customize the timeout duration by specifying the timeout option (in seconds) when initializing the Modem Pay client:
+
+```javascript javascript
+const modempay = new ModemPay(process.env.MODEM_API_KEY, {
+  timeout: 20, // Timeout set to 20 seconds
+});
+```
 
 This configuration gives you flexibility in error handling and helps manage network issues effectively.
