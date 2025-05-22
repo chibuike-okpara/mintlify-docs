@@ -23,6 +23,8 @@ All error responses follow this structure:
   - **403 Forbidden**: You don't have permission to access this resource.
   - **404 Not Found**: The requested resource doesn't exist or was entered incorrectly.
   - **405 Method Not Allowed**: The HTTP method used is not supported for this endpoint.
+  - **422 Unprocessable Entity**: The request was well-formed but contained semantic errors.
+  - **427 Too Many Requests**: You've exceeded the rate limit for API requests.
 
 - **5xx Server Errors**: These signify an issue on Modem Pay’s end.
   - **500 Internal Server Error**: General server error; retry the request or contact support if it persists.
@@ -71,4 +73,12 @@ const modempay = new ModemPay(process.env.MODEM_API_KEY, {
 });
 ```
 
-This configuration gives you flexibility in error handling and helps manage network issues effectively.
+## Rate Limiting
+
+To maintain the stability and security of our platform, **Modem Pay** enforces rate limiting on all API requests.
+
+Each API key is allowed up to **100 consecutive requests** within a **15-minute rolling window**. If this limit is exceeded, further requests will be temporarily blocked until the window resets.
+
+We recommend implementing retries with exponential backoff and monitoring your request patterns to stay within the allowed limits.
+
+If your application requires a higher throughput, please contact us at **[info@modempay.com](mailto:info@modempay.com)** to discuss increased rate limits based on your business needs.
