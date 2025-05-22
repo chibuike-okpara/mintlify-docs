@@ -18,10 +18,11 @@ All error responses follow this structure:
 #### Common Status Codes
 
 - **4xx Client Errors**: These indicate issues in the request sent to the server.
-
   - **400 Bad Request**: The request was invalid or missing required fields.
   - **401 Unauthorized**: Missing or invalid API key.
-  - **404 Not Found**: The requested resource doesn’t exist or was entered incorrectly.
+  - **403 Forbidden**: You don't have permission to access this resource.
+  - **404 Not Found**: The requested resource doesn't exist or was entered incorrectly.
+  - **405 Method Not Allowed**: The HTTP method used is not supported for this endpoint.
 
 - **5xx Server Errors**: These signify an issue on Modem Pay’s end.
   - **500 Internal Server Error**: General server error; retry the request or contact support if it persists.
