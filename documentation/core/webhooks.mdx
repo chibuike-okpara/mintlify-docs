@@ -421,6 +421,17 @@ For each webhook event, respond to Modem Pay with an HTTP `200 OK` status as con
 Ensure your webhook endpoint quickly responds with an HTTP `200 OK` status before performing any tasks that might cause delays or timeouts, such as updating records or sending invoices. This prevents webhook retries and ensures smooth processing.
 </Warning>
 
+### Webhook Retries
+
+Modem Pay ensures reliable delivery of webhook events through an automatic retry mechanism.
+
+If your server fails to acknowledge a webhook event with a **`200 OK`** HTTP response, Modem Pay will retry the delivery up to **3 times**, with each retry spaced **10 minutes apart**. A failure could be due to reasons such as server timeouts, network errors, or non-2xx response codes.
+
+To avoid unnecessary retries and ensure smooth webhook processing, **always return a `200 OK` response immediately**, even if you need to carry out time-consuming tasks (like writing to a database or triggering external API calls). It’s recommended to offload such operations to a background worker or job queue.
+
+By following this best practice, you help prevent duplicate processing and reduce the risk of delays or rate-limiting due to repeated webhook attempts.
+
+
 ### Summary
 
 By following these steps, you can securely receive and process webhook events from Modem Pay, automating actions based on customer interactions and payment flows. Make sure to store and securely handle the event data, as each event may carry critical transaction or customer information relevant to your application.
