@@ -15,7 +15,7 @@ To create a customer, use the `modempay.customers.create()` method, which allows
 <CodeGroup>
 ```typescript nodejs
 const customer = await modempay.customers.create(
-    { name: "Caleb Okpara", email: "caleb@modempay.com", phone: "7000001" },
+    { name: "Zypheron Kade", email: "zypheron.kade42@protonmail.com", phone: "7000001" },
     { distinct: true }
 );
 ```
@@ -24,8 +24,8 @@ cURL -X POST "https://api.modempay.com/v1/customers" \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer <your_api_key>" \
   -d '{
-    "name": "Caleb Okpara",
-    "email": "caleb@modempay.com",
+    "name": "Zypheron Kade",
+    "email": "zypheron.kade42@protonmail.com",
     "phone": "7000001",
     "config": { "distinct": true }
   }'
@@ -38,8 +38,8 @@ cURL -X POST "https://api.modempay.com/v1/customers" \
 {
   "id": "8a8c8a0e-c5d2-4692-a94b-25284d36adc7",
   "balance": 0,
-  "name": "Caleb Okpara",
-  "email": "caleb@modempay.com",
+  "name": "Zypheron Kade",
+  "email": "zypheron.kade42@protonmail.com",
   "phone": "7000001",
   "business_id": "a10a51ae-05c8-406e-968c-7b1d309a77e0",
   "account_id": "7788dd90-3801-47a6-8597-b46eaa0a7d7d",
@@ -74,8 +74,8 @@ cURL -X GET "https://api.modempay.com/v1/customers/8a8c8a0e-c5d2-4692-a94b-25284
 ```json
 {
   "id": "8a8c8a0e-c5d2-4692-a94b-25284d36adc7",
-  "name": "Caleb Okpara",
-  "email": "caleb@modempay.com",
+  "name": "Zypheron Kade",
+  "email": "zypheron.kade42@protonmail.com",
   "phone": "7000001",
   "balance": 0,
   "business_id": "a10a51ae-05c8-406e-968c-7b1d309a77e0",
@@ -120,7 +120,7 @@ cURL -X PUT "https://api.modempay.com/v1/customers/<customer_id>" \
 {
   "id": "8a8c8a0e-c5d2-4692-a94b-25284d36adc7",
   "name": "Chibuike Okpara",
-  "email": "caleb@modempay.com",
+  "email": "zypheron.kade42@protonmail.com",
   "phone": "7000001",
   "balance": 0,
   "business_id": "a10a51ae-05c8-406e-968c-7b1d309a77e0",
@@ -175,7 +175,7 @@ const customers = await modempay.customers.list({ limit:2, search: "caleb" })
     {
       "id": "8a8c8a0e-c5d2-4692-a94b-25284d36adc7",
       "name": "Chibuike Okpara",
-      "email": "caleb@modempay.com",
+      "email": "zypheron.kade42@protonmail.com",
       "phone": "7000001",
       "balance": 0,
       "business_id": "a10a51ae-05c8-406e-968c-7b1d309a77e0",
@@ -186,7 +186,7 @@ const customers = await modempay.customers.list({ limit:2, search: "caleb" })
     },
     {
       "id": "0f6e0912-2f2f-4d8b-bd68-ac8c97c44ae6",
-      "name": "Caleb Okpara",
+      "name": "Zypheron Kade",
       "email": "calebchibuike@modempay.com",
       "phone": "7000002",
       "balance": 0,
