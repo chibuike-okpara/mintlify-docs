@@ -61,6 +61,6 @@ For complete webhook validation examples in other programming languages (Python,
 
 * To secure your endpoint:
 
-  * Verify that incoming requests include a valid secret key in the `x-modem-signature` header.
+  * Verify that incoming requests include a valid signature in the `x-modem-signature` header.
   * Ensure your callback URL uses **HTTPS** to encrypt data in transit.
   * Implement proper timeout and retry logic, as Modem Pay will retry failed callback attempts up to 3 times with exponential backoff.
