@@ -13,7 +13,6 @@ Here are the currently supported mobile money networks on Modem Pay:
 |-------------|------------------|------------------------------|
 | Africell    | `afrimoney`      | Instant transfers supported  |
 | Wave        | `wave`           | Instant transfers supported  |
-| Jarama Wallet       | `jarama`         | Instant transfers supported  |
 
 <Note>
 You must specify the correct `network` value in your transfer request.
@@ -27,7 +26,7 @@ For mobile money transfers, you must provide the following in your request:
 |--------------------|----------|-----------------------------------------|
 | `amount`           | ✅       | Amount to send |
 | `currency`         | ✅       | Currency code (e.g., `GMD`)             |
-| `network`          | ✅       | One of: `jarama`, `afrimoney`, `wave`   |
+| `network`          | ✅       | One of: `afrimoney`, `wave`   |
 | `account_number`   | ✅       | Recipient's mobile wallet number        |
 | `beneficiary_name` | ✅       | Name of the wallet holder               |
 | `narration`        | ⛔       | Optional transfer note                  |
