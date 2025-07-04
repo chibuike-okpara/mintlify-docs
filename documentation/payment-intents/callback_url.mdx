@@ -1,0 +1,66 @@
+---
+title: Payment Intent Callbacks
+---
+
+Modem Pay supports specifying a **callback URL** per payment intent. This allows you to receive event notifications for that specific payment directly at the URL you provide, overriding your global webhook URL.
+
+The same types of events (such as `payment_intent.created`, `payment_intent.succeeded`, `payment_intent.failed`, etc.) are sent to your `callback_url`. The process for handling these events is almost identical, except for the authentication method (see below). For more details on event types and recommended handling, refer to the [Webhooks documentation](/documentation/core/webhooks).
+
+
+## 1. Creating a Payment Intent with a Callback URL
+
+When creating a payment intent, you can include an optional `callback_url` parameter to specify where you want Modem Pay to send event notifications related to this payment.
+
+<CodeGroup>
+```javascript nodejs 
+const paymentIntent = await modempay.paymentIntents.create({
+  amount: 450,
+  callback_url: "https://yourapp.com/payment-callback",
+});
+```
+```bash cURL 
+cURL -X POST "https://api.modempay.com/v1/payments" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <your_api_key>" \
+  -d '{
+    "data": {
+      "amount": 450,
+      "callback_url": "https://yourapp.com/payment-callback",
+      "from_sdk": false
+    }
+  }'
+```
+</CodeGroup>
+
+---
+
+## 2. How the Callback URL Works
+
+* If `callback_url` is provided in the payment intent, Modem Pay sends event notifications (e.g., `payment_intent.succeeded`, `payment_intent.failed`) to this URL **instead of** your global webhook URL.
+* If no `callback_url` is set, events are sent to your global webhook as usual.
+* This allows for more granular control and flexibility, especially useful for marketplaces or third-party integrations where different payments require different handling.
+
+---
+
+## 3. Security and Validation
+
+* All requests sent to the `callback_url` include an `x-modem-signature` header containing a signature that is signed with your **merchant secret key** for authentication.
+
+```javascript sdk
+const event = modempay.webhooks.composeEventDetails(
+    payload,
+    xSignatureHeader,
+    yourSecretKey
+);
+```
+<Info>
+For complete webhook validation examples in other programming languages (Python, Go, etc.), please refer to our [Webhooks documentation](/documentation/core/webhooks). When validating callback URL events, use your **merchant secret key** instead of the webhook signing key.
+</Info>
+
+* This differs from the global webhook which uses a separate **signing key** and payload signatures for verification.
+
+* To secure your endpoint:
+
+  * Verify that incoming requests include a valid secret key in the `x-modem-signature` header.
+  * Ensure your callback URL uses **HTTPS** to encrypt data in transit.
+  * Implement proper timeout and retry logic, as Modem Pay will retry failed callback attempts up to 3 times with exponential backoff.
