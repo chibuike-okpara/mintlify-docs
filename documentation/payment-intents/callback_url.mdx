@@ -4,7 +4,7 @@ title: Payment Intent Callbacks
 
 Modem Pay supports specifying a **callback URL** per payment intent. This allows you to receive event notifications for that specific payment directly at the URL you provide, overriding your global webhook URL.
 
-The same types of events (such as `payment_intent.created`, `payment_intent.succeeded`, `payment_intent.failed`, etc.) are sent to your `callback_url`. The process for handling these events is almost identical, except for the authentication method (see below). For more details on event types and recommended handling, refer to the [Webhooks documentation](/documentation/core/webhooks).
+The same types of events (such as `payment_intent.created`, `charge.succeeded`, `charge.failed`, etc.) are sent to your `callback_url`. The process for handling these events is almost identical, except for the authentication method (see below). For more details on event types and recommended handling, refer to the [Webhooks documentation](/documentation/core/webhooks).
 
 
 ## 1. Creating a Payment Intent with a Callback URL
@@ -36,7 +36,7 @@ cURL -X POST "https://api.modempay.com/v1/payments" \
 
 ## 2. How the Callback URL Works
 
-* If `callback_url` is provided in the payment intent, Modem Pay sends event notifications (e.g., `payment_intent.succeeded`, `payment_intent.failed`) to this URL **instead of** your global webhook URL.
+* If `callback_url` is provided in the payment intent, Modem Pay sends event notifications (e.g., `charge.succeeded`, `charge.failed`) to this URL **instead of** your global webhook URL.
 * If no `callback_url` is set, events are sent to your global webhook as usual.
 * This allows for more granular control and flexibility, especially useful for marketplaces or third-party integrations where different payments require different handling.
 
