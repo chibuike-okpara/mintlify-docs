@@ -37,11 +37,16 @@ Check the `message` field in the response to understand the cause of the error. 
 
 Modem Pay offers automatic retry handling for certain types of errors. By default, Modem Pay retries up to three times if a request fails due to transient issues, such as network errors or temporary server overloads. This is configurable via the `maxRetries` option, which you can set during initialization:
 
-```javascript
+<CodeGroup>
+```javascript javascript
 const modempay = new ModemPay(process.env.MODEM_API_KEY, {
   maxRetries: 3, // Sets the maximum number of retry attempts
 });
 ```
+```python python
+modem_pay = ModemPay(api_key="YOUR_MODEM_PAY_API_KEY", config={"maxRetries": 3})
+```
+</CodeGroup>
 
 ### When Retries Occur
 
@@ -51,11 +56,16 @@ Retries are triggered for errors that are likely temporary, typically with **5xx
 
 To reduce or increase the retry count, simply adjust the `maxRetries` value. Setting it to `0` disables retries entirely:
 
+<CodeGroup>
 ```javascript javascript
 const modempay = new ModemPay(process.env.MODEM_API_KEY, {
   maxRetries: 0, // Disables retries
 });
 ```
+```python python
+modem_pay = ModemPay(api_key="YOUR_MODEM_PAY_API_KEY", config={"maxRetries": 0})
+```
+</CodeGroup>
 
 <Tip>
 To disable error retry logs, add `RETRY_LOGGING=false` to your `.env` file. This will suppress the retry attempt logs while still performing the retries.
@@ -67,11 +77,16 @@ Modem Pay lets you configure request timeouts to prevent your application from w
 
 You can easily customize the timeout duration by specifying the timeout option (in seconds) when initializing the Modem Pay client:
 
+<CodeGroup>
 ```javascript javascript
 const modempay = new ModemPay(process.env.MODEM_API_KEY, {
   timeout: 20, // Timeout set to 20 seconds
 });
 ```
+```python python
+modem_pay = ModemPay(api_key="YOUR_MODEM_PAY_API_KEY", config={"timeout": 20})
+```
+</CodeGroup>
 
 ## Rate Limiting
 

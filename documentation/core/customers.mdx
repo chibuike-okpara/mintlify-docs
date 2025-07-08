@@ -19,6 +19,16 @@ const customer = await modempay.customers.create(
     { distinct: true }
 );
 ```
+```python python
+customer = modem_pay.customers.create(
+    params={
+        "name": "Zypheron Kade",
+        "email": "zypheron.kade42@protonmail.com",
+        "phone": "7000001",
+    },
+    options={"distinct": True},
+)
+```
 ```bash cURL
 cURL -X POST "https://api.modempay.com/v1/customers" \
   -H "Content-Type: application/json" \
@@ -63,6 +73,9 @@ const customer = await modempay.customers.retrieve(
   "8a8c8a0e-c5d2-4692-a94b-25284d36adc7"
 );
 ```
+```python python 
+customer = modem_pay.customers.retrieve("8a8c8a0e-c5d2-4692-a94b-25284d36adc7")
+```
 ```bash cURL 
 cURL -X GET "https://api.modempay.com/v1/customers/8a8c8a0e-c5d2-4692-a94b-25284d36adc7" \
   -H "Authorization: Bearer <your_api_key>"
@@ -100,6 +113,11 @@ const customer = await modempay.customers.update(
     "8a8c8a0e-c5d2-4692-a94b-25284d36adc7",
     { name: "Chibuike Okpara" }
 );
+```
+```python python 
+customer = modem_pay.customers.update(
+    id="8a8c8a0e-c5d2-4692-a94b-25284d36adc7", params={"name": "Chibuike Okpara"}
+)
 ```
 ```bash cURL 
 cURL -X PUT "https://api.modempay.com/v1/customers/<customer_id>" \
@@ -142,6 +160,9 @@ Remove a customer from your records using `modempay.customers.delete(customerId)
 <CodeGroup>
 ```javascript nodejs 
 await modempay.customers.delete("8a8c8a0e-c5d2-4692-a94b-25284d36adc7");
+```
+```python python 
+modem_pay.customers.delete("8a8c8a0e-c5d2-4692-a94b-25284d36adc7")
 ```
 ```bash cURL 
 cURL -X DELETE "https://api.modempay.com/v1/customers/<customer_id>" \

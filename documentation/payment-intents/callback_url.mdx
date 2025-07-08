@@ -18,6 +18,14 @@ const paymentIntent = await modempay.paymentIntents.create({
   callback_url: "https://yourapp.com/payment-callback",
 });
 ```
+```python python 
+payment_intent = modem_pay.payment_intents.create(
+    params={
+        "amount": 450,
+        "callback_url": "https://yourapp.com/payment-callback",
+    }
+)
+```
 ```bash cURL 
 cURL -X POST "https://api.modempay.com/v1/payments" \
   -H "Content-Type: application/json" \
@@ -46,13 +54,21 @@ cURL -X POST "https://api.modempay.com/v1/payments" \
 
 * All requests sent to the `callback_url` include an `x-modem-signature` header containing a signature that is signed with your **merchant secret key** for authentication.
 
-```javascript sdk
+<CodeGroup>
+```javascript js-sdk
 const event = modempay.webhooks.composeEventDetails(
     payload,
     xSignatureHeader,
     yourSecretKey
 );
 ```
+```python python-sdk
+event = modem_pay.webhooks.compose_event_details(
+    payload, xSignatureHeader, yourSecretKey
+)
+```
+
+</CodeGroup>
 <Info>
 For complete webhook validation examples in other programming languages (Python, Go, etc.), please refer to our [Webhooks documentation](/documentation/core/webhooks). When validating callback URL events, use your **merchant secret key** instead of the webhook signing key.
 </Info>

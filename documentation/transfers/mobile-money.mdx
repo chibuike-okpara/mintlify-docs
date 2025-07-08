@@ -54,6 +54,23 @@ const response = await modemPay.transfers.initiate({
   }
 });
 ```
+```python python
+from modempay import ModemPay
+
+modem_pay = ModemPay(api_key="sk_test_...")
+
+response = modem_pay.transfers.initiate(
+    params={
+        "amount": 100,
+        "currency": "GMD",
+        "network": "afrimoney",
+        "account_number": "7834567",
+        "beneficiary_name": "John Doe",
+        "narration": "Vendor payment for April supplies",
+        "metadata": {"vendor_id": "vendor_001", "invoice_id": "inv_204"},
+    }
+)
+```
 ```bash cURL
 curl -X POST https://api.modempay.com/v1/transfers \
   -H "Authorization: Bearer sk_test_..." \
@@ -119,6 +136,10 @@ You can fetch the details of a specific transfer using its unique `id`.
 ```typescript nodejs
 const transfer = await modemPay.transfers.retrieve("45eb796c...");
 console.log(transfer.status); // e.g., 'completed'
+```
+```python python
+transfer = modem_pay.transfers.retrieve("45eb796c...")
+print(transfer["status"]); # e.g., 'completed'
 ```
 ```bash cURL
 curl -X GET https://api.modempay.com/v1/transfers/45eb796c... \

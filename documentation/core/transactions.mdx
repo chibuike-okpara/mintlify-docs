@@ -46,6 +46,14 @@ const transaction = await modempay.transactions.retrieve(
     "5a24d5d0-1117-4f18-9a44-78112eac8aa1"
 );
 ```
+```python python
+modem_pay.transactions.retrieve("5a24d5d0-1117-4f18-9a44-78112eac8aa1")
+```
+```bash curl
+curl -X GET "https://api.modempay.com/v1/transactions/5a24d5d0..." \
+  -H "Authorization: Bearer <your_api_key>" \
+  -H "Content-Type: application/json"
+```
 </CodeGroup>
 
 ### List All Transactions
@@ -55,6 +63,14 @@ The `list` function returns all transactions, helping you monitor overall paymen
 <CodeGroup>
 ```javascript nodejs
 const transactions = await modempay.transactions.list();
+```
+```python python
+transactions = modem_pay.transactions.list()
+```
+```bash curl
+curl -X GET "https://api.modempay.com/v1/transactions" \
+  -H "Authorization: Bearer <your_api_key>" \
+  -H "Content-Type: application/json"
 ```
 </CodeGroup>
 
@@ -85,6 +101,16 @@ const transactions = await modempay.transactions.list({
   search: "GMD",
   timeframe: 1440 // last 24 hours
 });
+```
+```python python
+transactions = modem_pay.transactions.list(
+    options={"limit": 20, "search": "GMD", "timeframe": 1440}
+)
+```
+```bash curl
+curl -X GET "https://api.modempay.com/v1/transactions?limit=20&search=GMD&timeframe=1440" \
+  -H "Authorization: Bearer <your_api_key>" \
+  -H "Content-Type: application/json"
 ```
 </CodeGroup>
 

@@ -69,13 +69,17 @@ To confirm the integrity of incoming events, Modem Pay includes a unique `x-mode
 
 
 <CodeGroup>
-```javascript sdk
+```javascript js-sdk
 // Example usage
 const event = modempay.webhooks.composeEventDetails(
     payload,
     xSignatureHeader,
     modemSecret
 );
+```
+```python python-sdk
+# Example usage
+event = modem_pay.webhooks.compose_event_details(payload, xSignatureHeader, modemSecret)
 ```
 ```javascript javascript
 app.post("/modem-webhook", (req, res) => {
@@ -410,6 +414,41 @@ app.post("/webhook", (req, res) => {
 });
 
 app.listen(3000, () => console.log("Listening for webhooks on port 3000"));
+```
+```python flask
+import os
+from modempay import ModemPay
+from flask import Flask, request, jsonify
+
+modem_pay = ModemPay(api_key="YOUR_MODEM_PAY_API_KEY", config={"timeout": 20})
+
+app = Flask(__name__)
+
+@app.route("/webhook", methods=["POST"])
+def webhook():
+    payload = request.get_json()
+    signature = request.headers.get("x-modem-signature")
+    secret = os.environ.get("MODEM_WEBHOOK_SECRET")
+
+    try:
+        event = modem_pay.webhooks.compose_event_details(payload, signature, secret)
+        # Process the event
+        if event["event"] == "customer.created":
+            # Handle new customer logic
+            pass
+        elif event["event"] == "charge.succeeded":
+            # Process successful payment
+            pass
+        # Add other cases as needed
+
+        return "Webhook processed!", 200
+    except Exception:
+        return "Invalid signature!", 400
+
+
+if __name__ == "__main__":
+    app.run(port=3000, debug=True)
+
 ```
 </CodeGroup>
 

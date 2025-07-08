@@ -8,23 +8,29 @@ Before installing, make sure you have the following:
 
 - [Node.js](https://nodejs.org/) (v16 or higher)
 - [npm](https://www.npmjs.com/)
+- [Python](https://www.python.org/) (at least 3.8)
+
 
 ---
 
 ## Install the Modem Pay SDK
-Modem Pay currently offers official support for JavaScript and TypeScript, with plans to introduce SDKs in additional languages over time.
+To get started, install the SDK in your Node.js or Python project:
 
-To get started, install the SDK in your Node.js or TypeScript project using npm:
-
-```bash bash
+<CodeGroup>
+```bash npm
 npm install modem-pay
 ```
+```bash python
+pip install modempay
+```
+</CodeGroup>
 ---
 
 ## Initialize the SDK
 
 To authenticate requests, instantiate the SDK with your **Modem Pay secret API key**:
 
+<CodeGroup>
 ```ts typescript
 import ModemPay from "modem-pay";
 
@@ -34,6 +40,18 @@ const intent = await modempay.paymentIntents.create({ amount: 450 });
 
 console.log(intent.data.payment_link);
 ```
+
+```python python
+from modempay import ModemPay
+
+modem_pay = ModemPay(api_key="YOUR_MODEM_PAY_API_KEY")
+
+intent = modem_pay.payment_intents.create(params={"amount": 450})
+
+print(intent["data"]["payment_link"])
+```
+</CodeGroup>
+
 <Warning>
 🔐 Never expose your secret API key on the frontend or in public repositories.
 </Warning>

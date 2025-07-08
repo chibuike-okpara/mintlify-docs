@@ -44,6 +44,18 @@ const feeResponse = await modemPay.transfers.fee({
 console.log(`Transfer fee: ${feeResponse.fee} ${feeResponse.currency}`);
 console.log(`Total amount: ${feeResponse.amount} ${feeResponse.currency}`);
 ```
+```python python
+from modempay import ModemPay
+
+modem_pay = ModemPay(api_key="sk_test_...")
+
+fee_response = modem_pay.transfers.fee(
+    {"amount": 1000, "currency": "GMD", "network": "afrimoney"}
+)
+
+print(f"Transfer fee: {fee_response['fee']} {fee_response['currency']}")
+print(f"Total amount: {fee_response['amount']} {fee_response['currency']}")
+```
 ```bash cURL
 curl -X POST https://api.modempay.com/v1/transfers/fees \
   -H "Authorization: Bearer sk_test_..." \

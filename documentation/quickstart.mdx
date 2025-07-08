@@ -70,6 +70,16 @@ const intent = await modempay.paymentIntents.create({ amount: 450 });
 console.log(intent.data.payment_link);
 ```
 
+```python python
+from modempay import ModemPay
+
+modem_pay = ModemPay(api_key="YOUR_MODEM_PAY_API_KEY")
+
+intent = modem_pay.payment_intents.create(params={"amount": 450})
+
+print(intent["data"]["payment_link"])
+```
+
 </CodeGroup>
 
 ### 3. **Complete KYC**
