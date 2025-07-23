@@ -22,6 +22,7 @@ type TransferParams = {
   beneficiary_name: string;
   account_number: string;
   metadata?: object;
+  callback_url?: string;
 };
 ```
 
@@ -31,6 +32,7 @@ type TransferParams = {
 * `account_number` – Destination account (phone or bank account).
 * `beneficiary_name` – Name of the recipient.
 * `metadata` – Optional key-value pairs for internal tracking.
+* `callback_url` – The endpoint where Modem Pay will send a webhook notification after the payout has been processed.
 
 
 ### Transfer Object
@@ -61,6 +63,7 @@ type Transfer = {
   test_mode: boolean;
   events: object;
   note?: string;
+  callback_url?: string;
 };
 ```
 
