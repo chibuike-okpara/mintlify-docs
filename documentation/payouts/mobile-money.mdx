@@ -1,5 +1,5 @@
 ---
-title: Mobile Money Transfers
+title: Mobile Money Payouts
 ---
 
 Mobile money is one of the most popular and accessible methods of transferring funds in The Gambia and across West Africa. Modem Pay supports seamless transfers to major mobile money providers.
@@ -33,7 +33,7 @@ For mobile money transfers, you must provide the following in your request:
 | `metadata`         | ⛔       | Optional structured data (JSON)         |
 
 
-### Initiate Transfer
+### Initiate Payout
 
 <CodeGroup>
 ```typescript nodejs
@@ -91,7 +91,7 @@ curl -X POST https://api.modempay.com/v1/transfers \
 ```
 </CodeGroup>
 
-### Transfer Response
+### Payout Response
 
 ```typescript json
 {
@@ -128,7 +128,7 @@ curl -X POST https://api.modempay.com/v1/transfers \
 ```
 
 
-### Retrieve a Transfer
+### Retrieve a Payout
 
 You can fetch the details of a specific transfer using its unique `id`.
 

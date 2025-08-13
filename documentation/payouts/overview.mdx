@@ -2,14 +2,14 @@
 title: Overview
 ---
 
-The Modem Pay Transfers API allows you to send funds from your business account to users, vendors, or other accounts. Transfers can be made via mobile money, internal (Modem Pay) transfers, or bank transfers (coming soon).
+The Modem Pay Payouts API allows you to send funds from your business account to users, vendors, or other accounts. Payouts can be made via mobile money, internal (Modem Pay) transfers, or bank transfers (coming soon).
 
 Use cases include:
 - User withdrawals
 - Vendor payouts
 - Payroll and salary disbursements
 
-### Transfer Parameters
+### Payout Parameters
 
 Here’s the general shape of a transfer request:
 
@@ -35,7 +35,7 @@ type TransferParams = {
 * `callback_url` – The endpoint where Modem Pay will send a webhook notification after the payout has been processed.
 
 
-### Transfer Object
+### Payout Object
 
 Once initiated, a transfer is represented as:
 
@@ -71,7 +71,7 @@ This object is returned on creation and is also sent to your webhook endpoint wh
 
 ### Webhooks
 
-Transfers are asynchronous and may trigger the following webhook events:
+Payouts are asynchronous and may trigger the following webhook events:
 
 * `transfer.succeeded`
 * `transfer.failed`

@@ -65,13 +65,6 @@
       ]
     },
     {
-      "group": "Sessions",
-      "pages": [
-        "documentation/sessions/sessions",
-        "documentation/sessions/manage-sessions"
-      ]
-    },
-    {
       "group": "Payment Intents",
       "pages": [
         "documentation/payment-intents/overview",
@@ -81,11 +74,11 @@
       ]
     },
     {
-      "group": "Transfers",
+      "group": "Payouts",
       "pages": [
-        "documentation/transfers/overview",
-        "documentation/transfers/mobile-money",
-        "documentation/transfers/fees"
+        "documentation/payouts/overview",
+        "documentation/payouts/mobile-money",
+        "documentation/payouts/fees"
       ]
     },
     {

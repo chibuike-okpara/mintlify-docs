@@ -1,10 +1,10 @@
 ---
-title: Transfer Fees
+title: Payout Fees
 ---
 
 With Modem Pay, you can check how much a transfer will cost before proceeding. This allows you to estimate the total amount, including any fees that will be applied based on the payment network and transfer amount.
 
-### Check Transfer Fees
+### Check Payout Fees
 
 To check the fee for a transfer, use the `/v1/transfers/fees` endpoint. You can specify the transfer amount, currency, and network to get an estimate of the transfer fee.
 
@@ -41,7 +41,7 @@ const feeResponse = await modemPay.transfers.fee({
   network: "afrimoney"
 });
 
-console.log(`Transfer fee: ${feeResponse.fee} ${feeResponse.currency}`);
+console.log(`Payout fee: ${feeResponse.fee} ${feeResponse.currency}`);
 console.log(`Total amount: ${feeResponse.amount} ${feeResponse.currency}`);
 ```
 ```python python
@@ -53,7 +53,7 @@ fee_response = modem_pay.transfers.fee(
     {"amount": 1000, "currency": "GMD", "network": "afrimoney"}
 )
 
-print(f"Transfer fee: {fee_response['fee']} {fee_response['currency']}")
+print(f"Payout fee: {fee_response['fee']} {fee_response['currency']}")
 print(f"Total amount: {fee_response['amount']} {fee_response['currency']}")
 ```
 ```bash cURL
