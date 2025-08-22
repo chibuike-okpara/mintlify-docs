@@ -69,6 +69,7 @@
       "pages": [
         "documentation/payment-intents/overview",
         "documentation/payment-intents/create",
+        "documentation/payment-intents/direct-charge",
         "documentation/payment-intents/callback_url",
         "documentation/payment-intents/management"
       ]

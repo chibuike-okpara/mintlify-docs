@@ -1,0 +1,45 @@
+---
+title: Direct Charge
+---
+
+You can set up a **direct charge** by providing the `network` and the 7-digit `account_number` (no country code). This prefills the customer’s details in checkout, pending their confirmation.
+
+Accepted networks:
+
+* `wave`
+* `afrimoney`
+* `qmoney`
+
+Works only with **mobile money**.
+
+<CodeGroup>
+
+```typescript nodejs
+const intent = await modempay.paymentIntents.create({
+  amount: 450,
+  network: "wave",
+  account_number: "7000001",
+});
+```
+
+```python python
+payment_intent = modem_pay.payment_intents.create(
+  params={"amount": 450, "network": "wave", "account_number": "7000001"}
+)
+```
+
+```bash curl
+curl -X POST "https://api.modempay.com/v1/payments" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <your_api_key>" \
+  -d '{
+    "data": {
+      "amount": 450,
+      "network": "wave",
+      "account_number": "7000001",
+      "from_sdk": false
+    }
+  }'
+```
+
+</CodeGroup>
