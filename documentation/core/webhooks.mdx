@@ -370,9 +370,9 @@ Always respond to webhook events with an HTTP `200 OK` status to confirm receipt
 Upon successful validation, `modempay.webhooks.composeEventDetails` returns an `Event` object containing the event type and payload data. The event types you may receive include:
 
 - **Customer Events**: `"customer.created"`, `"customer.updated"`, `"customer.deleted"`
-- **Payment Intent Events**: `"payment_intent.created"`, `"payment_intent.cancelled"`
+- **Payment Intent Events**: `"payment_intent.created"`, `"payment_intent.cancelled"`, `"payment_intent.expired"`
 - **Charge Events**: `"charge.succeeded"`, `"charge.cancelled"`, `"charge.created"`, `"charge.updated"`
-- **Payout Events**: `"transfer.succeeded"`, `"transfer.cancelled"`, `"transfer.reversed"`, `"transfer.failed"`
+- **Payout Events**: `"transfer.succeeded"`, `"transfer.cancelled"`, `"transfer.reversed"`, `"transfer.failed"`, `"transfer.flagged"`
 
 
 ### Example Usage

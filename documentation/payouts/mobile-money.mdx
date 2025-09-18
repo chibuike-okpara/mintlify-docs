@@ -34,6 +34,10 @@ For mobile money transfers, you must provide the following in your request:
 
 
 ### Initiate Payout
+<Note>
+When initiating a transfer, you must provide an <b>Idempotency-Key</b> in the request header. This ensures that if the same request is sent multiple times (for example, due to network issues), only one transfer will be processed. The <b>Idempotency-Key</b> should be a unique value (such as a UUID) for each transfer request.
+</Note>
+
 
 <CodeGroup>
 ```typescript nodejs
@@ -52,7 +56,7 @@ const response = await modemPay.transfers.initiate({
     vendor_id: "vendor_001",
     invoice_id: "inv_204"
   }
-});
+}, "Idempotency-Key");
 ```
 ```python python
 from modempay import ModemPay
@@ -68,13 +72,15 @@ response = modem_pay.transfers.initiate(
         "beneficiary_name": "John Doe",
         "narration": "Vendor payment for April supplies",
         "metadata": {"vendor_id": "vendor_001", "invoice_id": "inv_204"},
-    }
+    },
+    idempotency_key="Idempotency-Key"
 )
 ```
 ```bash cURL
 curl -X POST https://api.modempay.com/v1/transfers \
   -H "Authorization: Bearer sk_test_..." \
   -H "Content-Type: application/json" \
+  -H "Idempotency-Key: Idempotency-Key" \
   -d '{
     "amount": 100,
     "currency": "GMD",
@@ -148,3 +154,12 @@ curl -X GET https://api.modempay.com/v1/transfers/45eb796c... \
 </CodeGroup>
 
 This returns the full transfer object with all metadata, status, and transaction history.
+
+### Fraud Monitoring & Security
+
+Modem Pay automatically monitors all payout transfers for suspicious or anomalous activity. If a transfer triggers our fraud detection systems, it is immediately flagged for review. When this happens:
+
+- You will receive an email notification alerting you to the flagged transfer.
+- A `transfer.flagged` webhook event will be sent to your configured webhook endpoint.
+
+**Important:** No further transfers can be made to the affected account number until you review and resolve the flagged issue. This helps protect your business and recipients from potential fraud or misuse. Always investigate flagged transfers promptly to restore normal payout operations.
