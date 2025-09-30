@@ -1,0 +1,56 @@
+---
+title: Initialize Split Payment
+---
+
+
+Once you’ve created a sub-account, you can attach it to a **Payment Intent** so that a portion of the transaction is automatically routed to the sub-account during settlement.
+
+### Example Usage
+
+<CodeGroup>
+```javascript nodejs
+const paymentIntent = await modempay.paymentIntents.create({
+  amount: 450,
+  sub_account: "5bfcc08....810b" // Attach the sub-account ID here
+});
+console.log(paymentIntent);
+```
+```python python
+payment_intent = modem_pay.payment_intents.create(params={
+    "amount": 450,
+    "sub_account": "5bfcc08....810b"  # Attach the sub-account ID here
+})
+print(payment_intent)
+```
+```bash cURL
+cURL -X POST "https://api.modempay.com/v1/payments" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <your_api_key>" \
+  -d '{
+    "data": {
+      "amount": 450,
+      "sub_account": "5bfcc08....810b",
+      "from_sdk": false
+    }
+  }'
+```
+</CodeGroup>
+
+**Notes:**
+
+* `sub_account` should be the ID of an existing sub-account you’ve created.
+* The `percentage` defined on the sub-account determines how much of the payment is routed to that account.
+* The remaining portion automatically goes to your main business account.
+* Currently, each Payment Intent supports **one sub-account**. Future updates will allow multiple sub-accounts per transaction.
+
+**Example Flow:**
+
+1. Create a sub-account: `Moca`, 10% of transactions.
+2. Create a Payment Intent for 450 GMD and attach `Moca` as the sub-account.
+3. After the payment is processed:
+
+   * Main account receives 405 GMD
+   * Sub-account receives 45 GMD
+
+This setup ensures **automatic, transparent revenue sharing** without manual calculations.
+

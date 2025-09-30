@@ -76,6 +76,14 @@
       ]
     },
     {
+      "group": "Split Payments",
+      "pages": [
+        "documentation/split-payments/overview",
+        "documentation/split-payments/sub-accounts",
+        "documentation/split-payments/initialize-payment"
+      ]
+    },
+    {
       "group": "Payouts",
       "pages": [
         "documentation/payouts/overview",

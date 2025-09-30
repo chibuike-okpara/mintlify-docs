@@ -1,0 +1,157 @@
+---
+title: Sub-Accounts
+---
+
+Sub-accounts are the backbone of **Split Payments**. They define who receives a portion of a transaction and where that money should go. Each sub-account can have a **percentage of the transaction** and a **settlement destination**.
+
+With sub-accounts, you can:
+
+* Automate revenue sharing
+* Maintain a transparent audit trail for settlements
+* Track balances for each partner before actual payout
+
+<Note>
+The **minimum split amount** per transaction is **1 GMD**.  
+Before a sub-account can receive a payout, it must have accumulated at least **10 GMD** in its balance. This ensures efficient settlement and reduces transaction costs.
+</Note>
+
+---
+
+## Create a Sub-Account
+
+Creates a new recipient account that can be used in split payments.
+
+<CodeGroup>
+```typescript nodejs
+const subAccount = await modempay.subAccounts.create({
+  business_name: "Hail-Ma",
+  percentage: 10,             // Revenue share (integer %)
+  settlement_code: "afrimoney", // Settlement provider (wave or afrimoney)
+  account_number: 7012345,      // Account to receive funds
+});
+```
+```python python
+sub_account = mp.sub_accounts.create(
+    params={
+        "business_name": "Hail-Ma",
+        "percentage": 10,
+        "settlement_code": "afrimoney",
+        "account_number": 7012345,
+    }
+)
+```
+```bash cURL
+curl -X POST https://api.modempay.com/v1/sub-accounts \
+  -H "Authorization: Bearer sk_test_..." \
+  -H "Content-Type: application/json" \
+  -d '{
+      "business_name": "Hail-Ma",
+      "percentage": 10,
+      "settlement_code": "afrimoney",
+      "account_number": 7012345,
+    }'
+```
+</CodeGroup>
+
+**Notes & Best Practices:**
+
+* Ensure the `percentage` is appropriate; total splits should not exceed 100%.
+* The `settlement_code` must match an active payment provider integrated with Modem Pay.
+* Keep the `account_number` accurate to avoid failed settlements.
+* You can create multiple sub-accounts and reuse them across payment intents.
+
+## Retrieve a Sub-Account
+
+Fetch details for a specific sub-account using its unique ID. Useful for confirming configuration or checking balances.
+
+<CodeGroup>
+```typescript nodejs
+const subAccount = await modempay.subAccounts.retrieve("5bfcc08....810b");
+console.log(subAccount);
+```
+
+```python python
+sub_account = mp.sub_accounts.retrieve("5bfcc08....810b")
+print(sub_account)
+```
+
+```bash cURL
+curl -X GET https://api.modempay.com/v1/sub-accounts/5bfcc08....810b \
+  -H "Authorization: Bearer sk_test_..." \
+  -H "Content-Type: application/json"
+```
+</CodeGroup>
+
+## List All Sub-Accounts
+
+Get a list of all sub-accounts associated with your business. This is helpful for dashboards or automated scripts.
+
+<CodeGroup>
+```typescript nodejs
+const allSubAccounts = await modempay.subAccounts.list();
+console.log(allSubAccounts);
+```
+```python python
+all_sub_accounts = mp.sub_accounts.list()
+print(all_sub_accounts)
+```
+```bash cURL
+curl -X GET https://api.modempay.com/v1/sub-accounts?term=""&limit=15&offset=0 \
+  -H "Authorization: Bearer sk_test_..." \
+  -H "Content-Type: application/json"
+```
+</CodeGroup>
+
+**Notes:**
+
+* Can be filtered by search term.
+* Supports pagination using `offset` and `limit` parameters
+* Returns pagination info if there are many sub-accounts.
+
+
+## Update a Sub-Account
+
+Modify a sub-account’s properties like percentage share or settlement destination.
+
+<CodeGroup>
+```typescript nodejs
+const updatedSubAccount = await modempay.subAccounts.update("5bfcc08....810b", {
+  percentage: 15,         // Update revenue share
+  account_number: 7016789, // Update account number
+});
+console.log(updatedSubAccount);
+```
+```python python
+updated_sub_account = mp.sub_accounts.update(
+    "5bfcc08....810b",
+    {
+        "percentage": 15,         # Update revenue share
+        "account_number": 7016789 # Update account number
+    }
+)
+print(updated_sub_account)
+```
+```bash cURL
+curl -X PUT https://api.modempay.com/v1/sub-accounts/5bfcc08....810b \
+  -H "Authorization: Bearer sk_test_..." \
+  -H "Content-Type: application/json" \
+  -d '{
+    "percentage": 15,
+    "account_number": 7016789
+  }'
+```
+</CodeGroup>
+
+**Notes:**
+* You can update the fields: `active`, `percentage`, `account_number`, and `settlement_code`.
+* Updates take effect on future transactions, not on already processed ones.
+* Avoid reducing percentages that would make total splits exceed 100%.
+
+---
+
+## Additional Tips
+
+* **Balances:** Each sub-account maintains an internal balance until settlement occurs.
+* **Audit:** Always store sub-account IDs and percentages used per payment intent to keep your records consistent.
+* **Multiple Sub-Accounts:** Currently, a payment intent supports one sub-account. Future updates will allow multiple sub-accounts per transaction.
+
