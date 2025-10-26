@@ -76,6 +76,24 @@ response = modem_pay.transfers.initiate(
     idempotency_key="Idempotency-Key"
 )
 ```
+```php php
+use ModemPay\ModemPay;
+
+$modemPay = new ModemPay('sk_test_...');
+
+$transfer = $modemPay->transfers()->create([
+    'amount' => 100,
+    'currency' => 'GMD',
+    'account_number' => '7834567',
+    'network' => 'afrimoney',
+    'beneficiary_name' => 'John Doe',
+    'narration' => 'Vendor payment for April supplies',
+    'metadata' => [
+      'vendor_id' => 'vendor_001',
+      'invoice_id' => 'inv_204',
+    ],
+], 'Idempotency-Key');
+```
 ```bash cURL
 curl -X POST https://api.modempay.com/v1/transfers \
   -H "Authorization: Bearer sk_test_..." \
@@ -146,6 +164,10 @@ console.log(transfer.status); // e.g., 'completed'
 ```python python
 transfer = modem_pay.transfers.retrieve("45eb796c...")
 print(transfer["status"]); # e.g., 'completed'
+```
+```php php
+$transfer = $modemPay->transfers()->retrieve("45eb796c...");
+echo $transfer->status; # e.g., 'completed'
 ```
 ```bash cURL
 curl -X GET https://api.modempay.com/v1/transfers/45eb796c... \

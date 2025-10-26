@@ -80,6 +80,16 @@ intent = modem_pay.payment_intents.create(params={"amount": 450})
 print(intent["data"]["payment_link"])
 ```
 
+```php php
+use ModemPay\ModemPay;
+
+$modemPay = new ModemPay('YOUR_MODEM_PAY_API_KEY');
+
+$payment = $modemPay->paymentIntents()->create(['amount' => 450]);
+
+echo $payment->data->payment_link;
+```
+
 </CodeGroup>
 
 ### 3. **Complete KYC**

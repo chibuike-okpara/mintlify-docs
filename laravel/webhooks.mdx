@@ -1,0 +1,212 @@
+---
+title: 'Webhooks'
+---
+
+Webhooks notify your app when events happen (like successful payments). They're essential for updating your database after a payment completes.
+
+## Setup
+
+### 1. Add Webhook Secret
+
+Add to `.env`:
+```env
+MODEMPAY_WEBHOOK_SECRET=wh_your_secret_here
+```
+
+### 2. Create Controller
+```bash
+php artisan make:controller WebhookController
+```
+```php
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use ModemPay\Laravel\Facades\ModemPay;
+use ModemPay\Exceptions\ModemPayException;
+
+class WebhookController extends Controller
+{
+    public function handle(Request $request)
+    {
+        try {
+            // Validate and parse webhook
+            $event = ModemPay::webhooks()->composeEventDetails(
+                $request->getContent(),
+                $request->header('x-modem-signature'),
+                config('modempay.webhook_secret')
+            );
+
+            // Handle event
+            match($event->event) {
+                \ModemPay\Types\EventType::PAYMENT_INTENT_CREATED 
+                    => $this->handlePaymentCreated($event),
+                \ModemPay\Types\EventType::CHARGE_SUCCEEDED 
+                    => $this->handleChargeSucceeded($event),
+                default => null,
+            };
+
+            return response()->json(['status' => 'success']);
+
+        } catch (ModemPayException $e) {
+            return response()->json(['error' => $e->getMessage()], 400);
+        }
+    }
+
+    private function handlePaymentCreated($event)
+    {
+        // Update your database
+        $paymentId = $event->payload['id'];
+        
+        // Your logic here...
+    }
+
+    private function handleChargeSucceeded($event)
+    {
+        // Mark order as paid
+        $chargeId = $event->payload['id'];
+        
+        // Your logic here...
+    }
+}
+```
+
+### 3. Add Route
+
+In `routes/api.php`:
+```php
+Route::post('/webhooks/modempay', [WebhookController::class, 'handle']);
+```
+
+### 4. Disable CSRF
+
+In `app/Http/Middleware/VerifyCsrfToken.php`:
+```php
+protected $except = [
+    'api/webhooks/modempay',
+];
+```
+
+## Event Types
+
+ModemPay sends these event types:
+
+| Event | Description |
+|-------|-------------|
+| `payment_intent.created` | Payment intent created |
+| `payment_intent.cancelled` | Payment cancelled |
+| `charge.succeeded` | Payment successful |
+| `charge.failed` | Payment failed |
+| `transfer.succeeded` | Transfer completed |
+
+## Using Event Listeners (Optional)
+
+For cleaner code, use Laravel events:
+
+### 1. Create Listener
+```bash
+php artisan make:listener HandleModemPayWebhook
+```
+```php
+<?php
+
+namespace App\Listeners;
+
+use ModemPay\Laravel\Events\WebhookReceived;
+use ModemPay\Types\EventType;
+
+class HandleModemPayWebhook
+{
+    public function handle(WebhookReceived $event)
+    {
+        match($event->event->event) {
+            EventType::CHARGE_SUCCEEDED => $this->handleSuccess($event),
+            EventType::CHARGE_FAILED => $this->handleFailure($event),
+            default => null,
+        };
+    }
+
+    private function handleSuccess($event)
+    {
+        // Mark order as paid
+    }
+
+    private function handleFailure($event)
+    {
+        // Handle failed payment
+    }
+}
+```
+
+### 2. Register Listener
+
+In `app/Providers/EventServiceProvider.php`:
+```php
+protected $listen = [
+    \ModemPay\Laravel\Events\WebhookReceived::class => [
+        \App\Listeners\HandleModemPayWebhook::class,
+    ],
+];
+```
+
+## Testing Webhooks
+
+Test locally with curl:
+```bash
+curl -X POST http://localhost:8000/api/webhooks/modempay \
+  -H "Content-Type: application/json" \
+  -H "x-modem-signature: your_test_signature" \
+  -d '{"event":"charge.succeeded","payload":{"id":"ch_123"}}'
+```
+
+<Warning>
+Always validate webhook signatures! Never trust webhook data without verification.
+</Warning>
+
+## Security Tips
+
+- Always validate signatures
+- Use HTTPS in production
+- Handle duplicate events (idempotency)
+- Log all webhook events
+- Return 200 quickly (process async if needed)
+
+## Example: Complete Webhook Handler
+```php
+public function handle(Request $request)
+{
+    try {
+        $event = ModemPay::webhooks()->composeEventDetails(
+            $request->getContent(),
+            $request->header('x-modem-signature'),
+            config('modempay.webhook_secret')
+        );
+
+        // Log event
+        Log::info('ModemPay webhook received', [
+            'event' => $event->event->value,
+            'payload' => $event->payload
+        ]);
+
+        // Process based on event type
+        switch ($event->event) {
+            case EventType::CHARGE_SUCCEEDED:
+                Order::where('payment_id', $event->payload['id'])
+                     ->update(['status' => 'paid']);
+                break;
+
+            case EventType::CHARGE_FAILED:
+                Order::where('payment_id', $event->payload['id'])
+                     ->update(['status' => 'failed']);
+                break;
+        }
+
+        return response()->json(['status' => 'success']);
+
+    } catch (\Exception $e) {
+        Log::error('Webhook processing failed', ['error' => $e->getMessage()]);
+        return response()->json(['error' => 'Processing failed'], 400);
+    }
+}
+```

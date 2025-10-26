@@ -81,6 +81,15 @@ const event = modempay.webhooks.composeEventDetails(
 # Example usage
 event = modem_pay.webhooks.compose_event_details(payload, xSignatureHeader, modemSecret)
 ```
+
+```php php-sdk
+$event = $modemPay->webhooks()->composeEventDetails(
+    $payload,
+    $xSignatureHeader,
+    $modemSecret
+);
+```
+
 ```javascript javascript
 app.post("/modem-webhook", (req, res) => {
   const payload = JSON.stringify(req.body);
@@ -229,51 +238,6 @@ def modem_webhook():
 
 if __name__ == "__main__":
     app.run(debug=True)
-```
-```php php
-$secretHash = getenv("MODEM_PAY_SECRET_HASH");
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $payload = json_encode(file_get_contents("php://input"));
-    $signature = $_SERVER["HTTP_X_MODEM_SIGNATURE"];
-
-    // Ensure the signature is provided
-    if (!$signature) {
-        http_response_code(400);
-        echo json_encode(["message" => "Signature missing"]);
-        exit();
-    }
-
-    // Generate the HMAC-SHA512 hash for signature comparison
-    $computedSignature = hash_hmac('sha512', $payload, $secretHash);
-
-    // Ensure the signature length matches to avoid timing attacks
-    if (strlen($computedSignature) !== strlen($signature)) {
-        http_response_code(400);
-        echo json_encode(["message" => "Invalid signature length"]);
-        exit();
-    }
-
-    // Use timing-safe comparison to protect against timing attacks
-    if (!hash_equals($computedSignature, $signature)) {
-        http_response_code(400);
-        echo json_encode(["message" => "Invalid signature!"]);
-        exit();
-    }
-
-    // Parse the payload to handle the event
-    $eventPayload = json_decode($payload, true);
-
-    if (json_last_error() !== JSON_ERROR_NONE) {
-        http_response_code(400);
-        echo json_encode(["message" => "Invalid event data"]);
-        exit();
-    }
-
-    // Logic to process the eventPayload can go here
-    http_response_code(200);  // Acknowledge successful receipt
-    echo "";
-}
 ```
 </CodeGroup>
 
@@ -449,6 +413,43 @@ def webhook():
 if __name__ == "__main__":
     app.run(port=3000, debug=True)
 
+```
+```php laravel
+public function handle(Request $request)
+{
+    try {
+        $event = ModemPay::webhooks()->composeEventDetails(
+            $request->getContent(),
+            $request->header('x-modem-signature'),
+            config('modempay.webhook_secret')
+        );
+
+        // Log event
+        Log::info('ModemPay webhook received', [
+            'event' => $event->event->value,
+            'payload' => $event->payload
+        ]);
+
+        // Process based on event type
+        switch ($event->event) {
+            case EventType::CHARGE_SUCCEEDED:
+                Order::where('payment_id', $event->payload['id'])
+                     ->update(['status' => 'paid']);
+                break;
+
+            case EventType::CHARGE_FAILED:
+                Order::where('payment_id', $event->payload['id'])
+                     ->update(['status' => 'failed']);
+                break;
+        }
+
+        return response()->json(['status' => 'success']);
+
+    } catch (\Exception $e) {
+        Log::error('Webhook processing failed', ['error' => $e->getMessage()]);
+        return response()->json(['error' => 'Processing failed'], 400);
+    }
+}
 ```
 </CodeGroup>
 

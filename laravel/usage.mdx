@@ -1,0 +1,133 @@
+---
+title: 'Usage'
+---
+
+How to use Modem Pay in your Laravel application.
+
+## Using the Facade
+
+The easiest way to use Modem Pay:
+```php
+use ModemPay\Laravel\Facades\ModemPay;
+
+// Create payment
+$payment = ModemPay::paymentIntents()->create([
+    'amount' => 5000,
+    'currency' => 'GMD',
+]);
+
+// List payments
+$payments = ModemPay::paymentIntents()->list(['limit' => 10]);
+
+// Get payment
+$payment = ModemPay::paymentIntents()->retrieve('hash');
+```
+
+## Using Dependency Injection
+
+Inject Modem Pay into your controllers:
+```php
+use ModemPay\ModemPay;
+
+class PaymentController extends Controller
+{
+    public function __construct(private ModemPay $modemPay) {}
+
+    public function create(Request $request)
+    {
+        $payment = $this->modemPay->paymentIntents()->create([
+            'amount' => $request->amount,
+            'currency' => 'GMD',
+        ]);
+
+        return redirect($payment->data->payment_link);
+    }
+}
+```
+
+## Payment Intents
+
+### Create a Payment
+```php
+$payment = ModemPay::paymentIntents()->create([
+    'amount' => 5000,
+    'currency' => 'GMD',
+    'title' => 'Order #12345',
+    'metadata' => [
+        'order_id' => '12345',
+        'customer_id' => 'cus_123'
+    ]
+]);
+```
+
+### List Payments
+```php
+$payments = ModemPay::paymentIntents()->list([
+    'limit' => 20,
+    'offset' => 0
+]);
+```
+
+### Get Single Payment
+```php
+$payment = ModemPay::paymentIntents()->retrieve('hash');
+```
+
+## Transfers
+
+### Create a Transfer
+```php
+$transfer = ModemPay::transfers()->create([
+    'amount' => 1000,
+    'account_number' => '7012345',
+    'network' => 'wave',
+    'currency' => 'GMD',
+    'beneficiary_name' => 'John Doe'
+], 'idempotency-key');
+```
+
+### Get Single Transfer
+```php
+$transfer = ModemPay::transfers()->retrieve('id');
+```
+
+## Error Handling
+
+Always wrap API calls in try-catch:
+```php
+use ModemPay\Exceptions\ModemPayException;
+
+try {
+    $payment = ModemPay::paymentIntents()->create([
+        'amount' => 5000,
+        'currency' => 'GMD',
+    ]);
+} catch (ModemPayException $e) {
+    return back()->with('error', $e->getMessage());
+}
+```
+
+## Example: Complete Payment Flow
+```php
+public function checkout(Request $request)
+{
+    try {
+        // Create payment
+        $payment = ModemPay::paymentIntents()->create([
+            'amount' => $request->total,
+            'currency' => 'GMD',
+            'title' => "Order #{$request->order_id}",
+            'metadata' => [
+                'order_id' => $request->order_id,
+                'user_id' => auth()->id(),
+            ]
+        ]);
+
+        // Redirect to payment page
+        return redirect($payment->data->payment_link);
+
+    } catch (ModemPayException $e) {
+        return back()->with('error', 'Payment failed: ' . $e->getMessage());
+    }
+}
+```

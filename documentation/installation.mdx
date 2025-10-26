@@ -9,7 +9,8 @@ Before installing, make sure you have the following:
 - [Node.js](https://nodejs.org/) (v16 or higher)
 - [npm](https://www.npmjs.com/)
 - [Python](https://www.python.org/) (at least 3.8)
-
+- [PHP](https://www.php.net/) (at least 8.1)
+- [Composer](https://getcomposer.org/) (for PHP dependency management)
 
 ---
 
@@ -22,6 +23,9 @@ npm install modem-pay
 ```
 ```bash python
 pip install modempay
+```
+```bash php
+composer require modempay/modempay-php
 ```
 </CodeGroup>
 ---
@@ -49,6 +53,16 @@ modem_pay = ModemPay(api_key="YOUR_MODEM_PAY_API_KEY")
 intent = modem_pay.payment_intents.create(params={"amount": 450})
 
 print(intent["data"]["payment_link"])
+```
+
+```php php
+use ModemPay\ModemPay;
+
+$modemPay = new ModemPay('YOUR_MODEM_PAY_API_KEY');
+
+$payment = $modemPay->paymentIntents()->create(['amount' => 450]);
+
+echo $payment->data->payment_link;
 ```
 </CodeGroup>
 

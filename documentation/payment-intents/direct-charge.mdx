@@ -28,6 +28,14 @@ payment_intent = modem_pay.payment_intents.create(
 )
 ```
 
+```php php 
+$payment_intent = $modemPay->paymentIntents()->create([
+    'amount' => 450,
+    'network' => 'wave',
+    'account_number' => '7000001',
+]);
+```
+
 ```bash curl
 curl -X POST "https://api.modempay.com/v1/payments" \
   -H "Content-Type: application/json" \

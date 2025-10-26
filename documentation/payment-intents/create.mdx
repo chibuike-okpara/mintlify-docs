@@ -30,6 +30,9 @@ const paymentIntent = await modempay.paymentIntents.create({ amount: 450 });
 ```python python 
 payment_intent = modem_pay.payment_intents.create(params={"amount": 450})
 ```
+```php php 
+$payment_intent = $modemPay->paymentIntents()->create(['amount' => 450]);
+```
 ```bash cURL 
 cURL -X POST "https://api.modempay.com/v1/payments" \
   -H "Content-Type: application/json" \
@@ -80,6 +83,12 @@ payment_intent = modem_pay.payment_intents.create(
     params={"amount": 450, "customer": "d9bf8831-4db5-4a1c-8aa0-3de72492f330"}
 )
 ```
+```php php 
+$payment_intent = $modemPay->paymentIntents()->create([
+    'amount' => 450,
+    'customer' => 'd9bf8831-4db5-4a1c-8aa0-3de72492f330',
+]);
+```
 ```bash cURL 
 cURL -X POST "https://api.modempay.com/v1/payments" \
   -H "Content-Type: application/json" \
@@ -117,6 +126,13 @@ payment_intent = modem_pay.payment_intents.create(
         "payment_methods": ["card"],
     }
 )
+```
+```php php 
+$payment_intent = $modemPay->paymentIntents()->create([
+    'amount' => 450,
+    'customer' => 'd9bf8831-4db5-4a1c-8aa0-3de72492f330',
+    'payment_methods' => ['card'],
+]);
 ```
 ```bash cURL 
 cURL -X POST "https://api.modempay.com/v1/payments" \
@@ -157,6 +173,13 @@ payment_intent = modem_pay.payment_intents.create(
         "customer": "d9bf8831-4db5-4a1c-8aa0-3de72492f330",
     }
 )
+```
+```php php 
+$payment_intent = $modemPay->paymentIntents()->create([
+    'amount' => 450,
+    'payment_method' => 'ad47ccb9-687c-475b-90dc-1dd3b4cba68e',
+    'customer' => 'd9bf8831-4db5-4a1c-8aa0-3de72492f330',
+]);
 ```
 ```bash cURL 
 cURL -X POST "https://api.modempay.com/v1/payments" \

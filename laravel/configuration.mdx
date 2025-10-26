@@ -1,0 +1,55 @@
+---
+title: 'Configuration'
+---
+
+Configure Modem Pay for your Laravel app.
+
+## Environment Variables
+
+Add these to your `.env` file:
+```env
+MODEMPAY_API_KEY=your_api_key_here
+MODEMPAY_WEBHOOK_SECRET=your_webhook_secret_here
+```
+
+<Warning>
+Never commit your API keys to version control. Always use `.env` file.
+</Warning>
+
+## Publish Config (Optional)
+
+If you need to customize settings, publish the config file:
+```bash
+php artisan vendor:publish --tag=modempay-config
+```
+
+This creates `config/modempay.php`:
+```php
+return [
+    'api_key' => env('MODEMPAY_API_KEY'),
+    'webhook_secret' => env('MODEMPAY_WEBHOOK_SECRET'),
+];
+```
+
+## Getting Your API Keys
+
+1. Log in to your [ModemPay Dashboard](https://merchant.modempay.com)
+2. Go to **Developers** → **API Keys**
+3. Copy your keys
+4. Add them to `.env`
+
+<Tip>
+Use test keys during development and live keys in production.
+</Tip>
+
+## Verifying Setup
+
+Test your configuration in Tinker:
+```bash
+php artisan tinker
+```
+```php
+ModemPay::paymentIntents()->list();
+```
+
+If this works, you're all set!

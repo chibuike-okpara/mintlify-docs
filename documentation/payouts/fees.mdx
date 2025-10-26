@@ -56,6 +56,19 @@ fee_response = modem_pay.transfers.fee(
 print(f"Payout fee: {fee_response['fee']} {fee_response['currency']}")
 print(f"Total amount: {fee_response['amount']} {fee_response['currency']}")
 ```
+```php php
+use ModemPay\ModemPay;
+
+$modemPay = new ModemPay('sk_test_...');
+
+$fee_response = $modemPay->transfers()->fee([
+    'amount' => 1000,
+    'currency' => 'GMD',
+    'network' => 'afrimoney',
+]);
+
+print_r($fee_response);
+```
 ```bash cURL
 curl -X POST https://api.modempay.com/v1/transfers/fees \
   -H "Authorization: Bearer sk_test_..." \

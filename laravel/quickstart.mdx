@@ -1,0 +1,38 @@
+---
+title: 'Quickstart'
+---
+
+Get started with Modem Pay in your Laravel application with just a few lines of code. This guide will walk you through installation, configuration, and making your first payment using the official Laravel package.
+
+## Installation
+
+Install the package via Composer:
+```bash
+composer require modempay/modempay-php
+```
+
+The package will automatically register itself with Laravel.
+
+## Configuration
+
+Add your API key to `.env`:
+```env
+MODEMPAY_API_KEY=your_api_key_here
+MODEMPAY_WEBHOOK_SECRET=your_webhook_secret_here
+```
+
+## First Payment
+
+Create a payment in seconds:
+```php
+use ModemPay\Laravel\Facades\ModemPay;
+
+$payment = ModemPay::paymentIntents()->create([
+    'amount' => 5000,
+    'currency' => 'GMD',
+]);
+
+return redirect($payment->data->payment_link);
+```
+
+That's it! Your first payment is ready.

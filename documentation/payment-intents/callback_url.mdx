@@ -26,6 +26,12 @@ payment_intent = modem_pay.payment_intents.create(
     }
 )
 ```
+```php php 
+$payment_intent = $modemPay->paymentIntents()->create([
+    'amount' => 450,
+    'callback_url' => 'https://yourapp.com/payment-callback',
+]);
+```
 ```bash cURL 
 cURL -X POST "https://api.modempay.com/v1/payments" \
   -H "Content-Type: application/json" \
@@ -66,6 +72,13 @@ const event = modempay.webhooks.composeEventDetails(
 event = modem_pay.webhooks.compose_event_details(
     payload, xSignatureHeader, yourSecretKey
 )
+```
+```php php-sdk
+$event = $modemPay->webhooks()->composeEventDetails(
+    $payload,
+    $xSignatureHeader,
+    $yourSecretKey
+);
 ```
 
 </CodeGroup>
