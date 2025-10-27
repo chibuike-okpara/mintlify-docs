@@ -77,7 +77,7 @@ $payment = ModemPay::paymentIntents()->retrieve('hash');
 
 ### Create a Transfer
 ```php
-$transfer = ModemPay::transfers()->create([
+$transfer = ModemPay::transfers()->initiate([
     'amount' => 1000,
     'account_number' => '7012345',
     'network' => 'wave',

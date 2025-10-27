@@ -81,7 +81,7 @@ use ModemPay\ModemPay;
 
 $modemPay = new ModemPay('sk_test_...');
 
-$transfer = $modemPay->transfers()->create([
+$transfer = $modemPay->transfers()->initiate([
     'amount' => 100,
     'currency' => 'GMD',
     'account_number' => '7834567',
