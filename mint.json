@@ -67,6 +67,7 @@
         "documentation/core/payment-links",
         "documentation/core/transactions",
         "documentation/core/webhooks",
+        "documentation/core/webhook-cli",
         "documentation/core/coupons"
       ]
     },
