@@ -42,6 +42,10 @@
       "name": "Laravel Integration",
       "url": "laravel",
       "description": "Complete guide for integrating ModemPay with Laravel, including setup, facades, and webhooks."
+    },
+    {
+      "name": "Plugins",
+      "url": "plugins"
     }
   ],
   "primaryTab": {
@@ -114,6 +118,10 @@
         "laravel/usage",
         "laravel/webhooks"
       ]
+    },
+    {
+      "group": "Plugins",
+      "pages": ["plugins/woocommerce"]
     }
   ],
   "footerSocials": {
