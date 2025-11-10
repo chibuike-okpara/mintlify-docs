@@ -121,7 +121,7 @@
     },
     {
       "group": "Plugins",
-      "pages": ["plugins/woocommerce"]
+      "pages": ["plugins/woocommerce", "plugins/payment-form"]
     }
   ],
   "footerSocials": {
