@@ -1,7 +1,10 @@
 {
+  "analytics": {
+    "google": "GTM-MG9SRBZJ"
+  },
   "integrations": {
     "gtm": {
-      "tagId": "GTM-TVZ7NVX6"
+      "tagId": "GTM-MG9SRBZJ"
     }
   }
 }
