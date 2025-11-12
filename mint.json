@@ -1,6 +1,11 @@
 {
   "$schema": "https://mintlify.com/schema.json",
   "name": "Modem Pay Inc.",
+  "integrations": {
+    "gtm": {
+      "tagId": "GTM-TVZ7NVX6"
+    }
+  },
   "favicon": "/favicon.png",
   "colors": {
     "primary": "#08a591",
