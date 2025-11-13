@@ -23,6 +23,7 @@ The **Payment Intent** object contains the following properties:
 - **payment_method**: The specific payment method to use (optional).
 - **coupon**: The ID of a coupon to apply to the payment (optional). If provided, the coupon's discount will be applied to the payment amount.
 - **callback_url**: The endpoint where Modem Pay will send a webhook notification after the payment has been processed.
+- **skip_url_validation**: Set to `true` to bypass Modem Pay's validation of the `cancel_url` or `return_url`. This is most commonly needed when these URLs use mobile app deeplinks, allowing you to return users directly into your app.
 
 #### Payment Intent Response Object
 
