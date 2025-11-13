@@ -2,7 +2,9 @@
   "$schema": "https://mintlify.com/schema.json",
   "name": "Modem Pay Inc.",
   "analytics": {
-    "google": "GTM-MG9SRBZJ"
+    "gtm": {
+      "tagId": "GTM-MG9SRBZJ"
+    }
   },
   "integrations": {
     "gtm": {
