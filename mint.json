@@ -6,11 +6,6 @@
       "tagId": "GTM-MG9SRBZJ"
     }
   },
-  "integrations": {
-    "gtm": {
-      "tagId": "GTM-MG9SRBZJ"
-    }
-  },
   "favicon": "/favicon.png",
   "colors": {
     "primary": "#08a591",
