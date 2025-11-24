@@ -40,6 +40,10 @@
       "url": "documentation"
     },
     {
+      "name": "Billing",
+      "url": "billing"
+    },
+    {
       "name": "Payments",
       "url": "payments"
     },
@@ -104,6 +108,16 @@
         "documentation/payouts/overview",
         "documentation/payouts/mobile-money",
         "documentation/payouts/fees"
+      ]
+    },
+    {
+      "group": "Invoices",
+      "pages": [
+        "billing/invoices/introduction",
+        "billing/invoices/quickstart",
+        "billing/invoices/types",
+        "billing/invoices/lifecycle",
+        "billing/invoices/api-reference"
       ]
     },
     {

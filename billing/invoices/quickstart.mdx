@@ -1,0 +1,217 @@
+---
+title: 'Quick Start Guide'
+---
+
+Let's create a simple invoice for a monthly subscription:
+
+<CodeGroup>
+```typescript nodejs
+const invoice = await modempay.invoices.create({
+  amount: 250,
+  customer_name: "John Doe",
+  customer_email: "john@example.com",
+  customer_phone: "+2203334444",
+  due_date: "2025-12-31",
+  notes: "Monthly Pro Plan Subscription - December 2025"
+});
+
+console.log('Invoice created:', invoice.reference);
+console.log('Payment link:', invoice.payment_link);
+```
+</CodeGroup>
+
+
+### What Happens Next?
+
+1. Invoice is created with status `not-paid`
+2. Customer automatically receives an email with the invoice
+3. Customer can pay via the `payment_link`
+4. You receive a `paymentrequest.success` webhook when payment completes
+5. If unpaid by `due_date`, status changes to `overdue` (production only)
+
+## Create a Professional Invoice
+
+For detailed billing with line items (perfect for usage-based subscriptions):
+
+<CodeGroup>
+```typescript nodejs
+const invoice = await modempay.invoices.create({
+  amount: 0, // This will be auto-calculated from line items
+  customer_name: "Adama Sanneh",
+  customer_email: "adama@example.com",
+  line_items: [
+    {
+      item: "Pro Plan Base Fee",
+      quantity: 1,
+      unit_price: 500
+    },
+    {
+      item: "Additional API Calls",
+      quantity: 50,
+      unit_price: 0.50 // 50 bututs per call
+    }
+  ],
+  discount: {
+    type: "percentage",
+    amount: 10 // 10% discount
+  },
+  due_date: "2025-12-31",
+  notes: "December 2025 - Pro Plan + Overages"
+});
+```
+</CodeGroup>
+
+### Line Item Breakdown
+
+The invoice automatically calculates:
+- **Subtotal**: Sum of all line items (500 + [50 \* 0.50] = 500 + 25 = 525)
+- **Discount**: 10% off subtotal (525)
+- **Total**: Subtotal minus discount (472.5)
+
+## Work with Drafts
+
+Create a draft invoice to review before sending:
+
+<CodeGroup>
+```typescript nodejs
+// Create draft
+const draft = await modempay.invoices.draft({
+  amount: 500,
+  customer_name: "John Doe",
+  customer_email: "customer@example.com",
+  due_date: "2025-12-31"
+});
+
+// Review and modify if needed
+const updated = await modempay.invoices.update(draft.id, {
+  amount: 550,
+  notes: "Updated pricing"
+});
+
+// Send when ready
+await modempay.invoices.sendDraftInvoice(draft.id);
+```
+</CodeGroup>
+
+<Warning>
+Draft invoices are not sent to customers and have `sent_date: null`. Use `sendDraftInvoice()` to publish them.
+</Warning>
+
+## Check Invoice Status
+
+Retrieve an invoice to check its current status:
+
+<CodeGroup>
+```typescript nodejs
+const invoice = await modempay.invoices.retrieve('invoice_id_here');
+
+console.log('Status:', invoice.status); // "not-paid" | "paid" | "overdue"
+console.log('Amount:', invoice.amount);
+console.log('Paid date:', invoice.paid_date); // null if not paid
+```
+</CodeGroup>
+
+## List All Invoices
+
+Fetch invoices with pagination:
+
+<CodeGroup>
+```typescript nodejs
+const invoices = await modempay.invoices.list({
+  limit: 20,
+  offset: 0
+});
+
+console.log('Total invoices:', invoices.meta.total);
+console.log('Invoices:', invoices.data);
+```
+</CodeGroup>
+
+## Send Payment Reminders
+
+Remind customers about unpaid invoices:
+
+<CodeGroup>
+```typescript nodejs
+await modempay.invoices.sendReminder('invoice_id_here');
+```
+</CodeGroup>
+
+<Note>
+The system tracks `reminder_count` to prevent spam. Use reminders judiciously.
+</Note>
+
+## Handle Webhooks
+
+Set up webhook handling to respond to invoice events:
+
+<CodeGroup>
+```typescript nodejs
+// In your webhook endpoint
+app.post('/webhooks/modempay', (req, res) => {
+  const event = modempay.webhooks.composeEventDetails(
+      req.body,
+      req.headers["x-modem-signature"],
+      process.env.WEBHOOK_SECRET
+  );
+
+  switch(event.event) {
+    case 'paymentrequest.success':
+      // Grant subscription access
+      console.log('Invoice paid:', event.payload.reference);
+      break;
+      
+    case 'invoice.overdue':
+      // Pause subscription or send notice
+      console.log('Invoice overdue:', event.payload.reference);
+      break;
+  }
+  
+  res.sendStatus(200);
+});
+```
+</CodeGroup>
+
+<Check>
+Always return a 200 status code to acknowledge receipt of webhooks.
+</Check>
+
+## Subscription Use Case Example
+
+Here's a complete monthly subscription flow:
+
+```typescript
+async function billMonthlySubscription(customerId: string) {
+  // Create invoice for this month
+  const invoice = await modempay.invoices.create({
+    amount: 2500,
+    customer: customerId,
+    due_date: getEndOfMonth(), // Helper function
+    notes: `Monthly Pro Plan - ${getCurrentMonth()}`,
+    callback_url: "https://yourapp.com/subscription/confirm"
+  });
+  
+  // Invoice is automatically sent to customer
+  // You'll receive webhook when paid or overdue
+  
+  return invoice;
+}
+```
+
+## Common Questions
+
+**Q: When is the invoice sent to the customer?**  
+A: Immediately upon creation (for published invoices) or when you call `sendDraftInvoice()` for drafts.
+
+**Q: How do I know when an invoice is paid?**  
+A: You'll receive a `paymentrequest.success` webhook event. You can also poll using `retrieve()`.
+
+**Q: What happens if a customer doesn't pay by the due date?**  
+A: In production mode, the invoice status automatically changes to `overdue` and you receive an `invoice.overdue` webhook.
+
+**Q: Can I manually mark an invoice as paid?**  
+A: Yes, use `modempay.invoices.pay(id)` for offline payments.
+
+---
+
+Need help? Contact support at info@modempay.com.

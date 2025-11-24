@@ -1,0 +1,344 @@
+---
+title: 'API Reference'
+---
+
+## Create Invoice
+
+Creates and publishes an invoice immediately.
+
+<CodeGroup>
+```typescript TypeScript
+const invoice = await modempay.invoices.create({
+  amount: 5000,
+  customer_email: "customer@example.com",
+  customer_name: "John Doe",
+  customer_phone: "+2203334444",
+  line_items: [
+    { item: "sku_001", quantity: 2, unit_price: 2500 }
+  ],
+  discount: { type: "percentage", amount: 10 },
+  due_date: "2025-12-31",
+  notes: "Monthly subscription",
+  invoice_number: "INV-001",
+  callback_url: "https://yourapp.com/callback",
+  sub_account: "sub_123"
+});
+```
+
+```bash cURL
+curl -X POST https://api.modempay.com/v1/invoices \
+  -H "Authorization: Bearer sk_test_..." \
+  -H "Content-Type: application/json" \
+  -d '{
+    "data": {
+      "amount": 5000,
+      "customer_email": "customer@example.com",
+      "customer_name": "John Doe",
+      "due_date": "2025-12-31"
+    }
+  }'
+```
+</CodeGroup>
+
+### Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `amount` | number | Yes* | Total amount (set to 0 if line_items present) |
+| `customer` | string | No | Customer ID |
+| `customer_email` | string | No** | Customer email address |
+| `customer_name` | string | No** | Customer name |
+| `customer_phone` | string | No | Customer phone number |
+| `line_items` | array | No | Array of line item objects |
+| `discount` | object | No | Discount configuration |
+| `due_date` | string | No | Due date (ISO 8601 or YYYY-MM-DD) |
+| `notes` | string | No | Additional notes |
+| `invoice_number` | string/number | No | Custom invoice number |
+| `callback_url` | string | No | Event notification webhook URL for invoice status updates |
+| `sub_account` | string | No | Sub-account identifier for split payment or revenue sharing |
+
+
+*Required if no line_items  
+**Required if no customer ID
+
+### Response
+
+```json
+{
+  "id": "c44cd39d-53f0-435f-8036-fefb8ad7b66e",
+  "type": "professional",
+  "status": "not-paid",
+  "amount": 4500,
+  "sub_total": 5000,
+  "total": 4500,
+  "currency": "GMD",
+  "customer_email": "customer@example.com",
+  "payment_link": "https://test.checkout.modempay.com/invoice/...",
+  "sent_date": "2025-11-24T10:30:00Z",
+  "test_mode": true
+}
+```
+
+---
+
+## Create Draft Invoice
+
+Creates invoice without sending to customer.
+
+```typescript nodejs
+const draft = await modempay.invoices.draft({
+  amount: 5000,
+  customer_email: "customer@example.com",
+  customer_name: "Adama Jobe",
+  due_date: "2025-12-31"
+});
+```
+
+### Parameters
+Same as Create Invoice
+
+### Response
+Same structure, but `sent_date: null`
+
+---
+
+## Retrieve Invoice
+
+Get invoice by ID.
+
+```typescript nodejs
+const invoice = await modempay.invoices.retrieve(
+  "c44cd39d-53f0-435f-8036-fefb8ad7b66e"
+);
+```
+
+### Response
+
+```json
+{
+  "id": "c44cd39d-53f0-435f-8036-fefb8ad7b66e",
+  "status": "paid",
+  "amount": 5000,
+  "paid_date": "2025-11-24T14:22:00Z",
+  "reminder_count": 1,
+  ...
+}
+```
+
+---
+
+## Update Invoice
+
+Modify existing invoice.
+
+```typescript nodejs
+const updated = await modempay.invoices.update(
+  "c44cd39d-53f0-435f-8036-fefb8ad7b66e",
+  {
+    amount: 6000,
+    notes: "Updated pricing"
+  }
+);
+```
+
+### Parameters
+Same as Create Invoice (all optional)
+
+<Warning>
+Updating published invoices may confuse customers. Use with caution.
+</Warning>
+
+---
+
+## Pay Invoice
+
+Manually mark invoice as paid (offline payments).
+
+```typescript nodejs
+await modempay.invoices.pay(
+  "c44cd39d-53f0-435f-8036-fefb8ad7b66e"
+);
+```
+
+### Response
+Returns updated invoice with `status: "paid"`
+
+---
+
+## Send Draft Invoice
+
+Publish draft and notify customer.
+
+```typescript nodejs
+await modempay.invoices.sendDraftInvoice(
+  "c44cd39d-53f0-435f-8036-fefb8ad7b66e"
+);
+```
+
+### Response
+Returns updated invoice with `status: "not-paid"` and `sent_date`
+
+---
+
+## Send Reminder
+
+Send payment reminder to customer.
+
+```typescript nodejs
+await modempay.invoices.sendReminder(
+  "c44cd39d-53f0-435f-8036-fefb8ad7b66e"
+);
+```
+
+Increments `reminder_count` on invoice.
+
+---
+
+## List Invoices
+
+Retrieve paginated list of invoices.
+
+```typescript nodejs
+const invoices = await modempay.invoices.list({
+  limit: 20,
+  offset: 0
+});
+```
+
+### Parameters
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `limit` | number | 10 | Results per page |
+| `offset` | number | 0 | Skip N results |
+
+### Response
+
+```json
+{
+  "data": [...],
+  "meta": {
+    "total": 150,
+    "limit": 20,
+    "offset": 0
+  }
+}
+```
+
+---
+
+## Types Reference
+
+### LineItem
+
+```typescript
+{
+  item: string;              // Required: Product SKU/ID
+  quantity: number;          // Required: Quantity
+  unit_price: number;        // Required: Price per unit
+  total_price?: number;      // Auto-calculated
+}
+```
+
+### Discount
+
+```typescript
+{
+  type: "fixed" | "percentage";
+  amount: number;  // Fixed amount or percentage value
+}
+```
+
+### Invoice Object
+
+```typescript
+{
+  id: string;
+  reference: string;
+  type: "simple" | "professional";
+  status: "not-paid" | "paid" | "overdue";
+  customer: string;
+  customer_email?: string;
+  customer_name?: string;
+  customer_phone?: string;
+  currency: string;
+  business_id: string;
+  merchant_name: string;
+  account_id: string;
+  amount: number;
+  sub_total?: number;
+  total?: number;
+  discount?: Discount;
+  line_items?: LineItem[];
+  due_date?: string;
+  invoice_number?: string | number;
+  notes?: string;
+  sent_date?: string;
+  paid_date?: string;
+  payment_link?: string;
+  callback_url?: string;
+  sub_account?: string;
+  reminder_count: number;
+  test_mode: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+```
+
+---
+
+## Webhook Events
+
+### paymentrequest.success
+
+Triggered when invoice is paid.
+
+```json
+{
+  "event": "paymentrequest.success",
+  "payload": {
+    "id": "...",
+    "status": "paid",
+    "paid_date": "2025-11-24T14:22:00Z",
+    ...
+  }
+}
+```
+
+### invoice.overdue
+
+Triggered when due date passes (production only).
+
+```json
+{
+  "event": "invoice.overdue",
+  "payload": {
+    "id": "...",
+    "status": "overdue",
+    "due_date": "2025-11-30",
+    ...
+  }
+}
+```
+
+---
+
+## Error Responses
+
+```json
+{
+  "error": {
+    "message": "Invalid email address",
+    "code": "validation_error"
+  }
+}
+```
+
+### Common Error Codes
+
+- `validation_error` - Invalid parameters
+- `not_found` - Invoice doesn't exist
+- `already_paid` - Invoice already paid
+- `authentication_error` - Invalid API key
+- `rate_limit_exceeded` - Too many requests
+
