@@ -16,7 +16,7 @@
   "navigation": {
     "tabs": [
       {
-        "tab": "Documentations",
+        "tab": "Documentation",
         "groups": [
           {
             "group": "Getting Started",
@@ -29,6 +29,7 @@
           },
           {
             "group": "Core API Resources",
+            "expanded": false,
             "pages": [
               "documentation/core/balances",
               "documentation/core/customers",
@@ -42,6 +43,7 @@
           },
           {
             "group": "Payment Intents",
+            "expanded": false,
             "pages": [
               "documentation/payment-intents/overview",
               "documentation/payment-intents/create",
@@ -52,6 +54,7 @@
           },
           {
             "group": "Split Payments",
+            "expanded": false,
             "pages": [
               "documentation/split-payments/overview",
               "documentation/split-payments/sub-accounts",
@@ -60,11 +63,64 @@
           },
           {
             "group": "Payouts",
+            "expanded": false,
             "pages": [
               "documentation/payouts/overview",
               "documentation/payouts/mobile-money",
               "documentation/payouts/fees"
             ]
+          }
+        ]
+      },
+      {
+        "tab": "Billing",
+        "groups": [
+          {
+            "group": "Invoices",
+            "pages": [
+              "billing/invoices/introduction",
+              "billing/invoices/quickstart",
+              "billing/invoices/types",
+              "billing/invoices/lifecycle",
+              "billing/invoices/api-reference"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Inline Payments",
+        "groups": [
+          {
+            "group": "Payment UI and Integration",
+            "pages": [
+              "payments/overview",
+              "payments/modem-inline",
+              "payments/html-checkout",
+              "payments/custom"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Laravel Integration",
+        "groups": [
+          {
+            "group": "Laravel",
+            "pages": [
+              "laravel/quickstart",
+              "laravel/configuration",
+              "laravel/usage",
+              "laravel/webhooks"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Plugins",
+        "groups": [
+          {
+            "group": "Plugins",
+            "pages": ["plugins/woocommerce", "plugins/payment-form"]
           }
         ]
       }
