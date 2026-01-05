@@ -1,6 +1,6 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "theme": "mint",
+  "theme": "willow",
   "name": "Modem Pay Inc.",
   "analytics": {
     "gtm": {
@@ -10,11 +10,7 @@
   "colors": {
     "primary": "#08a591",
     "light": "#08a591",
-    "dark": "#08a591",
-    "anchors": {
-      "from": "#08a591",
-      "to": "#07C983"
-    }
+    "dark": "#08a591"
   },
   "favicon": "/favicon.png",
   "navigation": {
