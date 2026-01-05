@@ -147,16 +147,7 @@
     }
   },
   "contextual": {
-    "options": [
-      "copy",
-      "view",
-      "chatgpt",
-      "claude",
-      "perplexity",
-      "mcp",
-      "cursor",
-      "vscode"
-    ]
+    "options": ["copy", "chatgpt", "claude", "mcp", "cursor"]
   },
   "footer": {
     "socials": {
