@@ -1,6 +1,6 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "theme": "mint",
+  "theme": "almond",
   "name": "Modem Pay Inc.",
   "analytics": {
     "gtm": {
@@ -20,6 +20,7 @@
         "groups": [
           {
             "group": "Getting Started",
+            "expanded": true,
             "pages": [
               "documentation/quickstart",
               "documentation/installation",
