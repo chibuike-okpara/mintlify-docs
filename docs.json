@@ -1,13 +1,12 @@
 {
-  "$schema": "https://mintlify.com/schema.json",
-  "name": "Modem Pay Inc.",
+  "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
+  "name": "Modem Pay Inc.",
   "analytics": {
     "gtm": {
       "tagId": "GTM-MG9SRBZJ"
     }
   },
-  "favicon": "/favicon.png",
   "colors": {
     "primary": "#08a591",
     "light": "#08a591",
@@ -17,134 +16,99 @@
       "to": "#07C983"
     }
   },
-  "topbar": {
-    "style": "gradient"
-  },
-  "codeBlock": {
-    "mode": "dark"
-  },
-  "isWhiteLabeled": true,
-  "topbarLinks": [
-    {
-      "name": "Support",
-      "url": "mailto:info@modempay.com"
+  "favicon": "/favicon.png",
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Getting Started",
+            "pages": [
+              "documentation/quickstart",
+              "documentation/installation",
+              "documentation/authentication",
+              "documentation/errors"
+            ]
+          },
+          {
+            "group": "Core API Resources",
+            "pages": [
+              "documentation/core/balances",
+              "documentation/core/customers",
+              "documentation/core/mandates",
+              "documentation/core/payment-links",
+              "documentation/core/transactions",
+              "documentation/core/webhooks",
+              "documentation/core/webhook-cli",
+              "documentation/core/coupons"
+            ]
+          },
+          {
+            "group": "Payment Intents",
+            "pages": [
+              "documentation/payment-intents/overview",
+              "documentation/payment-intents/create",
+              "documentation/payment-intents/direct-charge",
+              "documentation/payment-intents/callback_url",
+              "documentation/payment-intents/management"
+            ]
+          },
+          {
+            "group": "Split Payments",
+            "pages": [
+              "documentation/split-payments/overview",
+              "documentation/split-payments/sub-accounts",
+              "documentation/split-payments/initialize-payment"
+            ]
+          },
+          {
+            "group": "Payouts",
+            "pages": [
+              "documentation/payouts/overview",
+              "documentation/payouts/mobile-money",
+              "documentation/payouts/fees"
+            ]
+          }
+        ]
+      }
+    ],
+    "global": {
+      "anchors": []
     }
-  ],
-  "topbarCtaButton": {
-    "name": "Dashboard",
-    "url": "https://merchant.modempay.com"
   },
-  "layout": "solidSidenav",
-  "tabs": [
-    {
-      "name": "Documentation",
-      "url": "documentation"
-    },
-    {
-      "name": "Billing",
-      "url": "billing"
-    },
-    {
-      "name": "Payments",
-      "url": "payments"
-    },
-    {
-      "name": "Laravel Integration",
-      "url": "laravel",
-      "description": "Complete guide for integrating ModemPay with Laravel, including setup, facades, and webhooks."
-    },
-    {
-      "name": "Plugins",
-      "url": "plugins"
-    }
-  ],
-  "primaryTab": {
-    "name": "Documentation",
-    "isDefaultHidden": true
+  "logo": {
+    "light": "/logo/logo.png",
+    "dark": "/logo/logo.png"
   },
-  "navigation": [
-    {
-      "group": "Getting Started",
-      "pages": [
-        "documentation/quickstart",
-        "documentation/installation",
-        "documentation/authentication",
-        "documentation/errors"
-      ]
-    },
-    {
-      "group": "Core API Resources",
-      "pages": [
-        "documentation/core/balances",
-        "documentation/core/customers",
-        "documentation/core/mandates",
-        "documentation/core/payment-links",
-        "documentation/core/transactions",
-        "documentation/core/webhooks",
-        "documentation/core/webhook-cli",
-        "documentation/core/coupons"
-      ]
-    },
-    {
-      "group": "Payment Intents",
-      "pages": [
-        "documentation/payment-intents/overview",
-        "documentation/payment-intents/create",
-        "documentation/payment-intents/direct-charge",
-        "documentation/payment-intents/callback_url",
-        "documentation/payment-intents/management"
-      ]
-    },
-    {
-      "group": "Split Payments",
-      "pages": [
-        "documentation/split-payments/overview",
-        "documentation/split-payments/sub-accounts",
-        "documentation/split-payments/initialize-payment"
-      ]
-    },
-    {
-      "group": "Payouts",
-      "pages": [
-        "documentation/payouts/overview",
-        "documentation/payouts/mobile-money",
-        "documentation/payouts/fees"
-      ]
-    },
-    {
-      "group": "Invoices",
-      "pages": [
-        "billing/invoices/introduction",
-        "billing/invoices/quickstart",
-        "billing/invoices/types",
-        "billing/invoices/lifecycle",
-        "billing/invoices/api-reference"
-      ]
-    },
-    {
-      "group": "Payment UI and Integration",
-      "pages": [
-        "payments/overview",
-        "payments/modem-inline",
-        "payments/html-checkout",
-        "payments/custom"
-      ]
-    },
-    {
-      "group": "Laravel",
-      "pages": [
-        "laravel/quickstart",
-        "laravel/configuration",
-        "laravel/usage",
-        "laravel/webhooks"
-      ]
-    },
-    {
-      "group": "Plugins",
-      "pages": ["plugins/woocommerce", "plugins/payment-form"]
+  "navbar": {
+    "links": [
+      {
+        "label": "Support",
+        "href": "mailto:info@modempay.com"
+      }
+    ],
+    "primary": {
+      "type": "button",
+      "label": "Dashboard",
+      "href": "https://merchant.modempay.com"
     }
-  ],
-  "footerSocials": {
-    "linkedin": "https://linkedin.com/company/modempay"
+  },
+  "contextual": {
+    "options": [
+      "copy",
+      "view",
+      "chatgpt",
+      "claude",
+      "perplexity",
+      "mcp",
+      "cursor",
+      "vscode"
+    ]
+  },
+  "footer": {
+    "socials": {
+      "linkedin": "https://linkedin.com/company/modempay"
+    }
   }
 }
