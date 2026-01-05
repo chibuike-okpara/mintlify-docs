@@ -1,0 +1,428 @@
+# ModemPay
+
+ModemPay is a comprehensive payment infrastructure platform that enables businesses across Africa to collect payments, manage payouts, and handle complex financial workflows. The platform supports multiple payment methods including mobile money, bank transfers, and cards, with a focus on markets in West Africa.
+
+## Getting Started
+
+### Quickstart Guide
+
+To get started with ModemPay, follow these steps:
+
+1. **Create an Account**: Register on ModemPay's dashboard at https://merchant.modempay.com to access your account and manage payments.
+
+2. **API Keys**: Once registered, get your API keys from the dashboard for integrating and authenticating requests. ModemPay provides separate keys for test and live environments.
+
+3. **Configure Integrations**: Choose between HTML Checkout for quick integration or SDK Payment Intent for programmatic control.
+
+**HTML Checkout Implementation**:
+HTML Checkout provides a low-code solution for accepting payments. When implementing, you'll submit order details to ModemPay's endpoint, passing information like amount, customer details, and redirect URLs. After payment completion, users are redirected to your specified return_url or cancel_url.
+
+**SDK Payment Intent**:
+For more control, use ModemPay's SDK to create and confirm payment intents programmatically. Example:
+```
+import ModemPay from "modem-pay";
+const modempay = new ModemPay('YOUR_MODEM_PAY_API_KEY');
+const intent = await modempay.paymentIntents.create({ amount: 450 });
+console.log(intent.data.payment_link);
+```
+
+4. **Complete KYC**: Before going live, complete ModemPay's KYC requirements from the dashboard to enable secure, compliant transactions.
+
+5. **Start Collecting Live Payments**: Once KYC is approved, switch from test to live mode on your dashboard to process real transactions.
+
+### Installation
+
+ModemPay provides SDKs for multiple programming languages including Node.js, Python, and PHP. Install the SDK for your preferred language to integrate payment processing into your application.
+
+### Authentication
+
+All API requests to ModemPay require authentication using API keys. You can obtain your API keys from the merchant dashboard. Use test keys (prefixed with `pk_test_` or `sk_test_`) for development and live keys for production.
+
+Include your API key in the Authorization header:
+```
+Authorization: Bearer YOUR_API_KEY
+```
+
+### Handling Errors
+
+ModemPay returns standard HTTP status codes to indicate the success or failure of API requests. Common error codes include:
+- 200: Success
+- 400: Bad Request - Invalid parameters
+- 401: Unauthorized - Invalid API key
+- 404: Not Found - Resource doesn't exist
+- 500: Server Error - Something went wrong on ModemPay's end
+
+Error responses include a message field explaining what went wrong, helping you debug integration issues.
+
+## Core API Resources
+
+### Balances
+
+Check your ModemPay account balance to monitor available funds and track transaction history. The Balances API provides real-time information about your account's financial status.
+
+### Managing Customers
+
+Create and manage customer profiles to streamline repeat payments and maintain customer records. Customer objects store information like name, email, phone number, and payment methods for future transactions.
+
+Key features:
+- Create customer profiles with contact information
+- Associate payment methods with customers
+- Track customer payment history
+- Update customer information as needed
+
+### Mandates
+
+Mandates enable recurring payments by authorizing ModemPay to charge customers automatically. Set up mandates for subscription services, installment payments, or regular billing cycles.
+
+### Payment Links
+
+Generate shareable payment links for quick checkouts without building a full payment flow. Payment links are perfect for:
+- Invoice payments
+- Social media sales
+- Email campaigns
+- Quick one-time payments
+
+Simply create a payment link with an amount and share it with customers via any channel.
+
+### Transactions
+
+The Transactions API provides comprehensive access to all payment activity in your account. View transaction details including:
+- Amount and currency
+- Payment method used
+- Customer information
+- Transaction status
+- Timestamps
+- Metadata
+
+Use the Transactions API to build reporting dashboards, reconcile payments, and track business metrics.
+
+### Webhooks
+
+Webhooks provide real-time notifications when events occur in your ModemPay account. Configure webhook endpoints to receive updates for:
+- `charge.succeeded`: Payment completed successfully
+- `charge.failed`: Payment attempt failed
+- `charge.cancelled`: Payment was cancelled
+- `payout.completed`: Payout processed successfully
+- `payout.failed`: Payout failed
+
+**Webhook Configuration**:
+1. Set up a webhook endpoint on your server that accepts POST requests
+2. Register the endpoint URL in your ModemPay dashboard
+3. Verify webhook signatures to ensure authenticity
+4. Process webhook events and update your application state
+
+Webhooks are essential for building robust payment flows, allowing you to update order statuses, send confirmation emails, and trigger business logic in response to payment events.
+
+### Webhook Tester (CLI)
+
+ModemPay provides a command-line tool for testing webhook integrations during development. The CLI tool simulates webhook events, helping you verify your endpoint handles notifications correctly before going live.
+
+### Coupons
+
+Create and manage discount coupons to run promotions and offer discounts. Coupons can be:
+- Percentage-based or fixed amount
+- Applied to specific products or entire orders
+- Limited by usage count or expiration date
+- Restricted to certain customers
+
+Apply coupons during payment intent creation using the coupon parameter.
+
+## Payment Intents
+
+### Payment Intents Overview
+
+A Payment Intent represents a customer's intention to pay a specified amount. It's the core object for processing payments in ModemPay, providing a secure and flexible way to handle payment flows.
+
+**Payment Intent Properties**:
+- `amount`: Total amount to be paid
+- `currency`: Currency code (e.g., GMD for Gambian Dalasi)
+- `customer`: Customer ID (optional)
+- `payment_methods`: Accepted payment methods (optional)
+- `coupon`: Coupon ID to apply discount (optional)
+- `callback_url`: Webhook endpoint for payment notifications (optional)
+- `metadata`: Custom key-value pairs for additional information
+
+**Payment Intent Response**:
+When you create a Payment Intent, ModemPay returns:
+- `intent_secret`: Security key for completing the payment
+- `payment_link`: Hosted payment page URL
+- `amount`: Total payment amount
+- `currency`: Payment currency
+- `expires_at`: Expiration timestamp
+- `status`: Current status (requires_payment_method, processing, successful, failed, cancelled)
+
+Payment Intent statuses indicate the payment flow stage:
+- `requires_payment_method`: Customer needs to select payment method
+- `processing`: Payment is being processed
+- `successful`: Payment completed successfully
+- `failed`: Payment attempt failed
+- `cancelled`: Payment was cancelled
+
+### Create a Payment Intent
+
+ModemPay offers flexible options for creating Payment Intents based on your use case:
+
+**Scenario 1: Amount Only**
+Create a basic Payment Intent with just the amount. The customer will provide payment details during checkout.
+```
+const paymentIntent = await modempay.paymentIntents.create({
+  amount: 450
+});
+```
+
+**Scenario 2: Amount and Customer**
+Associate the payment with a specific customer for better tracking and streamlined checkout for returning customers.
+```
+const paymentIntent = await modempay.paymentIntents.create({
+  amount: 450,
+  customer: "d9bf8831-4db5-4a1c-8aa0-3de72492f330"
+});
+```
+
+**Scenario 3: Amount, Customer, and Payment Methods**
+Pre-define accepted payment methods to limit customer choices or match your business requirements.
+```
+const paymentIntent = await modempay.paymentIntents.create({
+  amount: 450,
+  customer: "d9bf8831-4db5-4a1c-8aa0-3de72492f330",
+  payment_methods: ["card", "mobile_money"]
+});
+```
+
+**Scenario 4: Amount, Customer, and Specific Payment Method**
+Pre-select a specific saved payment method for one-click checkout experiences.
+```
+const paymentIntent = await modempay.paymentIntents.create({
+  amount: 450,
+  customer: "d9bf8831-4db5-4a1c-8aa0-3de72492f330",
+  payment_method: "ad47ccb9-687c-475b-90dc-1dd3b4cba68e"
+});
+```
+
+**Optional Parameters**:
+- `currency`: Specify payment currency (defaults to account currency)
+- `coupon`: Apply discount coupon
+- `callback_url`: Custom webhook endpoint for this payment
+- `metadata`: Store custom data with the payment
+
+### Direct Charge
+
+Direct Charge allows you to process payments immediately without customer interaction, useful for:
+- Charging saved payment methods
+- Processing recurring payments
+- Automated billing workflows
+
+Direct charges require a payment method to be already associated with the customer.
+
+### Payment Intent Callbacks
+
+Configure callback URLs to receive notifications when payment status changes. Callbacks provide:
+- Real-time payment status updates
+- Transaction details
+- Customer information
+- Metadata
+
+Use callbacks to:
+- Update order status in your database
+- Send confirmation emails
+- Trigger fulfillment processes
+- Update inventory
+
+### Manage Payment Intent
+
+After creating a Payment Intent, you can:
+- Retrieve current status
+- Cancel pending payments
+- Update metadata
+- Confirm or capture payments
+
+Use the Payment Intent management API to build complete payment workflows with full control over the payment lifecycle.
+
+## Split Payments
+
+### Split Payments Overview
+
+Split Payments enable you to automatically distribute payment amounts across multiple recipients. This is essential for:
+- Marketplace platforms (split between seller and platform)
+- Affiliate programs (commission distribution)
+- Partnership arrangements
+- Multi-vendor platforms
+
+### Sub-Accounts
+
+Create sub-accounts for each recipient who should receive a portion of payments. Sub-accounts can:
+- Receive automatic payment splits
+- Access their own dashboard
+- Manage their payout settings
+- View transaction history
+
+### Initialize Split Payment
+
+When creating a Payment Intent with split payments:
+1. Specify the total amount
+2. Define split rules (recipients and amounts/percentages)
+3. Process the payment
+4. ModemPay automatically distributes funds to sub-accounts
+
+Split rules can be:
+- Fixed amounts per recipient
+- Percentage-based splits
+- Combination of both
+
+## Payouts
+
+### Payouts Overview
+
+ModemPay's Payout API enables you to send money from your account to recipients via mobile money networks. Use payouts for:
+- Vendor payments
+- Refunds
+- Commissions
+- Salary disbursements
+- Rewards and incentives
+
+### Mobile Money Payouts
+
+Transfer funds to mobile money accounts across supported networks including:
+- Wave
+- AfriMoney
+- Orange Money
+- MTN Mobile Money
+
+To initiate a payout:
+```
+const transfer = await modemPay.transfers.create({
+  amount: 1000,
+  account_number: '7012345',
+  network: 'wave',
+  currency: 'GMD',
+  beneficiary_name: 'John Doe'
+});
+```
+
+Payout properties:
+- `amount`: Transfer amount
+- `account_number`: Recipient's mobile money account
+- `network`: Mobile money provider
+- `currency`: Transfer currency
+- `beneficiary_name`: Recipient's name
+
+### Payout Fees
+
+Check payout fees before processing transfers to estimate total costs. Use the fees endpoint:
+```
+const feeResponse = await modemPay.transfers.fee({
+  amount: 1000,
+  currency: "GMD",
+  network: "afrimoney"
+});
+```
+
+The response includes:
+- `fee`: Transfer fee amount
+- `currency`: Fee currency
+- `amount`: Total amount including fees
+
+This allows you to:
+- Display fees to users before confirming
+- Calculate exact amounts needed
+- Budget for transfer costs
+- Provide transparent pricing
+
+## Billing
+
+### Invoices Introduction
+
+Create professional invoices for your customers with ModemPay's billing features. Invoices can include:
+- Line items with descriptions and prices
+- Tax calculations
+- Discounts and coupons
+- Payment terms
+- Due dates
+
+Send invoices via email and provide customers with multiple payment options through generated payment links.
+
+## Inline Payments
+
+### Inline Payments Overview
+
+Embed ModemPay payment forms directly into your website for a seamless checkout experience. Inline payments:
+- Keep customers on your site
+- Maintain your branding
+- Reduce checkout friction
+- Improve conversion rates
+
+The inline payment integration uses JavaScript to render payment forms within your page, providing a native checkout feel while leveraging ModemPay's secure payment processing.
+
+## Laravel Integration
+
+### Laravel Quickstart
+
+ModemPay provides first-class Laravel support with an official PHP SDK that auto-registers with Laravel applications.
+
+**Installation**:
+```
+composer require modempay/modempay-php
+```
+
+**Usage**:
+```php
+use ModemPay\Laravel\Facades\ModemPay;
+
+// Create payment intent
+$intent = ModemPay::paymentIntents()->create([
+    'amount' => 450,
+    'currency' => 'GMD'
+]);
+
+// Process payout
+$transfer = ModemPay::transfers()->create([
+    'amount' => 1000,
+    'account_number' => '7012345',
+    'network' => 'wave',
+    'currency' => 'GMD',
+    'beneficiary_name' => 'John Doe'
+]);
+
+// Validate webhook
+$event = ModemPay::webhooks()->composeEventDetails(
+    file_get_contents('php://input'),
+    $_SERVER['HTTP_X_MODEMPAY_SIGNATURE'],
+    config('modempay.webhook_secret')
+);
+```
+
+The Laravel integration includes:
+- Automatic service provider registration
+- Facade support for convenient access
+- Configuration file for API keys
+- Webhook verification helpers
+
+## Plugins
+
+### WooCommerce Plugin
+
+Accept ModemPay payments in your WooCommerce store with the official plugin. Features include:
+- Easy setup with API key configuration
+- Support for all ModemPay payment methods
+- Automatic order status updates via webhooks
+- Refund processing
+- Test mode for development
+
+**Installation**:
+1. Download the ModemPay WooCommerce plugin
+2. Upload and activate in WordPress admin
+3. Configure API keys in WooCommerce payment settings
+4. Enable ModemPay as a payment method
+5. Test checkout flow
+
+The plugin integrates seamlessly with WooCommerce, appearing as a payment option during checkout and handling the complete payment flow from initiation to confirmation.
+
+---
+
+## Support and Resources
+
+- **Dashboard**: https://merchant.modempay.com
+- **Documentation**: https://docs.modempay.com
+- **Support Email**: Contact ModemPay support for assistance
+
+ModemPay supports multiple African currencies including GMD (Gambian Dalasi), with plans to expand to additional markets. The platform emphasizes security, compliance, and ease of integration to help businesses of all sizes accept payments and manage financial operations.

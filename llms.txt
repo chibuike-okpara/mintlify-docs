@@ -1,0 +1,57 @@
+# ModemPay
+
+ModemPay is a payment infrastructure that enables businesses to collect payments and manage payouts across multiple channels in Africa.
+
+## Getting Started
+
+- [Quickstart Guide](https://docs.modempay.com/documentation/quickstart): Set up your account and start collecting payments with HTML Checkout or SDK
+- [Installation](https://docs.modempay.com/documentation/installation): Install ModemPay SDK in your preferred programming language
+- [Authentication](https://docs.modempay.com/documentation/authentication): Learn how to authenticate API requests using API keys
+- [Handling Errors](https://docs.modempay.com/documentation/errors): Understand error codes and how to handle API errors
+
+## Core API Resources
+
+- [Balances](https://docs.modempay.com/documentation/core/balances): Check your account balance and transaction history
+- [Managing Customers](https://docs.modempay.com/documentation/core/customers): Create and manage customer profiles
+- [Mandate](https://docs.modempay.com/documentation/core/mandates): Set up recurring payment mandates
+- [Payment Links](https://docs.modempay.com/documentation/core/payment-links): Generate payment links for quick checkouts
+- [Transactions](https://docs.modempay.com/documentation/core/transactions): View and manage all payment transactions
+- [Webhooks](https://docs.modempay.com/documentation/core/webhooks): Configure webhooks for real-time payment notifications
+- [Webhook Tester (CLI)](https://docs.modempay.com/documentation/core/webhook-cli): Test webhook integrations using CLI tool
+- [Coupons](https://docs.modempay.com/documentation/core/coupons): Create and manage discount coupons
+
+## Payment Intents
+
+- [Payment Intents Overview](https://docs.modempay.com/documentation/payment-intents/overview): Understand the Payment Intent object and its properties
+- [Create a Payment Intent](https://docs.modempay.com/documentation/payment-intents/create): Generate payment intents with various configurations
+- [Direct Charge](https://docs.modempay.com/documentation/payment-intents/direct-charge): Process direct charges without customer interaction
+- [Payment Intent Callbacks](https://docs.modempay.com/documentation/payment-intents/callback_url): Handle callbacks after payment completion
+- [Manage Payment Intent](https://docs.modempay.com/documentation/payment-intents/management): Update and retrieve payment intent status
+
+## Split Payments
+
+- [Split Payments Overview](https://docs.modempay.com/documentation/split-payments/overview): Distribute payments across multiple recipients
+- [Sub-Accounts](https://docs.modempay.com/documentation/split-payments/sub-accounts): Create and manage sub-accounts for split payments
+- [Initialize Split Payment](https://docs.modempay.com/documentation/split-payments/initialize-payment): Set up payment splitting for transactions
+
+## Payouts
+
+- [Payouts Overview](https://docs.modempay.com/documentation/payouts/overview): Send money to mobile money accounts
+- [Mobile Money Payouts](https://docs.modempay.com/documentation/payouts/mobile-money): Transfer funds to mobile money networks
+- [Payout Fees](https://docs.modempay.com/documentation/payouts/fees): Calculate transfer fees before sending payouts
+
+## Billing
+
+- [Invoices Introduction](https://docs.modempay.com/billing/invoices/introduction): Create and manage invoices for your customers
+
+## Inline Payments
+
+- [Inline Payments Overview](https://docs.modempay.com/payments/overview): Embed payment forms directly into your website
+
+## Laravel Integration
+
+- [Laravel Quickstart](https://docs.modempay.com/laravel/quickstart): Integrate ModemPay with Laravel applications
+
+## Plugins
+
+- [WooCommerce Plugin](https://docs.modempay.com/plugins/woocommerce): Accept payments in your WooCommerce store
