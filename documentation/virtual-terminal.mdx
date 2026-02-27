@@ -1,0 +1,284 @@
+---
+title: Virtual Terminals
+---
+
+Virtual Terminals turn any counter into a smart payment station.
+
+Built for real shops where staff collect payments and owners are not always present, they eliminate confirmation friction and provide instant payment visibility.
+
+Each Virtual Terminal:
+
+- Has a unique ID
+- Generates a dedicated QR code
+- Supports multiple payment methods
+- Sends real-time WhatsApp notifications
+- Tracks transactions per counter or location
+- Provides downloadable posters
+
+## Create a Virtual Terminal
+
+<CodeGroup>
+```shell cURL
+curl -X POST "https://api.modempay.com/v1/virtual-terminals" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <your_api_key>" \
+  -d '{
+    "name": "Counter 1",
+    "whatsapp_numbers": ["+2207012345"]
+  }'
+```
+
+```ts nodejs
+import ModemPay from "modem-pay";
+
+const modempay = new ModemPay("YOUR_SECRET_KEY");
+
+const terminal = await modempay.virtualTerminals.create({
+  name: "Counter 1",
+  whatsapp_numbers: ["+2207012345"],
+});
+
+console.log(terminal);
+```
+
+</CodeGroup>
+
+### Parameters
+
+| Field              | Type     | Required | Description                                |
+| ------------------ | -------- | -------- | ------------------------------------------ |
+| `name`             | string   | Yes      | Display name for the terminal              |
+| `whatsapp_numbers` | string[] | Yes      | Numbers that receive payment notifications |
+
+<div
+  style={{
+    display: "flex",
+    gap: "2em",
+    justifyContent: "center",
+    margin: "1.5em 0",
+    flexWrap: "wrap",
+  }}
+>
+  <img
+    src="/images/poster.png"
+    alt="Virtual Terminal Poster Example"
+    style={{
+      width: "100%",
+      maxWidth: "340px",
+      borderRadius: "8px",
+      margin: 0,
+      height: "auto",
+      objectFit: "contain",
+      flex: "1 1 260px",
+      minWidth: "220px",
+    }}
+  />
+  <img
+    src="/images/poster-2.png"
+    alt="Virtual Terminal Poster Example"
+    style={{
+      width: "100%",
+      maxWidth: "340px",
+      borderRadius: "8px",
+      margin: 0,
+      height: "auto",
+      objectFit: "contain",
+      flex: "1 1 260px",
+      minWidth: "220px",
+    }}
+  />
+</div>
+
+These posters showcase a live payment endpoint that is associated with a specific counter or location.
+
+## Retrieve a Terminal
+
+<CodeGroup>
+```shell cURL
+curl -X GET "https://api.modempay.com/v1/virtual-terminals/f2b9...0243" \
+  -H "Authorization: Bearer <your_api_key>"
+```
+
+```ts nodejs
+const terminal = await modempay.virtualTerminals.retrieve("f2b9...0243");
+```
+
+</CodeGroup>
+
+## Update a Terminal
+
+<CodeGroup>
+```shell cURL
+curl -X PUT "https://api.modempay.com/v1/virtual-terminals/f2b9...0243" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <your_api_key>" \
+  -d '{
+    "name": "Main Counter",
+    "whatsapp_numbers": ["+220XXXXXXXX"],
+    "active": true
+  }'
+```
+
+```ts nodejs
+const updated = await modempay.virtualTerminals.update("f2b9...0243", {
+  name: "Main Counter",
+  whatsapp_numbers: ["+220XXXXXXXX"],
+  active: true,
+});
+```
+
+</CodeGroup>
+
+### Updatable Fields
+
+- `name`
+- `whatsapp_numbers`
+- `active`
+
+## List Terminals
+
+<CodeGroup>
+```shell cURL
+curl -X GET "https://api.modempay.com/v1/virtual-terminals?limit=10&term=Counter" \
+  -H "Authorization: Bearer <your_api_key>"
+```
+
+```ts nodejs
+const terminals = await modempay.virtualTerminals.list({
+  limit: 10,
+  search: "Counter",
+});
+```
+
+</CodeGroup>
+
+## Delete a Terminal
+
+<CodeGroup>
+```shell cURL
+curl -X DELETE "https://api.modempay.com/v1/virtual-terminals/f2b9...0243" \
+  -H "Authorization: Bearer <your_api_key>"
+```
+
+```ts nodejs
+await modempay.virtualTerminals.delete("f2b9...0243");
+```
+
+</CodeGroup>
+
+## Download Terminal Posters
+
+Each terminal comes with a ready-to-print QR poster.
+
+<CodeGroup>
+```shell cURL
+curl -X GET "https://api.modempay.com/v1/virtual-terminals/download/f2b9...0243" \
+  -H "Authorization: Bearer <your_api_key>" --output poster.png
+```
+
+```ts nodejs
+const poster = await modempay.virtualTerminals.downloadPosters("f2b9...0243");
+```
+
+</CodeGroup>
+
+Use the downloaded file to:
+
+- Print and display at checkout
+- Share digitally
+- Place at multiple store locations
+
+# Sample Payment Notifications
+
+<img
+  src="/images/whatsapp-notification.png"
+  alt="Virtual Terminal Poster Example"
+  style={{
+    width: "100%",
+    maxWidth: "340px",
+    borderRadius: "8px",
+    margin: 0,
+    height: "auto",
+    objectFit: "contain",
+    flex: "1 1 260px",
+    minWidth: "220px",
+  }}
+/>
+
+# Sample Webhook Response
+
+Here's what a typical webhook payload looks like when a payment is collected at a Virtual Terminal:
+
+```json
+{
+  "event": "charge.succeeded",
+  "data": {
+    "id": "88e26728-9e9c-4f18-802f-9d0d7659f795",
+    "type": "payment",
+    "notes": null,
+    "amount": 10,
+    "coupon": null,
+    "edited": false,
+    "source": "online",
+    "status": "completed",
+    "currency": "GMD",
+    "customer": null,
+    "discount": null,
+    "metadata": {
+      "qr_code_url": "https://checkout.modempay.com/pos/9211661",
+      "terminal_id": "9211661",
+      "terminal_name": "COUNTER 1"
+    },
+    "auth_mode": "confirm",
+    "createdAt": "2026-02-27T00:03:55.078Z",
+    "paid_date": null,
+    "reference": "cos-238mandcg8wfc",
+    "sub_total": null,
+    "test_mode": false,
+    "updatedAt": "2026-02-27T00:04:07.957Z",
+    "account_id": "638c0d3b-9c90-4f20-8d3d-df2a6c6a40a6",
+    "risk_score": {},
+    "auth_length": 0,
+    "business_id": "120c298f-b736-49c1-8220-8a8c84a5d8f3",
+    "terminal_id": "f2b29a71-1928-4da2-98f4-3b851ad02b43",
+    "customer_name": null,
+    "requires_auth": false,
+    "customer_email": null,
+    "customer_phone": null,
+    "failure_reason": null,
+    "payment_method": "wave",
+    "payment_account": ".... 4725",
+    "payment_link_id": null,
+    "transaction_fee": 0,
+    "payment_intent_id": "cc8122d1-6f00-4773-a6f2-7cfa4797c869",
+    "payment_method_id": "d8ec7405-0485-47aa-b58e-ab6d173ba4ef",
+    "custom_fields_values": {},
+    "transaction_fee_type": "customer",
+    "transaction_reference": "MP-20260227-000355-85556EB0",
+    "maintain_original_return_url": false
+  }
+}
+```
+
+> **Tip:** You can configure your webhook URL in the [dashboard](https://merchant.modempay.com/developers/webhooks) to receive real-time payment notifications for your Virtual Terminals.
+
+# Why Virtual Terminals Matter
+
+Digital payments don’t fail because of infrastructure.
+They fail because of friction at the counter.
+
+Virtual Terminals eliminate:
+
+- Manual confirmation delays
+- Owner verification bottlenecks
+- Screenshot fraud
+- Staff confusion
+
+They increase:
+
+- Merchant trust
+- Transaction speed
+- Payment adoption
+- Operational visibility
+
+Built for real shops. Not demos.

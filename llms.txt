@@ -40,6 +40,10 @@ ModemPay is a payment infrastructure that enables businesses to collect payments
 - [Mobile Money Payouts](https://docs.modempay.com/documentation/payouts/mobile-money): Transfer funds to mobile money networks
 - [Payout Fees](https://docs.modempay.com/documentation/payouts/fees): Calculate transfer fees before sending payouts
 
+- [Virtual Terminals Overview](https://docs.modempay.com/documentation/virtual-terminal): Set up physical payment stations for in-person payments
+- [Create Virtual Terminal](https://docs.modempay.com/documentation/virtual-terminal#create-a-virtual-terminal): Generate a terminal and real-time WhatsApp notifications for your staff or counter
+
+
 ## Billing
 
 - [Invoices Introduction](https://docs.modempay.com/billing/invoices/introduction): Create and manage invoices for your customers

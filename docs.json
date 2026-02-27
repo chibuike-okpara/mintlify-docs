@@ -77,6 +77,11 @@
             ]
           },
           {
+            "group": "Terminals",
+            "expanded": false,
+            "pages": ["documentation/virtual-terminal"]
+          },
+          {
             "group": "Payouts",
             "expanded": false,
             "pages": [
