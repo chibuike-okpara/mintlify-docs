@@ -6,9 +6,10 @@ You can set up a **direct charge** by providing the `network` and the 7-digit `a
 
 Accepted networks:
 
-* `wave`
-* `afrimoney`
-* `qmoney`
+- `wave`
+- `afrimoney`
+- `qmoney`
+- `aps`
 
 Works only with **mobile money**.
 
@@ -28,7 +29,7 @@ payment_intent = modem_pay.payment_intents.create(
 )
 ```
 
-```php php 
+```php php
 $payment_intent = $modemPay->paymentIntents()->create([
     'amount' => 450,
     'network' => 'wave',
