@@ -16,30 +16,36 @@
   "navigation": {
     "tabs": [
       {
-        "tab": "API Playground",
-        "openapi": "openapi.json",
-        "groups": [
-          { "group": "Payment Intents", "pages": ["POST /v1/payments"] },
-          { "group": "Payment Links", "pages": ["POST /v1/payment-links"] },
-          { "group": "Transfers", "pages": ["POST /v1/transfers"] },
-          { "group": "Customers", "pages": ["POST /v1/customers"] },
-          {
-            "group": "Transactions",
-            "pages": ["GET /v1/transactions/{transaction_id}"]
-          }
-        ]
-      },
-      {
         "tab": "Documentation",
         "groups": [
           {
-            "group": "Getting Started",
+            "group": "Start Here",
             "expanded": true,
             "pages": [
               "documentation/quickstart",
               "documentation/installation",
               "documentation/authentication",
               "documentation/errors"
+            ]
+          },
+          {
+            "group": "Pay-ins",
+            "expanded": false,
+            "pages": [
+              "documentation/payment-intents/overview",
+              "documentation/payment-intents/create",
+              "documentation/payment-intents/direct-charge",
+              "documentation/payment-intents/callback_url",
+              "documentation/payment-intents/management"
+            ]
+          },
+          {
+            "group": "Payouts",
+            "expanded": false,
+            "pages": [
+              "documentation/payouts/overview",
+              "documentation/payouts/mobile-money",
+              "documentation/payouts/fees"
             ]
           },
           {
@@ -57,17 +63,6 @@
             ]
           },
           {
-            "group": "Payment Intents",
-            "expanded": false,
-            "pages": [
-              "documentation/payment-intents/overview",
-              "documentation/payment-intents/create",
-              "documentation/payment-intents/direct-charge",
-              "documentation/payment-intents/callback_url",
-              "documentation/payment-intents/management"
-            ]
-          },
-          {
             "group": "Split Payments",
             "expanded": false,
             "pages": [
@@ -80,15 +75,20 @@
             "group": "Terminals",
             "expanded": false,
             "pages": ["documentation/virtual-terminal"]
-          },
+          }
+        ]
+      },
+      {
+        "tab": "API Playground",
+        "openapi": "openapi.json",
+        "groups": [
+          { "group": "Payment Intents", "pages": ["POST /v1/payments"] },
+          { "group": "Payment Links", "pages": ["POST /v1/payment-links"] },
+          { "group": "Transfers", "pages": ["POST /v1/transfers"] },
+          { "group": "Customers", "pages": ["POST /v1/customers"] },
           {
-            "group": "Payouts",
-            "expanded": false,
-            "pages": [
-              "documentation/payouts/overview",
-              "documentation/payouts/mobile-money",
-              "documentation/payouts/fees"
-            ]
+            "group": "Transactions",
+            "pages": ["GET /v1/transactions/{transaction_id}"]
           }
         ]
       },

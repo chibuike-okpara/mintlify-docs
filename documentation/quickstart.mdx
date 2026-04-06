@@ -7,10 +7,55 @@ To get started with Modem Pay, follow these simple steps to set up and start col
 ### 1. **Create an Account**
 
 - **Sign Up**: Register on [Modem Pay's dashboard](https://merchant.modempay.com) to access your account and manage payments.
-<iframe width="100%" height="425" src="https://www.youtube.com/embed/xY_ysj40diU?si=5_BdUUsXZmfnIUQu" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+  <iframe
+    width="100%"
+    height="425"
+    src="https://www.youtube.com/embed/xY_ysj40diU?si=5_BdUUsXZmfnIUQu"
+    title="YouTube video player"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    referrerpolicy="strict-origin-when-cross-origin"
+    allowfullscreen
+  ></iframe>
 - **API Keys**: Once registered, get your API keys from the dashboard for integrating and authenticating requests.
 
 ### 2. **Configure Integrations**
+
+- **SDK Payment Intent**: For more control, use Modem Pay’s SDK to create and confirm payment intents programmatically.
+
+<CodeGroup>
+
+```javascript nodejs
+import ModemPay from "modem-pay";
+
+const modempay = new ModemPay("YOUR_MODEM_PAY_API_KEY");
+
+const intent = await modempay.paymentIntents.create({ amount: 450 });
+
+console.log(intent.data.payment_link);
+```
+
+```python python
+from modempay import ModemPay
+
+modem_pay = ModemPay(api_key="YOUR_MODEM_PAY_API_KEY")
+
+intent = modem_pay.payment_intents.create(params={"amount": 450})
+
+print(intent["data"]["payment_link"])
+```
+
+```php php
+use ModemPay\ModemPay;
+
+$modemPay = new ModemPay('YOUR_MODEM_PAY_API_KEY');
+
+$payment = $modemPay->paymentIntents()->create(['amount' => 450]);
+
+echo $payment->data->payment_link;
+```
+
+</CodeGroup>
 
 - **HTML Checkout**: Embed Modem Pay’s HTML Checkout into your site for a quick, low-code payment solution.
 
@@ -52,45 +97,8 @@ Here's an example of how you'd implement HTML checkout:
    ```
 
 3. **After Payment – Redirect and Webhooks**
-
    - **Redirect URL**: Once the payment completes, the user is redirected to the `return_url` specified in the form, or if canceled, to the `cancel_url`.
    - **Webhooks**: For real-time updates on the payment status, configure webhooks in Modem Pay’s dashboard. This allows your server to receive notifications for events like `charge.succeeded` or `charge.cancelled` so you can handle them as needed, such as updating the order status on your end.
-
-- **SDK Payment Intent**: For more control, use Modem Pay’s SDK to create and confirm payment intents programmatically.
-
-<CodeGroup>
-
-```javascript nodejs
-import ModemPay from "modem-pay";
-
-const modempay = new ModemPay('YOUR_MODEM_PAY_API_KEY');
-
-const intent = await modempay.paymentIntents.create({ amount: 450 });
-
-console.log(intent.data.payment_link);
-```
-
-```python python
-from modempay import ModemPay
-
-modem_pay = ModemPay(api_key="YOUR_MODEM_PAY_API_KEY")
-
-intent = modem_pay.payment_intents.create(params={"amount": 450})
-
-print(intent["data"]["payment_link"])
-```
-
-```php php
-use ModemPay\ModemPay;
-
-$modemPay = new ModemPay('YOUR_MODEM_PAY_API_KEY');
-
-$payment = $modemPay->paymentIntents()->create(['amount' => 450]);
-
-echo $payment->data->payment_link;
-```
-
-</CodeGroup>
 
 ### 3. **Complete KYC**
 
