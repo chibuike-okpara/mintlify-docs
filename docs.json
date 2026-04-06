@@ -79,7 +79,7 @@
         ]
       },
       {
-        "tab": "API Playground",
+        "tab": "API Reference",
         "openapi": "openapi.json",
         "groups": [
           { "group": "Payment Intents", "pages": ["POST /v1/payments"] },
