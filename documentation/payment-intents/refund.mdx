@@ -1,0 +1,52 @@
+---
+title: Refunds
+---
+
+Refunds allow you to reverse a completed payment, either partially or in full, by returning funds to the customer. Common scenarios for refunds include order cancellations, duplicate payments, or fulfillment issues. Modem Pay makes it simple to issue refunds via the API.
+
+### Important Refund Policies
+
+- **Eligibility:** Refunds are only allowed on transactions that have a **completed** status.
+- **Refund Window:** The refund request must be made within **48 hours** of the original transaction’s completion.
+- **Partial Refunds:** To issue a partial refund, specify the `amount` in the request body. The partial refund amount **cannot exceed** the original transaction amount.
+- **Charges:** Charges may apply when processing a refund.
+- **Transaction Reference:** Always use the **reference** to identify the payment you want to refund.
+
+### When to Issue a Refund
+
+You might want to issue a refund when:
+
+- The customer cancels their purchase after payment.
+- An incorrect amount was charged.
+- The goods or services could not be provided.
+- You need to comply with a return or cancellation policy.
+
+Refunds can be processed for the full or partial amount of the original payment as long as they meet the above criteria.
+
+## Issuing a Refund
+
+To issue a refund for a specific payment, call the refund endpoint and provide the **reference** of the original transaction. You can also specify the `amount` to refund if you want to perform a partial refund. _If `amount` is omitted, a full refund will be processed._
+
+### Example: Refund via cURL
+
+<CodeGroup>
+
+```typescript nodejs
+await modempay.transactions.refund("cos-245wvm6588xrp", 450);
+// Optional: omit amount for full refund
+```
+
+```bash cURL
+cURL -X POST "https://api.modempay.com/v1/transactions/refund" \
+  -H "Authorization: Bearer <your_api_key>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "reference": "cos-245wvm6588xrp",
+    "amount": 450
+  }'
+# Optional: omit amount for full refund
+```
+
+</CodeGroup>
+
+Refund requests are typically processed immediately, but it may take some time for the funds to settle back to your customer's payment method depending on their bank or card provider. Make sure you communicate clearly with your customers during the refund process. Note that refunds are subject to the conditions above and that processing charges may apply.
