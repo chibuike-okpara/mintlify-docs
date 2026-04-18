@@ -50,6 +50,16 @@
             ]
           },
           {
+            "group": "Drop-ins",
+            "pages": [
+              "documentation/payments/overview",
+              "documentation/payments/drop-in",
+              "documentation/payments/modem-inline",
+              "documentation/payments/html-checkout",
+              "documentation/payments/custom"
+            ]
+          },
+          {
             "group": "Core API Resources",
             "expanded": false,
             "pages": [
@@ -104,20 +114,6 @@
               "billing/invoices/types",
               "billing/invoices/lifecycle",
               "billing/invoices/api-reference"
-            ]
-          }
-        ]
-      },
-      {
-        "tab": "Inline Payments",
-        "groups": [
-          {
-            "group": "Payment UI and Integration",
-            "pages": [
-              "payments/overview",
-              "payments/modem-inline",
-              "payments/html-checkout",
-              "payments/custom"
             ]
           }
         ]

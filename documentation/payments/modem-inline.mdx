@@ -1,11 +1,10 @@
 ---
-title: Inline Modem Payment
+title: Modem Pay Checkout Modal
 ---
 
 Modem Pay's inline integration allows you to seamlessly add a payment option directly to your website, enabling your customers to make payments without leaving the page. This integration provides a smooth and efficient checkout process, ideal for businesses looking to enhance user experience and maximize conversion rates.
 
 By using this integration, you can implement a "Pay Now" button that triggers a payment flow directly on your site, avoiding pop-ups or redirects. This is especially useful for scenarios like product purchases, service subscriptions, or event ticket sales.
-
 
 ## Example: Setting Up Inline Payment
 
@@ -51,34 +50,34 @@ By using this integration, you can implement a "Pay Now" button that triggers a 
 ```
 
 ## Calling the ModemPayCheckout() Function
+
 Let's examine the parameters provided when invoking `ModemPayCheckout()` in detail:
 
-| **Field**            | **Description**                                                                                             | **Example**                          |
-|----------------------|-----------------------------------------------------------------------------------------------------------|--------------------------------------|
-| `amount`             | The amount to be charged.                             | `450` (for GMD 450.00)                   |
-| `currency`           | The transaction currency (default: GMD).                                                                  | `"GMD"`                              |
-| `payment_methods`    | Available payment methods (`card`, `wallet`, `bank`).                                                     | `"card,wallet,bank"`                 |
-| `title`              | A short title describing the transaction.                                                                 | `"Course Payment"`                  |
-| `description`        | Detailed description of the transaction.                                                                  | `"Access to Premium Content"`       |
-| `customer`           | A unique identifier for the customer.                                                                     | `"7e1908bb-bd62-4d20-9af7-3463a150fd98"`                            |
-| `customer_email`     | Customer's email address.                                                                                 | `"customer@example.com"`            |
-| `customer_name`      | Full name of the customer.                                                                                | `"John Doe"`                         |
-| `customer_phone`     | Customer's phone number.                                                                                  | `"7000000"`                     |
-| `metadata`           | A JSON object for additional payment information.                                                        | `{ "order_id": "98765" }`           |
-| `return_url`         | URL to redirect to after successful payment.                                                              | `"https://yourwebsite.com/success"` |
-| `cancel_url`         | URL to redirect to if the payment is canceled.                                                            | `"https://yourwebsite.com/cancel"`  |
-| `callback`           | Function to handle post-payment actions.                                                                 | `(transaction) => { ... }`       |
-| `onClose`            | Function to handle when the modal is closed or payment is canceled.                                       | `(cancelled) => { ... }`            |
-
+| **Field**         | **Description**                                                     | **Example**                              |
+| ----------------- | ------------------------------------------------------------------- | ---------------------------------------- |
+| `amount`          | The amount to be charged.                                           | `450` (for GMD 450.00)                   |
+| `currency`        | The transaction currency (default: GMD).                            | `"GMD"`                                  |
+| `payment_methods` | Available payment methods (`card`, `wallet`, `bank`).               | `"card,wallet,bank"`                     |
+| `title`           | A short title describing the transaction.                           | `"Course Payment"`                       |
+| `description`     | Detailed description of the transaction.                            | `"Access to Premium Content"`            |
+| `customer`        | A unique identifier for the customer.                               | `"7e1908bb-bd62-4d20-9af7-3463a150fd98"` |
+| `customer_email`  | Customer's email address.                                           | `"customer@example.com"`                 |
+| `customer_name`   | Full name of the customer.                                          | `"John Doe"`                             |
+| `customer_phone`  | Customer's phone number.                                            | `"7000000"`                              |
+| `metadata`        | A JSON object for additional payment information.                   | `{ "order_id": "98765" }`                |
+| `return_url`      | URL to redirect to after successful payment.                        | `"https://yourwebsite.com/success"`      |
+| `cancel_url`      | URL to redirect to if the payment is canceled.                      | `"https://yourwebsite.com/cancel"`       |
+| `callback`        | Function to handle post-payment actions.                            | `(transaction) => { ... }`               |
+| `onClose`         | Function to handle when the modal is closed or payment is canceled. | `(cancelled) => { ... }`                 |
 
 <Warning> 
 **Public Key**
 
 Keep in mind that this is client-side code, so it utilizes your public key rather than your secret key.
+
 </Warning>
 
 ## How Callbacks and onClose Work
-
 
 Here's an example that demonstrates how to use both the `callback` and `onClose` functions. The `callback` function sends a verification request to the backend in the background. Meanwhile, the `onClose` function handles the modal closure by displaying a "verifying" message if the background request is still in progress, or a thank-you message if the verification succeeds. If the verification fails, the user is prompted to retry or contact support.
 
@@ -89,10 +88,9 @@ Here's an example that demonstrates how to use both the `callback` and `onClose`
 The `callback` function allows you to perform actions after a successful payment. For instance, you can verify the transaction, send a confirmation email, or update your database. The `transaction` parameter contains essential information about the payment.
 
 <Warning>
-The `redirect_url` takes priority over the `callback`. If both are provided, the `redirect_url` will be used.
+  The `redirect_url` takes priority over the `callback`. If both are provided,
+  the `redirect_url` will be used.
 </Warning>
-
-
 
 ```javascript javascript
 function makePayment() {
@@ -107,11 +105,15 @@ function makePayment() {
   });
 }
 ```
+
 <Warning>
-Always verify the payment on your server after the transaction, even if a callback was used.
+  Always verify the payment on your server after the transaction, even if a
+  callback was used.
 </Warning>
 <Note>
-Keep in mind that the `callback` function is triggered after the payment is completed, even while the modal remains open. For an enhanced user experience, you can combine the `callback` with the `onClose` handler.
+  Keep in mind that the `callback` function is triggered after the payment is
+  completed, even while the modal remains open. For an enhanced user experience,
+  you can combine the `callback` with the `onClose` handler.
 </Note>
 
 ### **`onClose`: Handling Payment Cancellations**
@@ -137,7 +139,6 @@ function makePayment() {
 
 - **`return_url` vs `callback`:**  
   If both are provided, the `return_url` will take precedence, and the user will be redirected to the specified URL after the payment instead of executing the `callback` function.
-  
 - **`cancel_url` vs `onClose`:**  
   If a `cancel_url` is provided, it overrides the `onClose` function, and the user will be redirected to the specified URL upon cancellation.
 
@@ -189,9 +190,9 @@ If you have configured [webhook notifications](/documentation/core/webhooks) for
 Inline payment integrations provide a frictionless experience by letting users complete payments without leaving your page. This approach minimizes drop-offs during checkout and enhances customer satisfaction.
 
 **Perfect for:**
+
 - **E-commerce Sites:** Add quick payment buttons on product pages.
 - **Subscription Services:** Charge for recurring services effortlessly.
 - **Event Ticketing:** Allow customers to book and pay on the same page.
 
 By incorporating features like `callback` and `onClose`, you gain full control over the payment flow and can provide a seamless experience tailored to your users' needs.
-

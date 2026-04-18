@@ -1,0 +1,236 @@
+---
+title: Modem Pay Button
+---
+
+A self-contained Web Component that opens the Modem Pay checkout modal when clicked. Works in plain HTML and any JavaScript framework, no dependencies, no build step.
+
+## Installation
+
+Add the script to your page. That's it, the `<modempay-button>` element is now available everywhere on the page.
+
+```html html
+<script src="https://api.modempay.com/js/modempay-button.js"></script>
+```
+
+## Quick Start
+
+```html html
+<script src="https://api.modempay.com/js/modempay-button.js"></script>
+
+<modempay-button
+  merchant="pk_live_xxxx"
+  amount="500"
+  currency="GMD"
+  description="Order #1042"
+/>
+```
+
+Clicking the button opens the Modem Pay checkout modal. The SDK and stylesheets are loaded automatically, no manual initialization needed.
+
+## Attributes
+
+| Attribute     | Required | Default                          | Description                                 |
+| ------------- | -------- | -------------------------------- | ------------------------------------------- |
+| `merchant`    | Yes      | —                                | Your Modem Pay **public key**               |
+| `amount`      | No       | —                                | Payment amount. Omit to show an input field |
+| `currency`    | No       | `GMD`                            | ISO currency code                           |
+| `description` | No       | —                                | Description shown in the checkout modal     |
+| `label`       | No       | `Secure checkout with Modem Pay` | Override the button text                    |
+| `color`       | No       | `#16a34a`                        | Primary button color                        |
+| `radius`      | No       | `12`                             | Border radius in pixels                     |
+| `disabled`    | No       | —                                | Disables the button when present            |
+
+## Usage Examples
+
+### Custom label
+
+```html html
+<modempay-button
+  merchant="pk_live_xxxx"
+  amount="1200"
+  description="Concert Ticket"
+  label="Buy Ticket"
+/>
+```
+
+### Custom brand color
+
+```html html
+<modempay-button merchant="pk_live_xxxx" amount="500" color="#2563eb" />
+```
+
+### Dynamic amount (user enters amount)
+
+Omit the `amount` attribute and the button renders an input field for the user to fill in. The minimum accepted amount is **10 GMD**.
+
+```html html
+<modempay-button merchant="pk_live_xxxx" description="Donation" />
+```
+
+## Usage in React
+
+Web Components don't render through JSX, so use `dangerouslySetInnerHTML` to mount the button. Load the script once (e.g. in `index.html` or a `useEffect`), then render the element like this:
+
+```jsx jsx
+export default function CheckoutButton() {
+  return (
+    <div
+      dangerouslySetInnerHTML={{
+        __html: `<modempay-button
+          merchant="pk_test_xxxx"
+          amount="10"
+          currency="GMD"
+          description="Order #1042"
+        />`,
+      }}
+    />
+  );
+}
+```
+
+To listen for events in React, attach them via a `ref`:
+
+```jsx jsx
+import { useEffect, useRef } from "react";
+
+export default function CheckoutButton() {
+  const containerRef = useRef(null);
+
+  useEffect(() => {
+    const el = containerRef.current?.querySelector("modempay-button");
+    if (!el) return;
+
+    const onSuccess = (e) => {
+      console.log("Transaction:", e.detail.transaction);
+    };
+
+    el.addEventListener("modempay:success", onSuccess);
+    return () => el.removeEventListener("modempay:success", onSuccess);
+  }, []);
+
+  return (
+    <div
+      ref={containerRef}
+      dangerouslySetInnerHTML={{
+        __html: `<modempay-button
+          merchant="pk_test_xxxx"
+          amount="10"
+        />`,
+      }}
+    />
+  );
+}
+```
+
+<Note>
+  Make sure the script is loaded before the component mounts. The easiest way is to add the `<script>` tag to your `public/index.html`.
+</Note>
+
+## Events
+
+The button emits events at each stage of the payment lifecycle. Listen on the element directly.
+
+### modempay:click
+
+Fires when the button is clicked, **before** the checkout modal opens. The event is cancelable, call `event.preventDefault()` to stop the checkout from launching (e.g. to run validation first).
+
+```javascript javascript
+document
+  .querySelector("modempay-button")
+  .addEventListener("modempay:click", (event) => {
+    // event.detail contains: merchant, amount, currency, description
+    console.log(event.detail);
+
+    // Optionally cancel checkout
+    // event.preventDefault();
+  });
+```
+
+### modempay:success
+
+Fires when the payment completes. The completed transaction object is available at `event.detail.transaction`.
+
+```javascript javascript
+document
+  .querySelector("modempay-button")
+  .addEventListener("modempay:success", (event) => {
+    const transaction = event.detail.transaction;
+
+    console.log("Transaction ID:", transaction.id);
+    console.log("Amount paid:", transaction.amount);
+    console.log("Status:", transaction.status);
+  });
+```
+
+### modempay:error
+
+Fires if something goes wrong during the payment process. The error message is at `event.detail.message`.
+
+```javascript javascript
+document
+  .querySelector("modempay-button")
+  .addEventListener("modempay:error", (event) => {
+    console.error("Payment failed:", event.detail.message);
+  });
+```
+
+### modempay:cancel
+
+Fires when the user closes the checkout modal without completing the payment. No detail payload.
+
+```javascript javascript
+document
+  .querySelector("modempay-button")
+  .addEventListener("modempay:cancel", () => {
+    console.log("User closed the checkout modal.");
+  });
+```
+
+## Styling
+
+Customize the button with CSS custom properties. Set them on the element itself or in your stylesheet.
+
+| Variable           | Description          | Default   |
+| ------------------ | -------------------- | --------- |
+| `--mp-color`       | Primary button color | `#16a34a` |
+| `--mp-color-hover` | Hover state color    | `#15803d` |
+| `--mp-radius`      | Border radius        | `12px`    |
+
+```css
+modempay-button {
+  --mp-color: #2563eb;
+  --mp-color-hover: #1d4ed8;
+  --mp-radius: 16px;
+}
+```
+
+## Accessibility
+
+The button is built with accessibility in mind:
+
+- Full keyboard navigation
+- `aria-label` that includes the payment amount
+- `aria-busy` set during loading so screen readers announce the state
+- Visible focus ring on keyboard navigation
+- Disabled state properly conveyed to assistive technology
+
+## Accepted Payment Methods
+
+Supported wallets are shown directly on the button to build user trust at the point of payment.
+
+```
+Wave · QMoney · AfriMoney · APS
+```
+
+## Browser Support
+
+Works in all modern browsers that support the Web Components standard.
+
+| Browser | Supported |
+| ------- | --------- |
+| Chrome  | ✅        |
+| Edge    | ✅        |
+| Firefox | ✅        |
+| Safari  | ✅        |
+
+Internet Explorer and browsers without `customElements` support are not supported.
